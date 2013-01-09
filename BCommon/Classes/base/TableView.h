@@ -1,0 +1,103 @@
+//
+//  TableView.h
+//  itv
+//
+//  Created by Zhang Yinghui on 9/28/11.
+//  Copyright 2011 LavaTech. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "BTableDragView.h"
+#import "BTableLoadMoreView.h"
+#import "BLineView.h"
+
+enum  {
+	TableViewCellStyleDefault,
+	TableViewCellStyleImage,
+};
+typedef NSInteger TableViewCellStyle;
+enum{
+    SeparatorLineStyleNone,
+	SeparatorLineStyleTop = 1 << 0,
+	SeparatorLineStyleBottom = 1 << 1
+};
+typedef NSInteger SeparatorLineStyle;
+
+@interface TableViewCellBackground : UIView{
+	SeparatorLineStyle _separatorLineStyle;
+    UIColor *           _topLineColor;
+    UIColor *           _bottomLineColor;
+}
+@property (nonatomic, assign) SeparatorLineStyle separatorLineStyle;
+@property (nonatomic, retain) UIColor *topLineColor;
+@property (nonatomic, retain) UIColor *bottomLineColor;
+- (void)setTopLineColor:(UIColor *)topLineColor bottomLineColor:(UIColor *)bottomLineColor;
+@end
+
+@interface TableViewSection : TableViewCellBackground{
+	NSString *_title;
+	NSString *_rightTitle;
+    UILabel *_titleLabel;
+    UILabel *_rightLabel;
+    UIView *_bg;
+    UIView *_rightView;
+}
+@property (nonatomic, readonly) UILabel *titleLabel;
+@property (nonatomic, readonly) UILabel *rightLabel;
+@property (nonatomic, retain) NSString *title;
+@property (nonatomic, retain) NSString *rightTitle;
+@property (nonatomic, retain) UIView *rightView;
+- (void)setBackgroundImage:(UIImage *)img;
+
+@end
+
+
+@interface TableCellContentView : UIView {
+	TableViewCellStyle	_style;
+	NSInteger			_numOfLines;
+	CGRect				_imgRect;
+	id					_cell;
+	float				_aspectRatio;
+}
+@property (nonatomic, assign) TableViewCellStyle style;
+@property (nonatomic, assign) NSInteger numOfLines;
+@property (nonatomic, assign) float aspectRatio;
+- (id)initWithFrame:(CGRect)frame cell:(UITableViewCell *)cell;
+- (void)drawImage;
+- (void)drawImageInRect:(CGRect)rect inContext:(CGContextRef)ctx withTitle:(NSString *)title;
+- (void)drawLine:(NSInteger)line inRect:(CGRect)rect inContext:(CGContextRef)ctx;
+- (CGRect)rectForImageInContent:(CGContextRef)ctx;
+- (CGRect)rectForLine:(NSInteger)line offsetY:(float)y inContext:(CGContextRef)ctx;
+@end
+
+@interface TableView : UITableView <UIScrollViewDelegate>{
+	BTableDragView *	_pullDownView;
+	NSOperationQueue *	_queue;
+    BTableLoadMoreView *_loadMoreView;
+    BLineView              *_topLine;
+}
+@property (nonatomic, assign) BOOL hasMore;
+@property (nonatomic, assign) BOOL useCache;
+@property (nonatomic, retain) NSMutableDictionary *imgCache;
+- (void)supportPullDown:(BOOL)flag;
+- (void)pullDown;
+- (void)updateFinished;
+- (void)startUpdate;
+- (void)startLoadMore;
+- (void)loadImg:(NSString *)imgURL forIndexPath:(NSIndexPath *)indexPath;
+
+- (NSString *)imageCacheForIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)imageCacheForUrl:(NSString *)url;
+- (void)cacheImage:(NSString *)imgLocalPath forIndexPath:(NSIndexPath *)indexPath;
+- (BTableLoadMoreView *)loadMoreView;
+- (UITableViewCell *)moreCell;
+- (void) loadMore;
+@end
+
+@interface TableViewCell : UITableViewCell{	
+	UIView *_cellContentView;
+	NSString *_imgLocalPath;
+}
+@property (nonatomic, retain) NSString *imgLocalPath;
+- (void) setContentView:(UIView *)view;
+@end

@@ -1,0 +1,20 @@
+
+SPEC CHECKSUMS: 
+  JSONKit: 3d4708953ea7ae399a49777372d8b060a43ddd27
+  FMDB: 77fb1c93b51bbf14d84d49d5374344b7f68c54f1
+  RegexKitLite: 293ff6f3cf8f34277989a37802162c6961a2b35a
+  Reachability: 1c8584c5f26fa776695efef95caaa50402c94cfb
+
+DEPENDENCIES: 
+- FMDB
+- JSONKit
+- Reachability
+- RegexKitLite
+
+PODS: 
+- FMDB (2.0)
+- JSONKit (1.5pre)
+- Reachability (3.1.0)
+- RegexKitLite (4.0)
+
+COCOAPODS: 0.15.1

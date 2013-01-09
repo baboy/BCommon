@@ -1,0 +1,41 @@
+//
+//  UIViewController+itv.h
+//  itv
+//
+//  Created by Zhang Yinghui on 11-12-29.
+//  Copyright (c) 2011年 __MyCompanyName__. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ASIHTTPRequest.h"
+#import "BDropMenu.h"
+#import "BDropTitleView.h"
+
+enum{
+    AlertViewTagAlert,
+    AlertViewTagError,
+};
+@interface UIViewController (itv)
+
+@end
+@interface XUINavigationController:UINavigationController
+@property (nonatomic, retain)UIColor *navBgColor;
+@end
+
+@interface XUIViewController : UIViewController<UIAlertViewDelegate,BDropMenuDelegate>{
+	CGRect _frame;
+}
+@property (nonatomic, retain) BDropMenu *topDropMenu;
+- (void)setTitle:(NSString *)title withImageURL:(NSURL *)imageURL;
+- (void)setDropMenuTitle:(NSString *)title;
+- (void)showDropMenu:(id)sender;
+- (void)addBackButton;
+- (void)reset;
+-(id)loadViewFromNibNamed:(NSString*)nibName;
+- (void)showMessage:(NSString *)msg;
+- (void)showMessageAndFadeOut:(NSString *)msg;
+- (void)fadeOut;
+- (void)fadeOutAfterDelay:(float)t;
+- (void)setRequest:(ASIHTTPRequest *)request forKey:(NSString *)key;
+- (UIAlertView*)alert:(NSString *)msg;
+@end
