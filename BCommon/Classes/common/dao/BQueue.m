@@ -8,6 +8,9 @@
 
 #import "BQueue.h"
 #import "Utils.h"
+#import "G.h"
+#import "JSONKit.h"
+
 @implementation BQueueItem
 
 @synthesize tabId = _tabId;

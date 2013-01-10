@@ -1,0 +1,1 @@
+pod spec lint BCommon.podspec --verbose
