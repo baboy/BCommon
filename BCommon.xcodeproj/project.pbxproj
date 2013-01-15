@@ -51,19 +51,8 @@
 		831DD52816A5199300711DAD /* BQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD49F16A5199300711DAD /* BQueue.m */; };
 		831DD52916A5199300711DAD /* DBCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4A116A5199300711DAD /* DBCache.m */; };
 		831DD52A16A5199300711DAD /* BEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4A416A5199300711DAD /* BEnumerator.m */; };
-		831DD52B16A5199300711DAD /* NSArray+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4A616A5199300711DAD /* NSArray+x.m */; };
-		831DD52C16A5199300711DAD /* NSDate+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4A816A5199300711DAD /* NSDate+x.m */; };
-		831DD52D16A5199300711DAD /* NSDictionary+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4AA16A5199300711DAD /* NSDictionary+x.m */; };
-		831DD52E16A5199300711DAD /* NSMutableData+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4AC16A5199300711DAD /* NSMutableData+x.m */; };
-		831DD52F16A5199300711DAD /* NSNull+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4AE16A5199300711DAD /* NSNull+x.m */; };
-		831DD53016A5199300711DAD /* NSString+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4B016A5199300711DAD /* NSString+x.m */; };
 		831DD53116A5199300711DAD /* pinyin.c in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4B116A5199300711DAD /* pinyin.c */; };
 		831DD53216A5199300711DAD /* TabBarMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4B416A5199300711DAD /* TabBarMoreViewController.m */; };
-		831DD53316A5199300711DAD /* UIColor+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4B616A5199300711DAD /* UIColor+x.m */; };
-		831DD53416A5199300711DAD /* UIImage+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4B816A5199300711DAD /* UIImage+x.m */; };
-		831DD53516A5199300711DAD /* UIImageView+cache.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4BA16A5199300711DAD /* UIImageView+cache.m */; };
-		831DD53616A5199300711DAD /* UINavigationBar+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4BC16A5199300711DAD /* UINavigationBar+x.m */; };
-		831DD53716A5199300711DAD /* UIWebView+x.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4BE16A5199300711DAD /* UIWebView+x.m */; };
 		831DD53816A5199300711DAD /* XScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4C016A5199300711DAD /* XScrollView.m */; };
 		831DD53916A5199300711DAD /* XUIImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4C216A5199300711DAD /* XUIImageView.m */; };
 		831DD53A16A5199300711DAD /* XUILabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 831DD4C416A5199300711DAD /* XUILabel.m */; };
@@ -222,32 +211,10 @@
 		831DD4A116A5199300711DAD /* DBCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBCache.m; sourceTree = "<group>"; };
 		831DD4A316A5199300711DAD /* BEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEnumerator.h; sourceTree = "<group>"; };
 		831DD4A416A5199300711DAD /* BEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEnumerator.m; sourceTree = "<group>"; };
-		831DD4A516A5199300711DAD /* NSArray+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+x.h"; sourceTree = "<group>"; };
-		831DD4A616A5199300711DAD /* NSArray+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+x.m"; sourceTree = "<group>"; };
-		831DD4A716A5199300711DAD /* NSDate+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+x.h"; sourceTree = "<group>"; };
-		831DD4A816A5199300711DAD /* NSDate+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+x.m"; sourceTree = "<group>"; };
-		831DD4A916A5199300711DAD /* NSDictionary+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+x.h"; sourceTree = "<group>"; };
-		831DD4AA16A5199300711DAD /* NSDictionary+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+x.m"; sourceTree = "<group>"; };
-		831DD4AB16A5199300711DAD /* NSMutableData+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableData+x.h"; sourceTree = "<group>"; };
-		831DD4AC16A5199300711DAD /* NSMutableData+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableData+x.m"; sourceTree = "<group>"; };
-		831DD4AD16A5199300711DAD /* NSNull+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNull+x.h"; sourceTree = "<group>"; };
-		831DD4AE16A5199300711DAD /* NSNull+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNull+x.m"; sourceTree = "<group>"; };
-		831DD4AF16A5199300711DAD /* NSString+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+x.h"; sourceTree = "<group>"; };
-		831DD4B016A5199300711DAD /* NSString+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+x.m"; sourceTree = "<group>"; };
 		831DD4B116A5199300711DAD /* pinyin.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pinyin.c; sourceTree = "<group>"; };
 		831DD4B216A5199300711DAD /* pinyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pinyin.h; sourceTree = "<group>"; };
 		831DD4B316A5199300711DAD /* TabBarMoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarMoreViewController.h; sourceTree = "<group>"; };
 		831DD4B416A5199300711DAD /* TabBarMoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarMoreViewController.m; sourceTree = "<group>"; };
-		831DD4B516A5199300711DAD /* UIColor+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+x.h"; sourceTree = "<group>"; };
-		831DD4B616A5199300711DAD /* UIColor+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+x.m"; sourceTree = "<group>"; };
-		831DD4B716A5199300711DAD /* UIImage+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+x.h"; sourceTree = "<group>"; };
-		831DD4B816A5199300711DAD /* UIImage+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+x.m"; sourceTree = "<group>"; };
-		831DD4B916A5199300711DAD /* UIImageView+cache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+cache.h"; sourceTree = "<group>"; };
-		831DD4BA16A5199300711DAD /* UIImageView+cache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+cache.m"; sourceTree = "<group>"; };
-		831DD4BB16A5199300711DAD /* UINavigationBar+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+x.h"; sourceTree = "<group>"; };
-		831DD4BC16A5199300711DAD /* UINavigationBar+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+x.m"; sourceTree = "<group>"; };
-		831DD4BD16A5199300711DAD /* UIWebView+x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+x.h"; sourceTree = "<group>"; };
-		831DD4BE16A5199300711DAD /* UIWebView+x.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+x.m"; sourceTree = "<group>"; };
 		831DD4BF16A5199300711DAD /* XScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XScrollView.h; sourceTree = "<group>"; };
 		831DD4C016A5199300711DAD /* XScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XScrollView.m; sourceTree = "<group>"; };
 		831DD4C116A5199300711DAD /* XUIImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XUIImageView.h; sourceTree = "<group>"; };
@@ -517,32 +484,10 @@
 			children = (
 				831DD4A316A5199300711DAD /* BEnumerator.h */,
 				831DD4A416A5199300711DAD /* BEnumerator.m */,
-				831DD4A516A5199300711DAD /* NSArray+x.h */,
-				831DD4A616A5199300711DAD /* NSArray+x.m */,
-				831DD4A716A5199300711DAD /* NSDate+x.h */,
-				831DD4A816A5199300711DAD /* NSDate+x.m */,
-				831DD4A916A5199300711DAD /* NSDictionary+x.h */,
-				831DD4AA16A5199300711DAD /* NSDictionary+x.m */,
-				831DD4AB16A5199300711DAD /* NSMutableData+x.h */,
-				831DD4AC16A5199300711DAD /* NSMutableData+x.m */,
-				831DD4AD16A5199300711DAD /* NSNull+x.h */,
-				831DD4AE16A5199300711DAD /* NSNull+x.m */,
-				831DD4AF16A5199300711DAD /* NSString+x.h */,
-				831DD4B016A5199300711DAD /* NSString+x.m */,
 				831DD4B116A5199300711DAD /* pinyin.c */,
 				831DD4B216A5199300711DAD /* pinyin.h */,
 				831DD4B316A5199300711DAD /* TabBarMoreViewController.h */,
 				831DD4B416A5199300711DAD /* TabBarMoreViewController.m */,
-				831DD4B516A5199300711DAD /* UIColor+x.h */,
-				831DD4B616A5199300711DAD /* UIColor+x.m */,
-				831DD4B716A5199300711DAD /* UIImage+x.h */,
-				831DD4B816A5199300711DAD /* UIImage+x.m */,
-				831DD4B916A5199300711DAD /* UIImageView+cache.h */,
-				831DD4BA16A5199300711DAD /* UIImageView+cache.m */,
-				831DD4BB16A5199300711DAD /* UINavigationBar+x.h */,
-				831DD4BC16A5199300711DAD /* UINavigationBar+x.m */,
-				831DD4BD16A5199300711DAD /* UIWebView+x.h */,
-				831DD4BE16A5199300711DAD /* UIWebView+x.m */,
 				831DD4BF16A5199300711DAD /* XScrollView.h */,
 				831DD4C016A5199300711DAD /* XScrollView.m */,
 				831DD4C116A5199300711DAD /* XUIImageView.h */,
@@ -865,19 +810,8 @@
 				831DD52816A5199300711DAD /* BQueue.m in Sources */,
 				831DD52916A5199300711DAD /* DBCache.m in Sources */,
 				831DD52A16A5199300711DAD /* BEnumerator.m in Sources */,
-				831DD52B16A5199300711DAD /* NSArray+x.m in Sources */,
-				831DD52C16A5199300711DAD /* NSDate+x.m in Sources */,
-				831DD52D16A5199300711DAD /* NSDictionary+x.m in Sources */,
-				831DD52E16A5199300711DAD /* NSMutableData+x.m in Sources */,
-				831DD52F16A5199300711DAD /* NSNull+x.m in Sources */,
-				831DD53016A5199300711DAD /* NSString+x.m in Sources */,
 				831DD53116A5199300711DAD /* pinyin.c in Sources */,
 				831DD53216A5199300711DAD /* TabBarMoreViewController.m in Sources */,
-				831DD53316A5199300711DAD /* UIColor+x.m in Sources */,
-				831DD53416A5199300711DAD /* UIImage+x.m in Sources */,
-				831DD53516A5199300711DAD /* UIImageView+cache.m in Sources */,
-				831DD53616A5199300711DAD /* UINavigationBar+x.m in Sources */,
-				831DD53716A5199300711DAD /* UIWebView+x.m in Sources */,
 				831DD53816A5199300711DAD /* XScrollView.m in Sources */,
 				831DD53916A5199300711DAD /* XUIImageView.m in Sources */,
 				831DD53A16A5199300711DAD /* XUILabel.m in Sources */,

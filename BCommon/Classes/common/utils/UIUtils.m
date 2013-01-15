@@ -7,8 +7,7 @@
 //
 
 #import "UIUtils.h"
-#import <QuartzCore/QuartzCore.h>
-#import "G.h"
+#import "BCommon.h"
 
 UIView * loadViewFromNib(Class nibClass,id owner){    
     NSArray *objectsInNib = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass(nibClass)

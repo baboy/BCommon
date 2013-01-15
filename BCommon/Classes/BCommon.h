@@ -14,17 +14,19 @@
 #import "BQueue.h"
 #import "Utils.h"
 #import "UIUtils.h"
-#import "NSString+x.h"
-#import "UIImage+x.h"
 #import "XUIViewController.h"
+#import "XUIImageView.h"
+#import "BLineView.h"
+#import "BIndicator.h"
+
+//categories
 #import "NSNull+x.h"
 #import "NSDate+x.h"
 #import "NSArray+x.h"
 #import "NSDictionary+x.h"
 #import "NSMutableData+x.h"
-#import "XUIImageView.h"
-#import "BLineView.h"
-#import "BIndicator.h"
+#import "NSString+x.h"
+#import "UIImage+x.h"
 
 //ext
 #import "XScrollView.h"
