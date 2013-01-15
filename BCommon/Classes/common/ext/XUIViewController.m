@@ -286,7 +286,7 @@
 }
 - (UIAlertView*)alert:(NSString *)msg button:(NSString *)buttonTitle,...{
     if (!msg) {
-        return ;
+        return nil;
     }
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:2];
     va_list args;
