@@ -8,6 +8,10 @@
 
 
 //用户相关
+extern NSString *ApiDomain;
+
+#define ApiClient               @"http://m.tvie.com.cn/mcms/api2/client.php"
+#define ApiConf                 [NSString stringWithFormat:@"%@/config.origin.php", ApiDomain]
 #define ApiMemberLogin          [NSString stringWithFormat:@"%@/mod/member/login.php", ApiDomain]
 #define ApiMemberRegister       [NSString stringWithFormat:@"%@/mod/member/register.php", ApiDomain]
 

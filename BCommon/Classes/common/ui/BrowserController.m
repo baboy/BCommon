@@ -7,7 +7,7 @@
 //
 
 #import "BrowserController.h"
-#import "G.h"
+#import "BCommon.h"
 
 @interface BrowserController()
 @property (nonatomic, retain) NSURL *curUrl;

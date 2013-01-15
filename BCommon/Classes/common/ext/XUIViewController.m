@@ -8,30 +8,18 @@
 
 #import "XUIViewController.h"
 #import "UINavigationBar+x.h"
-#import "Utils.h"
-#import "XUIImageView.h"
-#import "G.h"
-#import "UIColor+x.h"
+#import "BCommon.h"
 
 @implementation UIViewController (itv)
 
 @end
 
 @implementation XUINavigationController
-@synthesize navBgColor = _navBgColor;
-- (void)dealloc{
-    RELEASE(_navBgColor);
-    [super dealloc];
-}
 - (id) initWithRootViewController:(UIViewController *)rootViewController{
     if (self = [super initWithRootViewController:rootViewController]) {
         if ([self respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-            //[self.navigationBar setTintColor:[UIColor greenColor]];
-            //UIImage *bgImg = [UIImage imageNamed:@"top_bg.png"];
-            //[self.navigationBar setBackgroundImage:bgImg forBarMetrics:UIBarMetricsDefault];
         }else{
         }
-        [self setNavBgColor:defNavBgColor];
     }
     return self;
 }
@@ -40,7 +28,6 @@
         if ([self respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
         }else{
         }
-        [self setNavBgColor:defNavBgColor];
     }
     return self;
 }
@@ -49,19 +36,11 @@
         if ([self respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
         }else{
         }
-        [self setNavBgColor:defNavBgColor];
     }
     return self;
 }
-- (void)setNavBgColor:(UIColor *)navBgColor{
-    RELEASE(_navBgColor);
-    _navBgColor = [navBgColor retain];
-    if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-        [self.navigationBar setBackgroundImage:[UIImage imageWithColor:navBgColor size:self.navigationBar.bounds.size] forBarMetrics:UIBarMetricsDefault];
-    }else{
-        UIImage *bgImg = [UIImage imageWithColor:navBgColor size:self.navigationBar.bounds.size];
-        [self.navigationBar setBackgroundImage:bgImg];
-    }
+- (void)setNavBgColor:(UIColor *)color{
+    [self.navigationBar setTintColor:color];
 }
 - (void)popViewController{
     [self popViewControllerAnimated:YES];
@@ -109,6 +88,8 @@
 }
 - (void) loadView{
     [super loadView];
+    
+    self.view.autoresizingMask |= UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_frame = self.view.bounds;
     if (self.navigationController) {
         _frame.size.height -= self.navigationController.navigationBar.bounds.size.height;
@@ -166,25 +147,18 @@
     [titleView release];
 }
 - (void)viewDidLoad{
-    [super viewDidLoad];    
-	_frame = self.view.bounds;
-    if (self.navigationController) {
-        _frame.size.height -= self.navigationController.navigationBar.bounds.size.height;
-    }
-	if (self.tabBarController && !self.hidesBottomBarWhenPushed) {
-		_frame.size.height -= self.tabBarController.tabBar.frame.size.height;
-	}
+    [super viewDidLoad];
     [self.view setBackgroundColor:gViewBgColor];
     if (self.navigationItem && !self.navTitleLabel) {
         CGRect rect = CGRectInset(self.navigationController.navigationBar.bounds, 60, 0);
         UILabel *titleLabel = createLabel(rect, gNavTitleFont, [UIColor clearColor], gNavTitleColor, [UIColor blackColor], CGSizeZero, UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
         [titleLabel setText:self.title];
-        /*
+        
         [titleLabel.layer setShadowOpacity:1];
         [titleLabel.layer setShadowColor:[[UIColor colorWithWhite:0 alpha:0.6] CGColor]];
         [titleLabel.layer setShadowRadius:1];
         [titleLabel.layer setShadowOffset:CGSizeMake(0, 1)];
-        */
+        
         [self.navigationItem setTitleView:titleLabel];
         [self setNavTitleLabel:titleLabel];
     }   
@@ -310,16 +284,44 @@
     }
     [self.requestPool setValue:request forKey:key];    
 }
-- (UIAlertView*)alert:(NSString *)msg{
+- (UIAlertView*)alert:(NSString *)msg button:(NSString *)buttonTitle,...{
+    if (!msg) {
+        return ;
+    }
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:2];
+    va_list args;
+    va_start(args, buttonTitle);
+    id arg;
+    if (buttonTitle) {
+        [buttons addObject:buttonTitle];
+        while ( (arg = va_arg(args, NSString*) ) != nil) {
+            [buttons addObject:arg];
+        }
+    }
+    va_end(args);
+    if ([buttons count] == 0) {
+        [buttons addObject:NSLocalizedString(@"确定", @"alert")];
+    }
+    
     UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"", nil)
-                                                    message:msg
-                                                   delegate:self
-                                          cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                          otherButtonTitles:nil] autorelease];
+                                                     message:msg
+                                                    delegate:self
+                                           cancelButtonTitle:nil
+                                           otherButtonTitles:nil] autorelease];
+    int n = [buttons count];
+    for (int i=0; i<n; i++) {
+        [alert addButtonWithTitle:[buttons objectAtIndex:i]];
+    }
+    [alert show];
+    return alert;
+}
+- (UIAlertView*)alert:(NSString *)msg{
+    UIAlertView *alert = [self alert:msg button:NSLocalizedString(@"确定", @"alert")];
     [alert setTag:AlertViewTagAlert];
     [alert show];
     return alert;
 }
+
 - (BDropMenu*) topDropMenu{
     if (!_topDropMenu) {
         _topDropMenu = [[BDropMenu alloc] init];

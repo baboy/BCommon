@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "G.h"
+#import "JSONKit.h"
+#import "Api.h"
 #import "DBCache.h"
 #import "BQueue.h"
 #import "Utils.h"
@@ -20,6 +22,9 @@
 #import "NSArray+x.h"
 #import "NSDictionary+x.h"
 #import "NSMutableData+x.h"
-@interface BCommon : NSObject
+#import "XUIImageView.h"
+#import "BLineView.h"
+#import "BIndicator.h"
 
-@end
+//ext
+#import "XScrollView.h"

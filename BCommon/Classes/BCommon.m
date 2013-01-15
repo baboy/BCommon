@@ -7,7 +7,3 @@
 //
 
 #import "BCommon.h"
-
-@implementation BCommon
-
-@end

@@ -28,7 +28,7 @@
 #define gTableSectionBgColor    [UIColor colorWithWhite:0.75 alpha:1]
 #define gNavTitleColor          [UIColor whiteColor]
 #define gNavTitleFont           [UIFont boldSystemFontOfSize:18]
-#define gViewBgColor            [UIColor colorWithWhite:1.0 alpha:1]
+#define gViewBgColor            [UIColor colorWithWhite:0.96 alpha:1]
 #define gThumbnailColor         [UIColor colorWithWhite:1.0 alpha:1]
 #define gNoteFont               [UIFont systemFontOfSize:12.0]
 #define gNoteColor              [UIColor colorWithWhite:0.3 alpha:1]

@@ -69,7 +69,6 @@
 #define HourSec                        3600
 //全局配置文件
 
-#define gImgDropUpdate				@"img_dropupdate.png"
 
 #define gButtonFont                 [UIFont boldSystemFontOfSize:16.0]
 #define gButtonTitleShadowColor     [UIColor colorWithWhite:0 alpha:0.5]
@@ -89,7 +88,6 @@
 #define ShareContentPostfix  NSLocalizedString(@"via iLookForiPhone", nil)
 
 #define AppLink  @"http://www.tvie.com.cn"
-#define ApiDomain   [G valueForKey:@"apiDomain"]
 
 //定义appkey & appsecret
 #define SinaWeiboCallback       @"http://m.tvie.com.cn/mcms/api2/mod/sns/callback.php"

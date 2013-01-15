@@ -7,7 +7,7 @@
 //
 
 #import "BCalloutMapAnnotationView.h"
-#import "G.h"
+#import "BCommon.h"
 
 #define AnnoTitleFont       [UIFont boldSystemFontOfSize:16]
 #define AnnoSubTitleFont    [UIFont systemFontOfSize:14]

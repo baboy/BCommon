@@ -9,10 +9,7 @@
 #import "TableView.h"
 #import "ASIHTTPRequest.h"
 #import "ASIDownloadCache.h"
-#import "G.h"
-#import "UIUtils.h"
-#import "UIImage+x.h"
-#import "NSString+x.h"
+#import "BCommon.h"
 
 
 @interface TableView()

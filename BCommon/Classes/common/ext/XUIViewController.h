@@ -19,7 +19,7 @@ enum{
 
 @end
 @interface XUINavigationController:UINavigationController
-@property (nonatomic, retain)UIColor *navBgColor;
+- (void)setNavBgColor:(UIColor *)color;
 @end
 
 @interface XUIViewController : UIViewController<UIAlertViewDelegate,BDropMenuDelegate>{
@@ -38,4 +38,5 @@ enum{
 - (void)fadeOutAfterDelay:(float)t;
 - (void)setRequest:(ASIHTTPRequest *)request forKey:(NSString *)key;
 - (UIAlertView*)alert:(NSString *)msg;
+- (UIAlertView*)alert:(NSString *)msg button:(NSString *)buttonTitle,...;
 @end

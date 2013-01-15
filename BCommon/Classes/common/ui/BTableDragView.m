@@ -49,7 +49,7 @@
 		[self addSubview:_updatedLabel];
 		
 		float w = W>240?240:W;
-		UIImage *_img = [UIImage imageNamed:gImgDropUpdate];
+		UIImage *_img = [UIImage imageNamed:@""];
 		r = CGRectMake((frame.size.width-w)/2, frame.size.height - UPDATEARROW_HEIGHT, 30.0f, 55.0f);
 		_arrowImg = [[UIImageView alloc]  initWithFrame:r];
 		_arrowImg.contentMode = UIViewContentModeScaleAspectFit;
