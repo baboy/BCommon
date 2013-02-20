@@ -150,6 +150,10 @@ NSString * getChineseCalendar(NSDate * date){
 	if ( [[NSString stringWithFormat:@"%qi",t] length] > 10 ) {
 		t /= 1000;
 	}
+    if (t<99999999) {
+        NSTimeInterval tmp = [[NSDate date] timeIntervalSince1970];
+        t += [Utils getStartTimestampOfDay:tmp];
+    }
 	NSDate *date = [NSDate dateWithTimeIntervalSince1970:t];
 	NSDateFormatter *df = [[NSDateFormatter alloc] init];
 	NSLocale *loc = [NSLocale currentLocale];

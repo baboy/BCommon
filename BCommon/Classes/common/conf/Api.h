@@ -14,7 +14,8 @@ extern NSString *ApiDomain;
 #define ApiConf                 [NSString stringWithFormat:@"%@/config.origin.php", ApiDomain]
 #define ApiMemberLogin          [NSString stringWithFormat:@"%@/mod/member/login.php", ApiDomain]
 #define ApiMemberRegister       [NSString stringWithFormat:@"%@/mod/member/register.php", ApiDomain]
-
+//直播
+#define ApiLiveChannel          [NSString stringWithFormat:@"%@/mod/live/", ApiDomain]
 //评论相关
 #define ApiCommentPost          [NSString stringWithFormat:@"%@/mod/comment/", ApiDomain]
 #define ApiCommentQuery         [NSString stringWithFormat:@"%@/mod/comment/", ApiDomain]
