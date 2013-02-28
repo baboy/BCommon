@@ -18,6 +18,7 @@
 
 
 extern NSString * getImageCacheDir();
+extern NSString * getFilePath(NSString *fn, NSString *ext, NSString *dir);
 extern NSString * getBundleFile(NSString *fn);
 extern NSString * getTempFilePath(NSString *fn);
 extern id nullToNil(id obj);

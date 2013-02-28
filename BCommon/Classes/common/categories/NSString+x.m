@@ -83,4 +83,13 @@
 - (BOOL)isEmail{
     return [self isMatchedByRegex:@"^[-_A-Za-z0-9]+[-A-Za-z0-9_\\.]*@[-_A-Za-z0-9]+\\.[-_A-Za-z0-9\\.]+$"];
 }
+- (BOOL)renameToPath:(NSString *)newPath{
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	return [fileManager moveItemAtPath:self toPath:newPath error:nil];
+}
+- (long long)sizeOfFile{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSDictionary *attrs = [fileManager attributesOfItemAtPath:self error: NULL];
+    return [attrs fileSize];
+}
 @end

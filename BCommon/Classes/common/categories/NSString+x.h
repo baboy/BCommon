@@ -20,4 +20,6 @@
 - (BOOL)isURL;
 - (NSString *)pinyin;
 - (BOOL)isEmail;
+- (BOOL)renameToPath:(NSString *)newPath;
+- (long long)sizeOfFile;
 @end

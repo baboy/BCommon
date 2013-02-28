@@ -33,8 +33,32 @@ NSString * getBundleFile(NSString *fn){
 	NSString *fp = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:fn];
 	return [[NSFileManager defaultManager] fileExistsAtPath:fp]?fp:nil;
 }
+
+NSString * getFilePath(NSString *fn, NSString *ext, NSString *dir){
+    NSString *documentsDirectory = [DOMAIN_DIRS objectAtIndex:0];
+	NSString *d = dir?[documentsDirectory stringByAppendingPathComponent:dir]:documentsDirectory;
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	if(![fileManager fileExistsAtPath:d]){
+		if(![fileManager createDirectoryAtPath:d withIntermediateDirectories:NO attributes:nil error:nil]){
+			return nil;
+		}
+	}
+	
+	NSString *fp = [d stringByAppendingPathComponent:fn];
+	if (ext && ![ext isEqualToString:@""]) {
+		fp = [fp stringByAppendingPathExtension:ext];
+	}
+	return fp;
+}
 NSString * getTempFilePath(NSString *fn){
-    return [Utils getFilePath:fn];
+    NSString *fp = fn;
+    if ([fn rangeOfString:@"/"].length == 0) {
+        fp = getFilePath(fn, @"tmp", nil);
+    }else{
+        fp = [fn stringByAppendingPathExtension:@"tmp"];
+    }
+    return fp;
 }
 id nullToNil(id obj){
 	return (NSNull *)obj == [NSNull null]?nil:obj;
@@ -94,7 +118,6 @@ NSString * getChineseCalendar(NSDate * date){
     
     return chineseCal_str;  
 }  
-
 @implementation Utils
 + (NSString *)getFilePath:(NSString *)fn{
 	NSString *documentDirectory = [DOMAIN_DIRS objectAtIndex:0];
@@ -174,7 +197,7 @@ NSString * getChineseCalendar(NSDate * date){
 	if (size>g) {
 		sg = size/g;
 		size -= sg*g;
-		[s appendFormat:@"%dG",sg];
+		[s appendFormat:@"%lldG",sg];
 	}
 	if (size>=m*0.1) {
 		sm = (float)size/m;
@@ -184,7 +207,7 @@ NSString * getChineseCalendar(NSDate * date){
 		[s appendFormat:@"%.2fK",((float)size/k)];
 	}
 	if ([s length]==0) {		
-		[s appendFormat:@"%dB",size];
+		[s appendFormat:@"%lldB",size];
 	}
 	return [s description] ;
 }
