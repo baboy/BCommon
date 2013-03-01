@@ -92,4 +92,13 @@
     NSDictionary *attrs = [fileManager attributesOfItemAtPath:self error: NULL];
     return [attrs fileSize];
 }
+- (id)json{
+    NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err = nil;
+    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments|NSJSONReadingMutableContainers error:&err];
+    if (err) {
+        NSLog(@"[NSString] jsonObject error:%@",err);
+    }
+    return json;
+}
 @end

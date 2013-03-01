@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ASIHTTPRequest.h"
 #import "BDropMenu.h"
 #import "BDropTitleView.h"
+#import "AFHTTPClient.h"
 
 enum{
     AlertViewTagAlert,
@@ -36,7 +36,7 @@ enum{
 - (void)showMessageAndFadeOut:(NSString *)msg;
 - (void)fadeOut;
 - (void)fadeOutAfterDelay:(float)t;
-- (void)setRequest:(ASIHTTPRequest *)request forKey:(NSString *)key;
+- (void)setHttpRequest:(id)request forKey:(NSString *)key;
 - (UIAlertView*)alert:(NSString *)msg;
 - (UIAlertView*)alert:(NSString *)msg button:(NSString *)buttonTitle,...;
 @end

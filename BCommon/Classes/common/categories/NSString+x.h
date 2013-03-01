@@ -22,4 +22,5 @@
 - (BOOL)isEmail;
 - (BOOL)renameToPath:(NSString *)newPath;
 - (long long)sizeOfFile;
+- (id)json;
 @end

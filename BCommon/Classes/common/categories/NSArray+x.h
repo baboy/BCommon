@@ -10,5 +10,6 @@
 
 @interface NSArray(x)
 - (NSArray *)reverse ;
-
+- (NSData *)jsonData;
+- (NSString *)jsonString;
 @end

@@ -10,4 +10,6 @@
 
 @interface NSDictionary(x)
 - (NSMutableData *)postData;
+- (NSData *)jsonData;
+- (NSString *)jsonString;
 @end
