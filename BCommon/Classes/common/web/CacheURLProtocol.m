@@ -7,19 +7,12 @@
 //
 
 #import "CacheURLProtocol.h"
-#import "ASIHTTPRequest.h"
-#import "ASIDownloadCache.h"
-#import "GTMBase64.h"
-#import "G.h"
 
-@interface CacheURLProtocol(){
-    ASIHTTPRequest *cacheRequest;
-}
-@property(nonatomic, retain) ASIHTTPRequest *cacheRequest;
+@interface CacheURLProtocol()
+@property(nonatomic, retain) BHttpRequestOperation *cacheOperation;
 @end
 
 @implementation CacheURLProtocol
-@synthesize cacheRequest;
 + (BOOL)canInitWithRequest:(NSURLRequest *)request{
     NSString *scheme = [[request URL] scheme];
     return ([scheme isEqualToString:CacheSchemeName]);
@@ -35,51 +28,45 @@
     NSString *urlString = [cacheURL httpURLString];
     NSURL *reqURL = [NSURL URLWithString:urlString];
     
-    ASIDownloadCache *cache = [ASIDownloadCache sharedCache];
-    
-    NSData *data = [cache cachedResponseDataForURL:reqURL];
-    //NSLog(@"start Loading:%@,%d,%@",urlString,[data length],[cache pathToCachedResponseDataForURL:reqURL]);
+    BHttpRequestCache *cache = [BHttpRequestCache fileCache];
+    NSData *data = [cache cacheDataForURL:reqURL];
     if (data) {
-        [self.client URLProtocol:self didLoadData:data];  
+        [self.client URLProtocol:self didLoadData:data];
         [self.client URLProtocolDidFinishLoading:self];
         return;
-    }    
-    self.cacheRequest = [ASIHTTPRequest requestWithURL:reqURL];
-    [self.cacheRequest setDelegate:self];
-    [self.cacheRequest setDownloadCache:cache];
-    [self.cacheRequest setCachePolicy:ASIOnlyLoadIfNotCachedCachePolicy];
-    [self.cacheRequest setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-    [self.cacheRequest setDownloadDestinationPath:[cache pathToStoreCachedResponseDataForRequest:cacheRequest]];
-    [self.cacheRequest startAsynchronous];
+    }
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:reqURL parameters:nil];
+    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id data) {
+                                                                     
+                                                                     [self.client URLProtocolDidFinishLoading:self];
+                                                                 }
+                                                                 failure:^(BHttpRequestOperation *request, NSError *error) {                                                                     
+                                                                     [self.client URLProtocol:self didFailWithError:error];
+                                                                 }];
+    [operation setReceiveDataBlock:^(NSData *data) {
+        [self.client URLProtocol:self didLoadData:data];
+    }];
+    [operation setRequestCache:cache];
+    [operation start];
+
+    self.cacheOperation = operation;
 }
 
 // Called by URL loading system in response to normal finish, error or abort. Cleans up in each case.
 - (void)stopLoading{
     //NSLog(@"stopLoading...:%d",[[cacheRequest responseData] length]);
-    if (cacheRequest) {
-        [cacheRequest clearDelegatesAndCancel];
+    if (self.cacheOperation) {
+        [self.cacheOperation cancel];
     }
-    self.cacheRequest = nil;
-}
-- (void)requestFinished:(ASIHTTPRequest *)request{
-    //NSLog(@"requestFinished...:%d,%d",[[cacheRequest responseData] length],[[cacheRequest rawResponseData] length]);
-    [self.client URLProtocolDidFinishLoading:self];
-}
-- (void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data{ 
-    //NSLog(@"cache-image didReceiveData:%d",[data length]);
-    [self.client URLProtocol:self didLoadData:data];  
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)request{
-    NSError *error = [request error];
-    //NSLog(@"cache-image requestFailed:%@,%@",error,[request url]);
-    [self.client URLProtocol:self didFailWithError:error];
+    self.cacheOperation = nil;
 }
 - (void)dealloc{  
-    if (cacheRequest) {
-        [cacheRequest clearDelegatesAndCancel];
+    if (self.cacheOperation) {
+        [self.cacheOperation cancel];
     }
-    [cacheRequest release];
+    [_cacheOperation release];
     [super dealloc];
 }
 @end

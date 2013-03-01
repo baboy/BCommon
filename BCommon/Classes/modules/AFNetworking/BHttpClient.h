@@ -12,11 +12,14 @@
 @interface BHttpClient : AFHTTPClient
 
 + (id)defaultClient;
-- (id)requestJsonWithURLRequest:(NSURLRequest *)urlRequest
-                        success:(void (^)(BHttpRequestOperation *request, id JSON))success
-                        failure:(void (^)(BHttpRequestOperation *request, NSError *error))failure;
+- (id)jsonRequestWithURLRequest:(NSURLRequest *)urlRequest
+                        success:(void (^)(BHttpRequestOperation *operation, id json))success
+                        failure:(void (^)(BHttpRequestOperation *operation, NSError *error))failure;
 
-- (id)requestWithURLRequest:(NSURLRequest *)urlRequest
-                    success:(void (^)(BHttpRequestOperation *request, id JSON))success
-                    failure:(void (^)(BHttpRequestOperation *request, NSError *error))failure;
+- (id)dataRequestWithURLRequest:(NSURLRequest *)urlRequest
+                    success:(void (^)(BHttpRequestOperation *operation, id data))success
+                    failure:(void (^)(BHttpRequestOperation *operation, NSError *error))failure;
+
+- (NSMutableURLRequest *)requestWithPostURL:(NSURL *)url parameters:(NSDictionary *)parameters;
+- (NSMutableURLRequest *)requestWithGetURL:(NSURL *)url parameters:(NSDictionary *)parameters;
 @end

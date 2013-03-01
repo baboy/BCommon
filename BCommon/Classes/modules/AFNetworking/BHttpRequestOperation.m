@@ -9,8 +9,10 @@
 #import "BHttpRequestOperation.h"
 #import "G.h"
 
+typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
+
 @interface AFURLConnectionOperation(x)<NSURLConnectionDataDelegate>
-@property (nonatomic, readonly) NSRecursiveLock *lock;
+- (NSRecursiveLock *)lock;
 - (void)finish;
 - (void)operationDidStart;
 @end
@@ -20,6 +22,7 @@
 @interface BHttpRequestOperation()
 @property (nonatomic, retain) NSString *tmpFilePath;
 @property (nonatomic, assign) BOOL readFromCache;
+@property (nonatomic, copy)   BHttpRequestOperationReceiveBlock receiveBlock;
 @end
 
 @implementation BHttpRequestOperation
@@ -81,6 +84,12 @@
     [self.lock unlock];
     [super operationDidStart];
 }
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
+    if (self.receiveBlock) {
+        self.receiveBlock(data);
+    }
+    [super connection:connection didReceiveData:data];
+}
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
     [self.outputStream close];
     if (self.cacheFilePath) {
@@ -101,5 +110,8 @@
         return nil;
     }
     return [super error];
+}
+- (void)setReceiveDataBlock:(void (^)(NSData *data))block{
+    
 }
 @end

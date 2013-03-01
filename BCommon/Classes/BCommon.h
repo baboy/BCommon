@@ -30,3 +30,7 @@
 
 //ext
 #import "XScrollView.h"
+#import "BHttpClient.h"
+
+//
+#import "GTMBase64.h"

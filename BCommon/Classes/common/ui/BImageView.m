@@ -7,33 +7,20 @@
 //
 
 #import "BImageView.h"
-#import <QuartzCore/QuartzCore.h>
-#import "ASIHTTPRequest.h"
-#import "ASIDownloadCache.h"
-#import "NSString+x.h"
-#import "UIUtils.h"
 
 #define BImgViewTitleFont			[UIFont boldSystemFontOfSize:12]
 #define BImgViewTitleColor			[UIColor whiteColor]
 #define BImgViewTitleShadowColor	[UIColor blackColor]
 
 
-@interface BImageView(){
-    
-    ASIHTTPRequest *request;
-}
-@property(nonatomic, retain) ASIHTTPRequest *request;
+@interface BImageView()
+@property(nonatomic, retain) BHttpRequestOperation *operation;
 - (void) loadImage;
 - (void) handleTap:(UIGestureRecognizer *)recognizer;
 - (void) createSubviews;
 @end
 
 @implementation BImageView
-@synthesize object = _object;
-@synthesize padding = _padding;
-@synthesize imageURL = _imageURL;
-@synthesize titleStyle = _titleStyle;
-@synthesize request;
 
 - (id)initWithFrame:(CGRect)frame {
     
@@ -131,32 +118,26 @@
 	[self loadImage];
 	
 }
-- (void) requestFinished:(ASIHTTPRequest *)req{
-    [_progressView setHidden:YES];
-    NSString *fn = [self.request downloadDestinationPath];
-    if (fn) {        
-        [self setImageLocalPath:fn];
-    }    
-    if (self.request) {
-        [self.request clearDelegatesAndCancel];
-    }
-    self.request = nil;
-}
-- (void) requestFailed:(ASIHTTPRequest *)req{
-    [self requestFinished:req];
-}
-- (void)setProgress:(float)newProgress{
-    _progressView.progress = newProgress;
-}
-- (void) loadImage{    
-    self.request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:_imageURL]];
-    [self.request setDownloadCache:[ASIDownloadCache sharedCache]];
-    [self.request setCachePolicy:ASIOnlyLoadIfNotCachedCachePolicy];
-    [self.request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-    [self.request setDownloadDestinationPath:[[ASIDownloadCache sharedCache] pathToStoreCachedResponseDataForRequest:request]];
-    [self.request setDelegate:self];
-    [self.request setDownloadProgressDelegate:self];
-    [self.request startAsynchronous];
+- (void) loadImage{
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:self.imageURL] parameters:nil];
+    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id data) {
+                                                                     if (self && [self isKindOfClass:[UIImageView class]]) {
+                                                                         NSString *fp = operation.cacheFilePath;
+                                                                         [self setImageLocalPath:fp];
+                                                                         self.operation = nil;
+                                                                     }
+                                                                 }
+                                                                 failure:^(BHttpRequestOperation *request, NSError *error) {
+                                                                     
+                                                                 }];
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        _progressView.progress = ((float)totalBytesRead/totalBytesExpectedToRead);
+    }];
+    [operation setRequestCache:[BHttpRequestCache fileCache]];
+    self.operation = operation;
+    [operation start];
 }
 - (void) showProgress:(BOOL)showProgress{
     [_progressView setHidden:!showProgress];
@@ -179,10 +160,10 @@
     [_progressView setFrame:CGRectInset(rect, 3, 0)];
 }
 - (void)dealloc {
-    if (request) {
-        [request clearDelegatesAndCancel];
+    if (self.operation) {
+        [self.operation cancel];
     }
-    [request release];
+    [_operation release];
 	[_object release];
 	[_imageURL release];
 	[_imageLocalPath release];

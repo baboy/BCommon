@@ -7,23 +7,15 @@
 //
 
 #import "XUIImageView.h"
-#import "ASIHTTPRequest.h"
-#import "ASIDownloadCache.h"
-#import "G.h"
-#import "NSString+x.h"
 
 @interface XUIImageView()
 @property (nonatomic, assign) id target;
 @property (nonatomic, assign) SEL action;
-@property (nonatomic, retain) ASIHTTPRequest *request;
+@property (nonatomic, retain) BHttpRequestOperation *operation;
 @end
 
 @implementation XUIImageView
 @synthesize object;
-@synthesize request = _request;
-@synthesize target = _target;
-@synthesize action = _action;
-@synthesize delegate = _delegate;
 
 
 - (void)setImageAndNotify:(UIImage *)image{    
@@ -37,22 +29,22 @@
     }
 }
 - (void)setImageURL:(NSURL *)url{
-    if (_request) {
-        [_request clearDelegatesAndCancel];
+    if (self.operation) {
+        [self.operation cancel];
     }
-    RELEASE(_request);    
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setDownloadCache:[ASIDownloadCache sharedCache]];
-    [request setCachePolicy:ASIOnlyLoadIfNotCachedCachePolicy];
-    [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-    [request setDownloadDestinationPath:[[ASIDownloadCache sharedCache] pathToStoreCachedResponseDataForRequest:request]];
-    [request setCompletionBlock:^{
-        NSString *fn = [request downloadDestinationPath];
-        DLOG(@"setImageURL setImageURL:%@",fn);
-        [self setImageAndNotify:[UIImage imageWithContentsOfFile:fn]];
-    }];
-    [request startAsynchronous];
-    [self setRequest:_request];
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:url parameters:nil];
+    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
+                          success:^(BHttpRequestOperation *operation, id data) {
+                              NSString *fp = operation.cacheFilePath;
+                              [self setImageAndNotify:[UIImage imageWithContentsOfFile:fp]];
+                          }
+                          failure:^(BHttpRequestOperation *request, NSError *error) {
+                              
+                          }];
+    [operation setRequestCache:[BHttpRequestCache fileCache]];
+    [operation start];
+    [self setOperation:operation];
 }
 - (void)setImageURLString:(NSString *)urlString{
     if ([urlString isURL]) {
@@ -72,10 +64,10 @@
     [self addGestureRecognizer:tap];
 }
 - (void)dealloc{
-    if (_request) {
-        [_request clearDelegatesAndCancel];
+    if (self.operation) {
+        [self.operation cancel];
     }
-    RELEASE(_request);
+    RELEASE(_operation);
     [super dealloc];
 }
 @end

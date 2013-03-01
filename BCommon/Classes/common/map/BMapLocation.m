@@ -83,45 +83,50 @@
     NSString *currentAddress = [NSString stringWithFormat:@"%@%@%@", [location country]?[location country]:@"", [location province]?[location province]:@"",([location city] && ![[location city] isEqualToString:[location province]])?[location city]:@""];
     [G setValue:currentAddress forKey:@"CurrentAdress"];
 }
-+ (ASIHTTPRequest *)getLocationByIpSuccess:(void (^)(BMapLocation *loc))success failure:(void (^)(NSError *error))failure{
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:@"http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json"]];
-    [request setCompletionBlock:^{
-        id json = [[request responseString] objectFromJSONString];
-        BMapLocation *loc = nil;
-        if (json) {
-            loc = [[[BMapLocation alloc] init] autorelease];
-            loc.country = [json valueForKey:@"country"];
-            loc.province = [json valueForKey:@"province"];
-            loc.city = [json valueForKey:@"city"];
-            loc.district = [json valueForKey:@"district"];
-        }
-        success(loc);
-    }];
-    [request setFailedBlock:^{
-        failure(request.error);
-    }];
-    [request startAsynchronous];
-    return request;
++ (BHttpRequestOperation *)getLocationByIpSuccess:(void (^)(BMapLocation *loc))success failure:(void (^)(NSError *error))failure{
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:@"http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json"] parameters:nil];
+    BHttpRequestOperation *operation = [client jsonRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id json) {
+                                                                     BMapLocation *loc = nil;
+                                                                     if (json) {
+                                                                         loc = [[[BMapLocation alloc] init] autorelease];
+                                                                         loc.country = [json valueForKey:@"country"];
+                                                                         loc.province = [json valueForKey:@"province"];
+                                                                         loc.city = [json valueForKey:@"city"];
+                                                                         loc.district = [json valueForKey:@"district"];
+                                                                     }
+                                                                     success(loc);
+                                                                     
+                                                                 } failure:^(BHttpRequestOperation *operation, NSError *error) {
+                                                                     if (failure) {
+                                                                         failure(error);
+                                                                     }
+                                                                 }];
+    [operation start];
+    return operation;
 }
-+ (ASIHTTPRequest *)searchLocation:(NSString *)locationName success:(void (^)(BMapLocation *loc))success failure:(void (^)(NSError *error))failure{
++ (BHttpRequestOperation *)searchLocation:(NSString *)locationName success:(void (^)(BMapLocation *loc))success failure:(void (^)(NSError *error))failure{
     NSString *url = [NSString stringWithFormat:@"http://maps.google.com/maps/geo?q=%@&output=json&hl=zh_CN",locationName];
-    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-    [request setCompletionBlock:^{
-        id json = [[request responseString] objectFromJSONString];
-        BMapLocation *loc = nil;
-        if (json && [json valueForKey:@"Placemark"] && [[json valueForKey:@"Placemark"] count]) {
-            loc = [[[BMapLocation alloc] initWithGoogleData:[[json valueForKey:@"Placemark"] objectAtIndex:0]] autorelease];
-        }
-        success(loc);
-    }];
-    [request setFailedBlock:^{
-        failure(request.error);
-    }];
-    [request startAsynchronous];    
-    return request;
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:url] parameters:nil];
+    BHttpRequestOperation *operation = [client jsonRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id json) {
+                                                                     BMapLocation *loc = nil;
+                                                                     if (json && [json valueForKey:@"Placemark"] && [[json valueForKey:@"Placemark"] count]) {
+                                                                         loc = [[[BMapLocation alloc] initWithGoogleData:[[json valueForKey:@"Placemark"] objectAtIndex:0]] autorelease];
+                                                                     }
+                                                                     success(loc);
+                                                                     
+                                                                 } failure:^(BHttpRequestOperation *operation, NSError *error) {
+                                                                     if (failure) {
+                                                                         failure(error);
+                                                                     }
+                                                                 }];
+    [operation start];
+    return operation;
 }
-+ (ASIHTTPRequest *)searchCoord:(CLLocationCoordinate2D)coord success:(void (^)(BMapLocation *loc))success failure:(void (^)(NSError *error))failure{
++ (BHttpRequestOperation *)searchCoord:(CLLocationCoordinate2D)coord success:(void (^)(BMapLocation *loc))success failure:(void (^)(NSError *error))failure{
     NSString *q = [NSString stringWithFormat:@"%f,%f",coord.latitude,coord.longitude];
     return [self searchLocation:q success:success failure:failure];
 }

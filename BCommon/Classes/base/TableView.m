@@ -7,14 +7,8 @@
 //
 
 #import "TableView.h"
-#import "ASIHTTPRequest.h"
-#import "ASIDownloadCache.h"
-#import "BCommon.h"
 
 
-@interface TableView()
-- (void)imageLoadFinished:(ASIHTTPRequest *)request;
-@end
 @implementation TableView
 @synthesize hasMore = _hasMore;
 @synthesize useCache = _useCache;
@@ -91,35 +85,36 @@
 	}
     NSURL *url = [NSURL URLWithString:[imgURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ];
     DLOG(@"loadImg:%@",url);
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-    [request setDownloadCache:[ASIDownloadCache sharedCache]];
-    [request setCachePolicy:ASIOnlyLoadIfNotCachedCachePolicy];
-    [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-    [request setDownloadDestinationPath:[[ASIDownloadCache sharedCache] pathToStoreCachedResponseDataForRequest:request]];
-    [request setUserInfo:[NSDictionary dictionaryWithObject:indexPath forKey:@"indexPath"]];
-    [request setCompletionBlock:^{
-        [self imageLoadFinished:request];
-    }];
-    [request setFailedBlock:^{
-        DLOG(@"[TableView] loadImg error:%@",request.error);
-        [self imageLoadFinished:request];
-    }];
-	[_queue addOperation:request];
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:url parameters:nil];
+    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id data) {
+                                                                     if (self && [self isKindOfClass:[UIImageView class]]) {
+                                                                         NSString *fp = operation.cacheFilePath;
+                                                                         
+                                                                         NSIndexPath *indexPath = [[operation userInfo] valueForKey:@"indexPath"];
+                                                                         [self setImagePath:fp forURL:operation.request.URL forIndexPath:indexPath];
+                                                                     }
+                                                                 }
+                                                                 failure:^(BHttpRequestOperation *request, NSError *error) {
+                                                                     
+                                                                 }];
+    [operation setUserInfo:[NSDictionary dictionaryWithObject:indexPath forKey:@"indexPath"]];
+    [operation setRequestCache:[BHttpRequestCache fileCache]];
+	[_queue addOperation:operation];
 }
-- (void)imageLoadFinished:(ASIHTTPRequest *)request{
-    NSString *fn = [request downloadDestinationPath];
-    NSIndexPath *indexPath = [[request userInfo] valueForKey:@"indexPath"];
-    if (fn && indexPath && [self cellForRowAtIndexPath:indexPath]) {
+- (void)setImagePath:(NSString *)fp forURL:(NSURL *)url forIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath && [self cellForRowAtIndexPath:indexPath]) {
         UITableViewCell *cell = [self cellForRowAtIndexPath:indexPath];
         if ([cell respondsToSelector:@selector(setImgLocalPath:)]) {
-            [cell performSelector:@selector(setImgLocalPath:) withObject:fn];
+            [cell performSelector:@selector(setImgLocalPath:) withObject:fp];
         }else if([cell respondsToSelector:@selector(setImg:)]){
-            [cell performSelector:@selector(setImg:) withObject:[UIImage imageWithContentsOfFile:fn]];
+            [cell performSelector:@selector(setImg:) withObject:[UIImage imageWithContentsOfFile:fp]];
         }
         if (self.delegate && [self.delegate respondsToSelector:@selector(cacheImage:forIndexPath:)]) {
-            [self.delegate performSelector:@selector(cacheImage:forIndexPath:) withObject:fn withObject:indexPath];
+            [self.delegate performSelector:@selector(cacheImage:forIndexPath:) withObject:fp withObject:indexPath];
         }else{
-            [self cacheImage:fn forUrl:[request.url absoluteString]];
+            [self cacheImage:fp forUrl:[url absoluteString]];
         }
     }
 }

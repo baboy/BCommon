@@ -7,119 +7,63 @@
 //
 
 #import "AsyncLoader.h"
-#import "ASIDownloadCache.h"
-#import "ASIFormDataRequest.h"
-#import "G.h"
-#import "Utils.h"
-#import "JSONKit.h"
-#import "Api.h"
 
 @implementation AsyncLoader
-+ (ASIHTTPRequest *)loadConfig:(NSString *)url param:(NSDictionary*)param  success:(void (^)(id json))success failure:(void (^)(NSError *error))failure{
-    DLOG(@"url:%@",url);
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-    [request setDownloadCache:[ASIDownloadCache sharedCache]];
-    [request setCachePolicy:ASIFallbackToCacheIfLoadFailsCachePolicy];
-    [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-    [request setCompletionBlock:^{
-        //DLOG(@"config:%@",[request responseString]);
-        id json = [[request responseString] objectFromJSONString];
-        if (success) {
-            success(json);
-        }
-    }];
-    [request setFailedBlock:^{
-        DLOG(@"fail:%@",[request error]);
-        if (failure) {
-            failure([request error]);
-        }
-    }];
-    [request startAsynchronous];    
-    return request;
++ (BHttpRequestOperation *)loadDataString:(NSString *)url param:(NSDictionary*)param  cached:(BOOL)cached success:(void (^)(NSString *s))success failure:(void (^)(NSError *error))failure{
+    return [self loadData:url
+                    param:param
+                   cached:cached
+                  success:^(NSData *data) {
+                      NSString *s = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                      if (success) {
+                          success(s);
+                      }
+                  }
+                  failure:failure];
+
 }
-+ (ASIHTTPRequest *)loadJSONData:(NSString *)url param:(NSDictionary*)param success:(void (^)(id json))success failure:(void (^)(NSError *error))failure{
-    url = [Utils url:url withParam:param];
++ (BHttpRequestOperation *)loadData:(NSString *)url param:(NSDictionary*)param cached:(BOOL)cached success:(void (^)(NSData *data))success failure:(void (^)(NSError *error))failure;{
     NSLog(@"url:%@",url);
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-    [request setCompletionBlock:^{
-        id json = [[request responseString] objectFromJSONString];
-        if (success) {
-            success(json);
-        }
-    }];
-    [request setFailedBlock:^{
-        if (failure) {
-            failure([request error]);
-        }
-    }];
-    [request startAsynchronous];    
-    return request;
-}
-+ (ASIHTTPRequest *)loadDataString:(NSString *)url param:(NSDictionary*)param  cached:(BOOL)cached success:(void (^)(NSString *s))success failure:(void (^)(NSError *error))failure{
-    NSLog(@"url:%@",url);
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
+    
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:url] parameters:param];
+    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id data) {
+                                                                     if (success) {
+                                                                         success( data );
+                                                                     }
+                                                                 }
+                                                                 failure:^(BHttpRequestOperation *operation, NSError *error) {                                                                     
+                                                                     DLOG(@"fail:%@",error);
+                                                                     if (failure) {
+                                                                         failure(error);
+                                                                     }
+                                                                 }];
     if (cached) {
-        [request setDownloadCache:[ASIDownloadCache sharedCache]];
-        [request setCachePolicy:ASIFallbackToCacheIfLoadFailsCachePolicy];
-        [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
+        [operation setRequestCache:[BHttpRequestCache defaultCache]];
     }
-    [request setCompletionBlock:^{
-        if (success) {
-            success([request responseString]);
-        }
-    }];
-    [request setFailedBlock:^{
-        DLOG(@"fail:%@",[request error]);
-        if (failure) {
-            failure([request error]);
-        }
-    }];
-    [request startAsynchronous];    
-    return request;
+    [operation start];
+    return operation;
 }
-+ (ASIHTTPRequest *)loadData:(NSString *)url param:(NSDictionary*)param cached:(BOOL)cached success:(void (^)(NSData *data))success failure:(void (^)(NSError *error))failure;{
-    NSLog(@"url:%@",url);
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-    if (cached) {
-        [request setDownloadCache:[ASIDownloadCache sharedCache]];
-        [request setCachePolicy:ASIFallbackToCacheIfLoadFailsCachePolicy];
-        [request setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
-    }
-    [request setCompletionBlock:^{
-        if (success) {
-            success([request responseData] );
-        }
-    }];
-    [request setFailedBlock:^{
-        DLOG(@"fail:%@",[request error]);
-        if (failure) {
-            failure([request error]);
-        }
-    }];
-    [request startAsynchronous];    
-    return request;
++ (BHttpRequestOperation *)post:(NSURL *)url param:(NSDictionary*)param success:(void (^)(id json))success failure:(void (^)(NSError *error))failure{
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithPostURL:url parameters:param];
+    BHttpRequestOperation *operation = [client jsonRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id json) {
+                                                                     
+                                                                     if (success) {
+                                                                         success(json);
+                                                                     }
+                                                                 }
+                                                                 failure:^(BHttpRequestOperation *operation, NSError *error) {
+                                                                     if (failure) {
+                                                                         failure(error);
+                                                                     }
+                                                                 }];
+    [operation start];
+    return operation;
 }
-+ (ASIHTTPRequest *)post:(NSString *)url param:(NSDictionary*)param success:(void (^)(id json))success failure:(void (^)(NSError *error))failure{
-    ASIFormDataRequest *formRequest = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:url]];
-    //[formRequest setRequestMethod:@"POST"];
-    for (NSString *k in [param allKeys]) {
-        [formRequest setPostValue:[param objectForKey:k] forKey:k];
-    }
-    [formRequest setCompletionBlock:^{  
-        NSDictionary *json = [formRequest.responseString objectFromJSONString];
-        if (success) {
-            success(json);
-        }
-    }];
-    [formRequest setFailedBlock:^{
-        if (failure) {
-            failure([formRequest error]);
-        }
-    }];
-    [formRequest startAsynchronous];
-    return formRequest;
-}
-+ (ASIHTTPRequest *)feedback:(NSString *)content success:(void (^)(id json))success failure:(void (^)(NSError *error))failure{
++ (BHttpRequestOperation *)feedback:(NSString *)content success:(void (^)(id json))success failure:(void (^)(NSError *error))failure{
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithCapacity:3];
     [param setValue:content forKey:@"content"];
     [param setValue:BundleID forKey:@"domain"];
@@ -127,7 +71,7 @@
     [param setValue:BundleVersion forKey:@"sid"];
     [param setValue:TmpUserID forKey:UserIDKey];
     [param setValue:TmpUserName forKey:UserNameKey];
-    return [self post:ApiFeedback
+    return [self post:[NSURL URLWithString:ApiFeedback]
                 param:param
               success:success
               failure:failure];

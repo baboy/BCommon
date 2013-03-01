@@ -7,7 +7,9 @@
 //
 
 #import "BHttpClient.h"
-
+@interface BHttpClient(x)
+- (NSMutableDictionary *)defaultHeaders;
+@end
 @implementation BHttpClient
 
 + (id)defaultClient {
@@ -30,9 +32,9 @@
     
     return self;
 }
-- (id)requestJsonWithURLRequest:(NSURLRequest *)urlRequest
-										success:(void (^)(BHttpRequestOperation *request, id JSON))success
-										failure:(void (^)(BHttpRequestOperation *request, NSError *error))failure
+- (id)jsonRequestWithURLRequest:(NSURLRequest *)urlRequest
+										success:(void (^)(BHttpRequestOperation *operation, id json))success
+										failure:(void (^)(BHttpRequestOperation *operation, NSError *error))failure
 {
     return [self HTTPRequestOperationWithRequest:urlRequest
                                          success:^(id operation, id responseObject) {
@@ -47,9 +49,9 @@
                                          }];
 }
 
-- (id)requestWithURLRequest:(NSURLRequest *)urlRequest
-                     success:(void (^)(BHttpRequestOperation *request, id JSON))success
-                     failure:(void (^)(BHttpRequestOperation *request, NSError *error))failure
+- (id)dataRequestWithURLRequest:(NSURLRequest *)urlRequest
+                     success:(void (^)(BHttpRequestOperation *operation, id data))success
+                     failure:(void (^)(BHttpRequestOperation *operation, NSError *error))failure
 {
     return [self HTTPRequestOperationWithRequest:urlRequest
                                          success:^(id operation, id responseObject) {
@@ -63,4 +65,48 @@
                                              }
                                          }];
 }
+- (NSMutableURLRequest *)requestWithPostURL:(NSURL *)url parameters:(NSDictionary *)parameters
+{
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"POST"];
+    [request setAllHTTPHeaderFields:self.defaultHeaders];
+	
+    if (parameters) {
+        NSString *charset = (NSString *)CFStringConvertEncodingToIANACharSetName(CFStringConvertNSStringEncodingToEncoding(self.stringEncoding));
+        NSError *error = nil;
+        
+        switch (self.parameterEncoding) {
+            case AFFormURLParameterEncoding:;
+                [request setValue:[NSString stringWithFormat:@"application/x-www-form-urlencoded; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
+                [request setHTTPBody:[AFQueryStringFromParametersWithEncoding(parameters, self.stringEncoding) dataUsingEncoding:self.stringEncoding]];
+                break;
+            case AFJSONParameterEncoding:;
+                [request setValue:[NSString stringWithFormat:@"application/json; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
+                [request setHTTPBody:[NSJSONSerialization dataWithJSONObject:parameters options:0 error:&error]];
+                break;
+            case AFPropertyListParameterEncoding:;
+                [request setValue:[NSString stringWithFormat:@"application/x-plist; charset=%@", charset] forHTTPHeaderField:@"Content-Type"];
+                [request setHTTPBody:[NSPropertyListSerialization dataWithPropertyList:parameters format:NSPropertyListXMLFormat_v1_0 options:0 error:&error]];
+                break;
+        }
+        
+        if (error) {
+            NSLog(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
+        }
+    }
+    
+	return request;
+}
+- (NSMutableURLRequest *)requestWithGetURL:(NSURL *)url parameters:(NSDictionary *)parameters{
+    if (parameters) {
+        NSString *urlString = [Utils url:[url absoluteString] withParam:parameters];
+        url = [NSURL URLWithString:urlString];
+    }
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    [request setHTTPMethod:@"GET"];
+    [request setAllHTTPHeaderFields:self.defaultHeaders];
+    
+    return request;
+}
+
 @end

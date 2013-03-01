@@ -31,5 +31,7 @@ typedef enum _BHttpRequestCachePolicy {
 @interface BHttpRequestCache : NSObject
 @property (nonatomic, assign) BHttpRequestCachePolicy cachePolicy;
 + (id)defaultCache;
++ (id)fileCache;
 - (NSString *)cachePathForURL:(NSURL *)url;
+- (NSData *)cacheDataForURL:(NSURL *)url;
 @end
