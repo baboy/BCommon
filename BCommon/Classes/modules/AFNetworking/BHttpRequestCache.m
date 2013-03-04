@@ -14,7 +14,7 @@
     static id _defaultHttpRequestCache = nil;
     static dispatch_once_t initOnceDefaultCache;
     dispatch_once(&initOnceDefaultCache, ^{
-        _defaultHttpRequestCache = [[[BHttpRequestCache alloc] init] autorelease];
+        _defaultHttpRequestCache = [[BHttpRequestCache alloc] init];
         [_defaultHttpRequestCache setCachePolicy:BHttpRequestCachePolicyFallbackToCacheIfLoadFails];
     });    
     return _defaultHttpRequestCache;
@@ -23,7 +23,7 @@
     static id _fileRequestCache = nil;
     static dispatch_once_t initOnceFileCache;
     dispatch_once(&initOnceFileCache, ^{
-        _fileRequestCache = [[[BHttpRequestCache alloc] init] autorelease];
+        _fileRequestCache = [[BHttpRequestCache alloc] init];
         [_fileRequestCache setCachePolicy:BHttpRequestCachePolicyLoadIfNotCached];
     });
     return _fileRequestCache;

@@ -17,7 +17,6 @@
 @property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, retain) UIActivityIndicatorView *indicatorView;
 @property (nonatomic, assign) CGFloat arc;
-- (float)activeHeight;
 @end
 
 @interface XScrollView()
@@ -37,6 +36,20 @@
         // Initialization code
     }
     return self;
+}
+- (void)awakeFromNib{
+    
+}
+- (void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    CGSize contentSize = self.contentSize;
+    contentSize.height = MAX(contentSize.height, self.bounds.size.height);
+    [self setContentSize:contentSize];
+    if (self.isSupportLoadMore) {
+        CGRect frame = self.bounds;
+        frame.origin.y = MAX(frame.size.height, self.contentSize.height);
+        [self.moreView setFrame:frame];
+    }
 }
 - (DragView *) updateView{
     if (!_updateView && self.isSupportUpdate) {
@@ -60,26 +73,28 @@
 }
 - (void)setSupportLoadMore:(BOOL)supportLoadMore{
     _supportLoadMore = supportLoadMore;
-    [self updateView];
-    if (!supportLoadMore && self.updateView) {
-        [self.updateView removeFromSuperview];
-        RELEASE(_updateView);
+    if (!supportLoadMore && _moreView) {
+        [self.moreView removeFromSuperview];
+        RELEASE(_moreView);
+        return;
     }
+    [self moreView];
 }
 - (void)setSupportUpdate:(BOOL)supportUpdate{
     _supportUpdate = supportUpdate;
-    [self moreView];
-    if (!supportUpdate && self.moreView) {
-        [self.moreView removeFromSuperview];
-        RELEASE(_moreView);
+    if (!supportUpdate && _updateView) {
+        [self.updateView removeFromSuperview];
+        RELEASE(_updateView);
+        return;
     }
+    [self updateView];
 }
 
 - (void)updateFinished{
     [self.layer removeAllAnimations];
     [UIView animateWithDuration:0.2
                      animations:^{
-                         self.contentInset = UIEdgeInsetsMake(0, 0.0f, 00.0f, 0.0f);
+                         self.contentInset = UIEdgeInsetsZero;
                      }];
 	if (self.updateView.state == DragStateDraging) {
 		self.updateView.state = DragStateLoadFinished;
@@ -90,11 +105,12 @@
 }
 - (void)startUpdate{
     if (self.isSupportUpdate) {
+        [self.layer removeAllAnimations];
         [UIView animateWithDuration:0.2
                          animations:^{
                              self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
                          }];
-        [self.updateView setState:DragStateDraging];
+        [self.updateView setState:DragStateLoading];
         if (self.delegate && [self.delegate respondsToSelector:@selector(update:)]) {
             [(id<XScrollViewDelegate>)self.delegate update:self];
         }
@@ -103,11 +119,12 @@
 }
 - (void)startLoadMore{
     if (self.isSupportLoadMore) {
+        [self.layer removeAllAnimations];
         [UIView animateWithDuration:0.2
                          animations:^{
-                             self.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, [self.moreView activeHeight]-5, 0.0f);
+                             self.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, [self.moreView activeHeight] - 5 , 0.0f);
                          }];
-        [self.moreView setState:DragStateDraging];
+        [self.moreView setState:DragStateLoading];
         if (self.delegate && [self.delegate respondsToSelector:@selector(loadMore:)]) {
             [(id<XScrollViewDelegate>)self.delegate loadMore:self];
         }
@@ -121,6 +138,36 @@
         [self.moreView setFrame:frame];
     }
 }
+
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView{
+    float oh = scrollView.contentOffset.y;
+	float oh2 = MAX(scrollView.contentSize.height,scrollView.bounds.size.height) - scrollView.bounds.size.height;
+    
+    if (self.supportUpdate && scrollView.dragging && oh < 0) {
+		if ( oh < -[self.updateView activeHeight]) {
+			self.updateView.state = DragStateDragBeyond;
+		}else{
+			self.updateView.state = DragStateDraging;
+		}
+        DLOG(@"scrollViewDidScroll:%d",self.updateView.state);
+	}
+    if (self.isSupportLoadMore && scrollView.dragging && oh > oh2){
+        if ( (oh-oh2) >  [self.moreView activeHeight]) {
+			self.moreView.state = DragStateDragBeyond;
+        }else{
+			self.moreView.state = DragStateDraging;
+        }
+    }
+}
+- (void) scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+	if ([self isSupportUpdate] && scrollView.contentOffset.y < -[self.updateView activeHeight]) {
+		[self startUpdate];
+	}
+    if ([self isSupportLoadMore]  && (MAX(scrollView.contentSize.height,scrollView.bounds.size.height) - scrollView.bounds.size.height) <   scrollView.contentOffset.y){
+        [self startLoadMore];
+    }
+}
+
 @end
 
 #define DragActiveAreaHeight    65.0f
@@ -138,15 +185,15 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code.
-		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		self.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		float W = frame.size.width,H = frame.size.height;
 		
 		
-        CGRect contentFrame = CGRectMake(0, H-DragActiveAreaHeight, 300.0, DragActiveAreaHeight);
+        CGRect contentFrame = CGRectMake(frame.size.width/2-300/2, H-DragActiveAreaHeight, 300.0, DragActiveAreaHeight);
         self.contentView = [[UIView alloc]  initWithFrame:contentFrame];
-        
+        self.contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         CGRect labelFrame = CGRectMake(0, (contentFrame.size.height-48)/2, contentFrame.size.width, 24);
-		self.stateLabel = createLabel(labelFrame,[UIFont systemFontOfSize:14],nil,[UIColor blackColor],[UIColor whiteColor],CGSizeMake(0, -1),UITextAlignmentCenter,0,UILineBreakModeWordWrap);
+		self.stateLabel = createLabel(labelFrame,[UIFont systemFontOfSize:14],[UIColor redColor],[UIColor blackColor],[UIColor whiteColor],CGSizeMake(0, -1),UITextAlignmentCenter,0,UILineBreakModeWordWrap);
 		self.stateLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
 		[self.contentView addSubview:self.stateLabel];
 		
@@ -155,7 +202,7 @@
 		self.dateLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
 		[self.contentView addSubview:self.dateLabel];
 		
-		float minWidth = W>240?240:W;
+		float minWidth = W > 240 ? 240 : W;
 		UIImage *arrow = [UIImage imageNamed:@"drag_drop_arrow"];
         CGRect arrowFrame = CGRectMake((W-minWidth)/2, frame.size.height - (DragActiveAreaHeight+arrow.size.height)/2, arrow.size.width, arrow.size.height);
 		self.arrowImgView = [[[UIImageView alloc]  initWithFrame:arrowFrame] autorelease];
@@ -168,6 +215,8 @@
 		self.indicatorView.hidesWhenStopped  = YES;
 		[self.contentView addSubview:self.indicatorView];
         [self addSubview:self.contentView];
+        [self setState:DragStateUnInit];
+        [self.contentView setBackgroundColor:[UIColor redColor]];
     }
     return self;
 }
@@ -188,36 +237,42 @@
 	return DragActiveAreaHeight;
 }
 - (void) setState:(int)state{
-	if (state == _state)
+	if (state == _state && state != DragStateUnInit)
 		return;
 	switch (state) {
 		case DragStateUnInit:
-			self.stateLabel.text = NSLocalizedString(@"Drop for update", nil);
-			break;
-		case DragStateDraging:
+        case DragStateDraging:
 			[self rotate:self.arc];
-			self.stateLabel.text = NSLocalizedString(@"Drop for update", nil);
+			self.stateLabel.text = self.location == DragLocationTop?
+                                NSLocalizedString(@"向下拖拽更新...", nil):
+                                NSLocalizedString(@"向上拖拽加载更多...", nil);
 			break;
 		case DragStateDragBeyond:
 			[self rotate:self.arc+M_PI];
-			self.stateLabel.text = NSLocalizedString(@"Release for update", nil);
+			self.stateLabel.text = self.location == DragLocationTop?
+                                NSLocalizedString(@"释放立即更新...", nil):
+                                NSLocalizedString(@"释放加载更多...", nil);
 			break;
 		case DragStateRelease:
 			[self rotate:self.arc];
 			break;
 		case DragStateLoading:
 			[self.indicatorView startAnimating];
-			self.stateLabel.text = NSLocalizedString(@"Loading...", nil);;
+			self.stateLabel.text = NSLocalizedString(@"正在加载...", nil);;
 			break;
 		case DragStateLoadFinished:
 			[self.indicatorView stopAnimating];
-			self.stateLabel.text = NSLocalizedString(@"Drop for update", nil);;
+			self.stateLabel.text = self.location == DragLocationTop?
+                                NSLocalizedString(@"向下拖拽更新...", nil):
+                                NSLocalizedString(@"向上拖拽加载更多...", nil);
 			self.dateLabel.text = [Utils format:@"最后更新:MM-dd HH:mm:ss" time:[[NSDate date] timeIntervalSince1970]];
 			break;
 		case DragStateLoadError:
 			[self.indicatorView stopAnimating];
-			self.stateLabel.text = NSLocalizedString(@"Drop for update", nil);;
-			self.dateLabel.text = NSLocalizedString(@"Update Fail!", nil);;
+			self.stateLabel.text = self.location == DragLocationTop?
+                                NSLocalizedString(@"向下拖拽更新...", nil):
+                                NSLocalizedString(@"向上拖拽加载更多...", nil);
+			self.dateLabel.text = NSLocalizedString(@"更新失败!", nil);;
 			break;
 		default:
 			break;

@@ -7,9 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BTableDragView.h"
-#import "BTableLoadMoreView.h"
-#import "BLineView.h"
+#import "XScrollView.h"
 
 enum  {
 	TableViewCellStyleDefault,
@@ -70,17 +68,15 @@ typedef NSInteger SeparatorLineStyle;
 - (CGRect)rectForLine:(NSInteger)line offsetY:(float)y inContext:(CGContextRef)ctx;
 @end
 
-@interface TableView : UITableView <UIScrollViewDelegate>{
-	BTableDragView *	_pullDownView;
-	NSOperationQueue *	_queue;
-    BTableLoadMoreView *_loadMoreView;
-    BLineView              *_topLine;
-}
-@property (nonatomic, assign) BOOL hasMore;
+@interface TableView : UITableView <UIScrollViewDelegate>
+@property (nonatomic, retain) NSOperationQueue *queue;
+@property (nonatomic, retain) BLineView *topLine;
 @property (nonatomic, assign) BOOL useCache;
 @property (nonatomic, retain) NSMutableDictionary *imgCache;
-- (void)supportPullDown:(BOOL)flag;
-- (void)pullDown;
+
+@property (nonatomic, assign, getter = isSupportLoadMore) BOOL supportLoadMore;
+@property (nonatomic, assign, getter = isSupportUpdate) BOOL supportUpdate;
+
 - (void)updateFinished;
 - (void)startUpdate;
 - (void)startLoadMore;
@@ -89,9 +85,6 @@ typedef NSInteger SeparatorLineStyle;
 - (NSString *)imageCacheForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)imageCacheForUrl:(NSString *)url;
 - (void)cacheImage:(NSString *)imgLocalPath forIndexPath:(NSIndexPath *)indexPath;
-- (BTableLoadMoreView *)loadMoreView;
-- (UITableViewCell *)moreCell;
-- (void) loadMore;
 @end
 
 @interface TableViewCell : UITableViewCell{	

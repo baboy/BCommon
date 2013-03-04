@@ -8,16 +8,17 @@
 
 #import "TableView.h"
 
+@interface TableView()
+
+@property (nonatomic, retain) DragView *updateView;
+@property (nonatomic, retain) DragView *moreView;
+@end
 
 @implementation TableView
-@synthesize hasMore = _hasMore;
-@synthesize useCache = _useCache;
-@synthesize imgCache = _imgCache;
 
 - (void)setup{
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.backgroundColor = gTableViewBgColor;
-    _hasMore = NO;
     if (self.style != UITableViewStyleGrouped) {
         if (_topLine && [_topLine superview]) {
             [_topLine removeFromSuperview];
@@ -118,112 +119,142 @@
         }
     }
 }
+- (void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    CGSize contentSize = self.contentSize;
+    contentSize.height = MAX(contentSize.height, self.bounds.size.height);
+    [self setContentSize:contentSize];
+    if (self.isSupportLoadMore) {
+        CGRect frame = self.bounds;
+        frame.origin.y = MAX(frame.size.height, self.contentSize.height);
+        [self.moreView setFrame:frame];
+    }
+}
+- (DragView *) updateView{
+    if (!_updateView && self.isSupportUpdate) {
+        CGRect frame = self.bounds;
+        frame.origin.y = -frame.size.height;
+        _updateView = [[DragView alloc] initWithFrame:frame];
+        [_updateView setLocation:DragLocationTop];
+        [self addSubview:_updateView];
+    }
+    return _updateView;
+}
+- (DragView *) moreView{
+    if (!_moreView && self.isSupportLoadMore) {
+        CGRect frame = self.bounds;
+        frame.origin.y = MAX(frame.size.height, self.contentSize.height);
+        _moreView = [[DragView alloc] initWithFrame:frame];
+        [_moreView setLocation:DragLocationBottom];
+        [self addSubview:_moreView];
+    }
+    return _moreView;
+}
+- (void)setSupportLoadMore:(BOOL)supportLoadMore{
+    _supportLoadMore = supportLoadMore;
+    if (!supportLoadMore && _moreView) {
+        [self.moreView removeFromSuperview];
+        RELEASE(_moreView);
+        return;
+    }
+    [self moreView];
+}
+- (void)setSupportUpdate:(BOOL)supportUpdate{
+    _supportUpdate = supportUpdate;
+    if (!supportUpdate && _updateView) {
+        [self.updateView removeFromSuperview];
+        RELEASE(_updateView);
+        return;
+    }
+    [self updateView];
+}
+
 - (void)updateFinished{
     [self.layer removeAllAnimations];
     [UIView animateWithDuration:0.2
                      animations:^{
-                         self.contentInset = UIEdgeInsetsMake(0, 0.0f, 00.0f, 0.0f);
+                         self.contentInset = UIEdgeInsetsZero;
                      }];
-	if (_pullDownView) {
-		_pullDownView.state = DragDropStateLoadOk;
-	} 
-    if (_loadMoreView) {
-        [_loadMoreView stop];
-    }
-}
-- (void) supportPullDown:(BOOL)flag{
-	if (!flag) {
-		if (_pullDownView && [_pullDownView superview]) {
-			[_pullDownView removeFromSuperview];
-		}
-		RELEASE(_pullDownView);
-		return;
+	if (self.updateView.state == DragStateDraging) {
+		self.updateView.state = DragStateLoadFinished;
 	}
-	if (_pullDownView) {
-		return;
-	}
-	CGRect r = self.bounds;
-	r.origin.y = -r.size.height-2;
-	_pullDownView = [[BTableDragView alloc] initWithFrame:r toUp:YES];
-	[self addSubview:_pullDownView];
-}
-
-- (void) startLoadMore{
-    
-    [[self loadMoreView] start];
-    NSLog(@"startLoadMore start");
-    if (self.delegate && [self.delegate respondsToSelector:@selector(loadMore)]) {
-        [self.delegate performSelector:@selector(loadMore)];
+    if (self.moreView.state == DragStateDraging) {
+        self.moreView.state = DragStateLoadFinished;
     }
 }
-- (UITableViewCell *)moreCell{
-    TableViewCell *cell = (TableViewCell *)[self dequeueReusableCellWithIdentifier:@"MoreTableViewCell"];
-    if (cell == nil) {
-        cell = [[[TableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MoreTableViewCell"] autorelease];
-        [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-        [(TableViewCell *)cell setContentView:[self loadMoreView]];
-    }
-    return cell;
-}
-- (BTableLoadMoreView *)loadMoreView{
-    if (!_loadMoreView) {
-        _loadMoreView = [[BTableLoadMoreView alloc] initWithFrame:CGRectZero];
-        [_loadMoreView addTarget:self action:@selector(startLoadMore) forControlEvents:UIControlEventTouchUpInside];
-        [_loadMoreView stop];
-    }
-    return _loadMoreView;
-}
-- (void)pullDown{
-    //[self.layer removeAllAnimations];
-    if (_pullDownView) {
+- (void)startUpdate{
+    if (self.isSupportUpdate) {
+        [self.layer removeAllAnimations];
         [UIView animateWithDuration:0.2
-                         animations:^{                             
-                             self.contentInset = UIEdgeInsetsMake([_pullDownView visibleHeight]-5, 0.0f, 00.0f, 0.0f);
+                         animations:^{
+                             self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
                          }];
-        _pullDownView.state = DragDropStateLoading;
+        [self.updateView setState:DragStateLoading];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(update:)]) {
+            [(id<XScrollViewDelegate>)self.delegate update:self];
+        }
+    }
+    
+}
+- (void)startLoadMore{
+    if (self.isSupportLoadMore) {
+        [self.layer removeAllAnimations];
+        [UIView animateWithDuration:0.2
+                         animations:^{
+                             self.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, [self.moreView activeHeight] - 5 , 0.0f);
+                         }];
+        [self.moreView setState:DragStateLoading];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(loadMore:)]) {
+            [(id<XScrollViewDelegate>)self.delegate loadMore:self];
+        }
     }
 }
-- (void) startUpdate{
-	if (_pullDownView) {
-        [self pullDown];
-        if (self.delegate && [self.delegate respondsToSelector:@selector(update)]) {
-            [self.delegate performSelector:@selector(update)];
-        }
-	}
+- (void)setContentSize:(CGSize)contentSize{
+    [super setContentSize:contentSize];
+    if (self.isSupportLoadMore) {
+        CGRect frame = self.bounds;
+        frame.origin.y = MAX(frame.size.height, self.contentSize.height);
+        [self.moreView setFrame:frame];
+    }
 }
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView{
-    //DLOG(@"[TableView] scrollViewDidScroll:%f,%f",scrollView.contentOffset.y,[_pullDownView visibleHeight])
-	if (_pullDownView && !_pullDownView.hidden && scrollView.dragging) {
-		if (scrollView.contentOffset.y < -[_pullDownView visibleHeight]) {
-			_pullDownView.state = DragDropStatePullBeyond;
-		}else if (scrollView.contentOffset.y < 0) {
-			_pullDownView.state = DragDropStatePulling;
-		} 
+    float oh = scrollView.contentOffset.y;
+	float oh2 = MAX(scrollView.contentSize.height,scrollView.bounds.size.height) - scrollView.bounds.size.height;
+    
+    if (self.supportUpdate && scrollView.dragging && oh < 0) {
+		if ( oh < -[self.updateView activeHeight]) {
+			self.updateView.state = DragStateDragBeyond;
+		}else{
+			self.updateView.state = DragStateDraging;
+		}
+        DLOG(@"scrollViewDidScroll:%d",self.updateView.state);
 	}
-    if ( !_hasMore || [[self loadMoreView] isLoading] ) {
-		return;
-	}
-    //DLOG(@"scrollViewDidScroll:%d",[self loadMoreView].state);
-	float oh = scrollView.contentOffset.y;
-	float oh2 = scrollView.contentSize.height - scrollView.bounds.size.height;
-	if( oh > oh2){
-        [self startLoadMore];
-    }	
+    if (self.isSupportLoadMore && scrollView.dragging && oh > oh2){
+        if ( (oh-oh2) >  [self.moreView activeHeight]) {
+			self.moreView.state = DragStateDragBeyond;
+        }else{
+			self.moreView.state = DragStateDraging;
+        }
+    }
 }
 - (void) scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-	if (_pullDownView && !_pullDownView.hidden && scrollView.contentOffset.y < -[_pullDownView visibleHeight]) {
+	if ([self isSupportUpdate] && scrollView.contentOffset.y < -[self.updateView activeHeight]) {
 		[self startUpdate];
 	}
+    if ([self isSupportLoadMore]  && (MAX(scrollView.contentSize.height,scrollView.bounds.size.height) - scrollView.bounds.size.height) <   scrollView.contentOffset.y){
+        [self startLoadMore];
+    }
 }
+
 - (void)dealloc {
 	if (_queue && [_queue operationCount]>0) {
 		[_queue cancelAllOperations];
 	}
 	RELEASE(_queue);
-	RELEASE(_pullDownView);
+	RELEASE(_updateView);
 	RELEASE(_imgCache);
-    RELEASE(_loadMoreView);
+    RELEASE(_moreView);
     RELEASE(_topLine);
     [super dealloc];
 }

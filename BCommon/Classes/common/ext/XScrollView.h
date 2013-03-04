@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 enum DragState{
-	DragStateUnInit=0,
+	DragStateUnInit = 0,
 	DragStateDraging,
 	DragStateDragBeyond,
 	DragStateRelease,
@@ -28,6 +28,7 @@ typedef int DragLocation;
 @interface DragView : UIView
 @property (nonatomic, assign) DragState state;
 @property (nonatomic, assign) DragLocation location;
+- (float)activeHeight;
 @end
 
 @interface XScrollView : UIScrollView<UIScrollViewDelegate>
@@ -35,10 +36,11 @@ typedef int DragLocation;
 @property (nonatomic, assign, getter = isSupportUpdate) BOOL supportUpdate;
 - (void) startUpdate;
 - (void) startLoadMore;
+- (void) updateFinished;
 @end
 
 @protocol XScrollViewDelegate <NSObject>
 @optional
-- (void)update:(XScrollView *)scrollView;
-- (void)loadMore:(XScrollView *)scrollView;
+- (void)update:(id)scrollView;
+- (void)loadMore:(id)scrollView;
 @end
