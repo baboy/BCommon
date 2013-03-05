@@ -31,6 +31,8 @@
 //ext
 #import "XScrollView.h"
 #import "BHttpClient.h"
+#import "HTabBarView.h"
+#import "VTabBarView.h"
 
 //
 #import "GTMBase64.h"
