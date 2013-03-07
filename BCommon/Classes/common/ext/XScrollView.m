@@ -89,7 +89,14 @@
     }
     [self updateView];
 }
-
+- (void)setContentInset:(UIEdgeInsets)contentInset{
+    [super setContentInset:contentInset];
+    if (contentInset.top != 0) {
+        CGPoint contentOffset = self.contentOffset;
+        contentOffset.y -= contentInset.top;
+        [self setContentOffset:contentOffset];
+    }
+}
 - (void)updateFinished{
     [self.layer removeAllAnimations];
     [UIView animateWithDuration:0.2

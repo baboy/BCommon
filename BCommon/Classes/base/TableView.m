@@ -209,6 +209,14 @@
         }
     }
 }
+- (void)setContentInset:(UIEdgeInsets)contentInset{
+    [super setContentInset:contentInset];
+    if (contentInset.top != 0) {
+        CGPoint contentOffset = self.contentOffset;
+        contentOffset.y -= contentInset.top;
+        [self setContentOffset:contentOffset];
+    }
+}
 - (void)setContentSize:(CGSize)contentSize{
     [super setContentSize:contentSize];
     if (self.isSupportLoadMore) {
@@ -217,7 +225,6 @@
         [self.moreView setFrame:frame];
     }
 }
-
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView{
     float oh = scrollView.contentOffset.y;
 	float oh2 = MAX(scrollView.contentSize.height,scrollView.bounds.size.height) - scrollView.bounds.size.height;
