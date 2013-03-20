@@ -18,7 +18,7 @@
 
 - (void)setup{
     self.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.backgroundColor = gTableViewBgColor;
+    self.backgroundColor = [UIColor clearColor];
     if (self.style != UITableViewStyleGrouped) {
         if (_topLine && [_topLine superview]) {
             [_topLine removeFromSuperview];

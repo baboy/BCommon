@@ -161,7 +161,17 @@
         
         [self.navigationItem setTitleView:titleLabel];
         [self setNavTitleLabel:titleLabel];
-    }   
+    }
+    UIViewController *rootController = self.view.window.rootViewController;
+    if (rootController.modalViewController) {
+        rootController = rootController.modalViewController;
+    }
+    if ([rootController isKindOfClass:[UINavigationController class]]) {
+        rootController = [(UINavigationController*)rootController viewControllers];
+    }
+    if (!self.navigationController) {
+        
+    }
 }
 - (void)addBackButton{
     if (!self.navigationItem) {

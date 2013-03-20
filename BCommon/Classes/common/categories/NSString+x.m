@@ -85,7 +85,21 @@
 }
 - (BOOL)renameToPath:(NSString *)newPath{
 	NSFileManager *fileManager = [NSFileManager defaultManager];
-	return [fileManager moveItemAtPath:self toPath:newPath error:nil];
+    NSError *err = nil;
+	BOOL flag = [fileManager moveItemAtPath:self toPath:newPath error:&err];
+    if (err) {
+        DLOG(@"[NSString] renameToPath error:%@",err);
+    }
+    return flag;
+}
+- (BOOL)deleteFile{
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *err = nil;
+	BOOL flag = [fileManager removeItemAtPath:self error:&err];
+    if (err) {
+        DLOG(@"[NSString] deleteFile error:%@",err);
+    }
+    return flag;
 }
 - (long long)sizeOfFile{
     NSFileManager *fileManager = [NSFileManager defaultManager];

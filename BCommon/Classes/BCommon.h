@@ -18,6 +18,17 @@
 #import "XUIImageView.h"
 #import "BLineView.h"
 #import "BIndicator.h"
+#import "TableView.h"
+#import "TableCell.h"
+
+//map
+#import "BMapAnnotation.h"
+#import "BCalloutMapAnnotationView.h"
+#import "CalloutMapAnnotationView.h"
+#import "MKMapView+x.h"
+
+//web
+#import "CacheURLProtocol.h"
 
 //categories
 #import "NSNull+x.h"

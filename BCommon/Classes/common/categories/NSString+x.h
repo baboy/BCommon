@@ -21,6 +21,7 @@
 - (NSString *)pinyin;
 - (BOOL)isEmail;
 - (BOOL)renameToPath:(NSString *)newPath;
+- (BOOL)deleteFile;
 - (long long)sizeOfFile;
 - (id)json;
 @end

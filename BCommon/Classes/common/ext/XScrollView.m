@@ -198,9 +198,10 @@
 		
         CGRect contentFrame = CGRectMake(frame.size.width/2-300/2, H-DragActiveAreaHeight, 300.0, DragActiveAreaHeight);
         self.contentView = [[UIView alloc]  initWithFrame:contentFrame];
+        [self.contentView setBackgroundColor:[UIColor clearColor]];
         self.contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         CGRect labelFrame = CGRectMake(0, (contentFrame.size.height-48)/2, contentFrame.size.width, 24);
-		self.stateLabel = createLabel(labelFrame,[UIFont systemFontOfSize:14],[UIColor redColor],[UIColor blackColor],[UIColor whiteColor],CGSizeMake(0, -1),UITextAlignmentCenter,0,UILineBreakModeWordWrap);
+		self.stateLabel = createLabel(labelFrame,[UIFont systemFontOfSize:14], nil,[UIColor blackColor],[UIColor whiteColor],CGSizeMake(0, -1),UITextAlignmentCenter,0,UILineBreakModeWordWrap);
 		self.stateLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
 		[self.contentView addSubview:self.stateLabel];
 		
@@ -223,7 +224,6 @@
 		[self.contentView addSubview:self.indicatorView];
         [self addSubview:self.contentView];
         [self setState:DragStateUnInit];
-        [self.contentView setBackgroundColor:[UIColor redColor]];
     }
     return self;
 }

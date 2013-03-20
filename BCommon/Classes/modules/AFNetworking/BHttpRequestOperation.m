@@ -38,6 +38,7 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
 - (void)setTmpFilePath:(NSString *)tmpFilePath{
     RELEASE(_tmpFilePath);
     _tmpFilePath = [tmpFilePath retain];
+    [tmpFilePath deleteFile];
     self.outputStream = [NSOutputStream outputStreamToFileAtPath:tmpFilePath append:NO];
 }
 
@@ -93,6 +94,7 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
     [self.outputStream close];
     if (self.cacheFilePath) {
+        [self.cacheFilePath deleteFile];
         [self.tmpFilePath renameToPath:self.cacheFilePath];
     }
     [super connectionDidFinishLoading:connection];
