@@ -84,6 +84,7 @@
 		[btn addTarget:self action:@selector(tapItem:) forControlEvents:UIControlEventTouchUpInside];
 		[btn setTag:i];
         btn.backgroundColor = [UIColor clearColor];
+        [btn setBackgroundImage:self.selectedImage forState:UIControlStateNormal];
 		btn.titleLabel.font = [UIFont systemFontOfSize:14];
 		[btn setTitle:name forState:UIControlStateNormal];
         [btn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
@@ -161,7 +162,7 @@
         //[preBtn setBackgroundImage:nil forState:UIControlStateNormal];
         [preBtn setBackgroundColor:[UIColor clearColor]];
         [preBtn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
-        [preBtn setBackgroundImage:nil forState:UIControlStateNormal];
+        [preBtn setBackgroundImage:self.unSelectedImage forState:UIControlStateNormal];
 	}
 	UIButton *curBtn = [_btns objectAtIndex:i];
     [curBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -203,6 +204,7 @@
 	self.bottomIndicator.alpha = 0.4 + (1-p)*0.6;
 }
 - (void) dealloc{
+    RELEASE(_unSelectedImage);
 	RELEASE(_btns);
 	RELEASE(_scrollView);
 	RELEASE(_key);

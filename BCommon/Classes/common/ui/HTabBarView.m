@@ -35,7 +35,7 @@
     
     _itemBorderWidth = 1;
     _separatorWidth = 2;
-    CGRect r = CGRectInset(self.bounds, HTabBarIndicatorWidth, 0);
+    CGRect r = CGRectInset(self.bounds, 0, 0);
     _scrollView = [[UIScrollView alloc] initWithFrame:r];
     _scrollView.delegate = self;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -93,6 +93,7 @@
 		[btn addTarget:self action:@selector(tapItem:) forControlEvents:UIControlEventTouchUpInside];
 		[btn setTag:i];
         btn.backgroundColor = [UIColor clearColor];
+        [btn setBackgroundImage:self.unSelectedImage forState:UIControlStateNormal];
 		btn.titleLabel.font = [UIFont systemFontOfSize:14];
 		[btn setTitle:name forState:UIControlStateNormal];
         [btn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
@@ -103,11 +104,12 @@
 		if (i != (n-1) && _separatorWidth) {
 			VSeparator *sep = [[VSeparator alloc] initWithFrame:CGRectMake(rect.origin.x, rect.origin.y, self.separatorWidth, rect.size.height)];
 			[self.scrollView addSubview:sep];
-			rect.origin.x += sep.bounds.size.width+self.spacing/2;
+			rect.origin.x += sep.bounds.size.width;
 			[sep release];
 		}
+        rect.origin.x += self.spacing/2;
 	}
-	self.scrollView.contentSize = CGSizeMake(rect.origin.x-self.spacing/2, 0);
+	self.scrollView.contentSize = CGSizeMake(rect.origin.x-self.spacing, 0);
     CGRect r = self.scrollView.frame;
 	if ( self.scrollView.contentSize.width > (r.size.width+5) ) {
         [self.scrollView setFrame:CGRectInset(r, HTabBarIndicatorWidth, 0)];
@@ -170,7 +172,7 @@
         //[preBtn setBackgroundImage:nil forState:UIControlStateNormal];
         [preBtn setBackgroundColor:[UIColor clearColor]];
         [preBtn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
-        [preBtn setBackgroundImage:nil forState:UIControlStateNormal];
+        [preBtn setBackgroundImage:self.unSelectedImage forState:UIControlStateNormal];
 	}
 	UIButton *curBtn = [_btns objectAtIndex:i];
     [curBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -212,6 +214,7 @@
 	_rightIndicator.alpha = 0.4 + (1-p)*0.6;
 }
 - (void) dealloc{
+    RELEASE(_unSelectedImage);
 	RELEASE(_btns);
 	RELEASE(_scrollView);
 	RELEASE(_key);

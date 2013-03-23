@@ -39,7 +39,7 @@
 
 //临时用户名
 #define TmpUserName               (USER?UserName:[NSString stringWithFormat:@"%@手机网友",([G valueForKey:@"CurrentAdress"]?[G valueForKey:@"CurrentAdress"]:@"")])
-#define TmpUserID                 (USER?UserID:[[UIDevice currentDevice] uniqueIdentifier])
+#define TmpUserID                 (USER?UserID:0)
 #define TmpUserKey                (USER?UserKey:TmpUserID)
 
 #define PASSWORD                       [[G valueForKey:@"USER"] password]
@@ -100,7 +100,7 @@
 #define RenrenWeiboAppKey       @"2bfa00bfed014943acdfc26a5af1332c"
 #define RenrenWeiboAppSecret    @"4571a4799f634b2798e9a5e310ae0710"
 
-#define DeviceID                [[UIDevice currentDevice] uniqueIdentifier]
+#define DeviceID                [OpenUDID value]
 #define DeviceToken             [DBCache valueForKey:@"deviceToken"]
 //notify
 #define NotifyLogout    @"NotifyLogout"

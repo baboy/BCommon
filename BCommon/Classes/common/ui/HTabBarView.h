@@ -20,6 +20,7 @@
 @property (nonatomic, assign) int selectedIndex;
 @property (nonatomic, retain) UIColor *selectedTitleColor;
 @property (nonatomic, retain) UIColor *unSelectedTitleColor;
+@property (nonatomic, retain) UIImage *unSelectedImage;
 @property (nonatomic, retain) UIImage *selectedImage;
 
 - (void) selectAtIndex:(int)i;
