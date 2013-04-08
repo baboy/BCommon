@@ -9,12 +9,13 @@
 #import <UIKit/UIKit.h>
 
 
-@interface BLineView : UIView {
-	NSArray *_lines;
-	float _lineWidth;
-}
+@interface BLineView : UIView
 @property (nonatomic, retain) NSArray *lines;
 @property (nonatomic, assign) float lineWidth;
 - (id) initWithFrame:(CGRect)frame lines:(NSArray *)lines;
 - (void) setColors:(NSArray *)colors;
+@end
+
+@interface VLine : BLineView
+
 @end

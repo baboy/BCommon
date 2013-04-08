@@ -103,10 +103,10 @@
                      animations:^{
                          self.contentInset = UIEdgeInsetsZero;
                      }];
-	if (self.updateView.state == DragStateDraging) {
+	if (self.updateView.state == DragStateLoading) {
 		self.updateView.state = DragStateLoadFinished;
 	}
-    if (self.moreView.state == DragStateDraging) {
+    if (self.moreView.state == DragStateLoading) {
         self.moreView.state = DragStateLoadFinished;
     }
 }
@@ -211,9 +211,9 @@
 		[self.contentView addSubview:self.dateLabel];
 		
 		float minWidth = W > 240 ? 240 : W;
-		UIImage *arrow = [UIImage imageNamed:@"drag_drop_arrow"];
-        CGRect arrowFrame = CGRectMake((W-minWidth)/2, frame.size.height - (DragActiveAreaHeight+arrow.size.height)/2, arrow.size.width, arrow.size.height);
-		self.arrowImgView = [[[UIImageView alloc]  initWithFrame:arrowFrame] autorelease];
+		UIImage *arrow = [UIImage imageNamed:@"dropdown_arrow"];
+        CGRect arrowFrame = CGRectMake((contentFrame.size.width - minWidth)/2, (contentFrame.size.height - arrow.size.height)/2, arrow.size.width, arrow.size.height);
+		self.arrowImgView = AUTORELEASE([[UIImageView alloc]  initWithFrame:arrowFrame]);
 		self.arrowImgView.contentMode = UIViewContentModeScaleAspectFit;
 		self.arrowImgView.image = arrow;
 		[self.contentView addSubview:self.arrowImgView];
@@ -228,7 +228,13 @@
     return self;
 }
 - (void)rotate:(CGFloat) arc{
-    [self.arrowImgView layer].transform = CATransform3DMakeRotation(arc, 0.0f, 0.0f, 1.0f);
+    [UIView animateWithDuration:0.2
+                     animations:^{
+                         [self.arrowImgView layer].transform = CATransform3DMakeRotation(arc, 0.0f, 0.0f, 1.0f);
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
 }
 - (void)setLocation:(DragLocation)location{
     _location = location;
@@ -243,9 +249,14 @@
 - (float)activeHeight{
 	return DragActiveAreaHeight;
 }
+- (void)setIndicatorAnimating:(BOOL)flag{
+    [self.arrowImgView setHidden:flag];
+    flag?[self.indicatorView startAnimating]:[self.indicatorView stopAnimating];
+}
 - (void) setState:(int)state{
 	if (state == _state && state != DragStateUnInit)
 		return;
+    DLOG(@"dragView state:%d",state);
 	switch (state) {
 		case DragStateUnInit:
         case DragStateDraging:
@@ -264,18 +275,18 @@
 			[self rotate:self.arc];
 			break;
 		case DragStateLoading:
-			[self.indicatorView startAnimating];
+			[self setIndicatorAnimating:YES];
 			self.stateLabel.text = NSLocalizedString(@"正在加载...", nil);;
 			break;
 		case DragStateLoadFinished:
-			[self.indicatorView stopAnimating];
+			[self setIndicatorAnimating:NO];
 			self.stateLabel.text = self.location == DragLocationTop?
                                 NSLocalizedString(@"向下拖拽更新...", nil):
                                 NSLocalizedString(@"向上拖拽加载更多...", nil);
 			self.dateLabel.text = [Utils format:@"最后更新:MM-dd HH:mm:ss" time:[[NSDate date] timeIntervalSince1970]];
 			break;
 		case DragStateLoadError:
-			[self.indicatorView stopAnimating];
+			[self setIndicatorAnimating:NO];
 			self.stateLabel.text = self.location == DragLocationTop?
                                 NSLocalizedString(@"向下拖拽更新...", nil):
                                 NSLocalizedString(@"向上拖拽加载更多...", nil);

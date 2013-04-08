@@ -43,7 +43,6 @@
     _scrollView.backgroundColor = [UIColor clearColor];
     [self addSubview:_scrollView];
     _selectedIndex = 0;
-    self.backgroundColor = [UIColor redColor];
 }
 - (id)initWithFrame:(CGRect)frame{
 	self = [super initWithFrame:frame];

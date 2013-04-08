@@ -10,7 +10,9 @@
 #import "UIUtils.h"
 
 extern void createPath(CGContextRef ctx,CGRect rect,float rad);
-@interface UIImage (x)    
+@interface UIImage (x)
+- (UIImage *)resizableWithCapInsets:(UIEdgeInsets)capInsets;
+- (UIImage *)resizableWithCenter;
 - (UIImage *)scaleToSize:(CGSize) size;  
 - (UIImage *)cropToRect:(CGRect) rect;
 - (UIImage *)cropToScale:(float) scale;

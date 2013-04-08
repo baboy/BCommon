@@ -14,8 +14,6 @@
 @end
 
 @implementation BLineView
-@synthesize lines = _lines;
-@synthesize lineWidth = _lineWidth;
 - (id)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -54,7 +52,7 @@
 - (void) setColors:(NSArray *)colors{
 	int n = [colors count];
 	NSMutableArray *lines = [NSMutableArray arrayWithCapacity:n];
-    float y = self.bounds.size.height - n*(_lineWidth+0.3);
+    float y = 0.3;
 	for (int i=0; i<n; i++) {
 		UIColor *color = [colors objectAtIndex:i];
 		CGPoint p1 = CGPointMake(0, y);
@@ -90,4 +88,21 @@
 }
 
 
+@end
+
+@implementation VLine
+- (void) setColors:(NSArray *)colors{
+	int n = [colors count];
+	NSMutableArray *lines = [NSMutableArray arrayWithCapacity:n];
+    float x = 0.3;
+	for (int i=0; i<n; i++) {
+		UIColor *color = [colors objectAtIndex:i];
+		CGPoint p1 = CGPointMake(x, 0);
+		CGPoint p2 = CGPointMake(x,self.bounds.size.height);
+		NSArray *line = [NSArray arrayWithObjects:NSStringFromCGPoint(p1),NSStringFromCGPoint(p2),color,nil];
+		[lines addObject:line];
+        x += self.lineWidth+0.3;
+	}
+    [self setLines:lines];
+}
 @end

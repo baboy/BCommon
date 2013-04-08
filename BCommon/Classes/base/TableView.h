@@ -21,24 +21,16 @@ enum{
 };
 typedef NSInteger SeparatorLineStyle;
 
-@interface TableViewCellBackground : UIView{
-	SeparatorLineStyle _separatorLineStyle;
-    UIColor *           _topLineColor;
-    UIColor *           _bottomLineColor;
-}
+@interface TableViewCellBackground : UIView
 @property (nonatomic, assign) SeparatorLineStyle separatorLineStyle;
 @property (nonatomic, retain) UIColor *topLineColor;
 @property (nonatomic, retain) UIColor *bottomLineColor;
+@property (nonatomic, retain) UIImage *backgroundImage;
 - (void)setTopLineColor:(UIColor *)topLineColor bottomLineColor:(UIColor *)bottomLineColor;
 @end
 
 @interface TableViewSection : TableViewCellBackground{
-	NSString *_title;
-	NSString *_rightTitle;
-    UILabel *_titleLabel;
-    UILabel *_rightLabel;
     UIView *_bg;
-    UIView *_rightView;
 }
 @property (nonatomic, readonly) UILabel *titleLabel;
 @property (nonatomic, readonly) UILabel *rightLabel;

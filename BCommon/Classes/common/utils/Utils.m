@@ -212,7 +212,7 @@ NSString * getChineseCalendar(NSDate * date){
 	return [s description] ;
 }
 + (NSString *)formatToTime:(NSInteger)t{
-	int d = t/3600*24;
+	int d = t/3600/24;
 	t -= d*3600*24;
 	int h = t/3600;
 	t -= h*3600;

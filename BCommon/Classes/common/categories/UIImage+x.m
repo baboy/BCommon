@@ -29,7 +29,19 @@ void createPath(CGContextRef ctx,CGRect rect,float rad){
 	CGContextAddArcToPoint(ctx, minx, maxy, minx, midy, rad);
 }
 @implementation UIImage (x)  
-
+- (UIImage *)resizableWithCapInsets:(UIEdgeInsets)capInsets{
+    if ([self respondsToSelector:@selector(resizableImageWithCapInsets:resizingMode:) ]) {
+        return [self resizableImageWithCapInsets:capInsets resizingMode:UIImageResizingModeStretch];
+    }
+    if ([self respondsToSelector:@selector(resizableImageWithCapInsets:)]) {
+        return [self resizableImageWithCapInsets:capInsets];
+    }
+    return [self stretchableImageWithLeftCapWidth:capInsets.left topCapHeight:capInsets.top];
+}
+- (UIImage *)resizableWithCenter{
+    UIEdgeInsets capInsets = UIEdgeInsetsMake((int)(self.size.height/2), (int)(self.size.width/2), (int)(self.size.height/2)-1, (int)(self.size.width/2)-1);
+    return [self resizableWithCapInsets:capInsets];
+}
 - (UIImage *)scaleToSize:(CGSize)size{  
 	// 创建一个bitmap的context  
     // 并把它设置成为当前正在使用的context  

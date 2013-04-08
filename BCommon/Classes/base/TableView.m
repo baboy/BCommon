@@ -175,10 +175,10 @@
                      animations:^{
                          self.contentInset = UIEdgeInsetsZero;
                      }];
-	if (self.updateView.state == DragStateDraging) {
+	if (self.updateView.state == DragStateLoading) {
 		self.updateView.state = DragStateLoadFinished;
 	}
-    if (self.moreView.state == DragStateDraging) {
+    if (self.moreView.state == DragStateLoading) {
         self.moreView.state = DragStateLoadFinished;
     }
 }
@@ -187,7 +187,9 @@
         [self.layer removeAllAnimations];
         [UIView animateWithDuration:0.2
                          animations:^{
-                             self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
+                             if (self.contentInset.top != [self.updateView activeHeight]-5) {
+                                 self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
+                             }
                          }];
         [self.updateView setState:DragStateLoading];
         if (self.delegate && [self.delegate respondsToSelector:@selector(update:)]) {
@@ -303,14 +305,9 @@
 }
 @end
 @implementation TableViewSection
-@synthesize title = _title;
-@synthesize titleLabel = _titleLabel;
-@synthesize rightLabel = _rightLabel;
-@synthesize rightTitle = _rightTitle;
-@synthesize rightView = _rightView;
 - (id)initWithFrame:(CGRect)frame{
 	if (self = [super initWithFrame:frame]) {
-		_separatorLineStyle = SeparatorLineStyleTop | SeparatorLineStyleBottom;
+		self.separatorLineStyle = SeparatorLineStyleTop | SeparatorLineStyleBottom;
         _titleLabel = [createLabel(CGRectZero, gTableSectionTitleFont, [UIColor clearColor], gTableSectionTitleColor, nil, CGSizeZero, UITextAlignmentLeft, 1, 0) retain];
         _rightLabel = [createLabel(CGRectZero, gTableSectionTitleFont, [UIColor clearColor], gTableSectionTitleColor, nil, CGSizeZero, UITextAlignmentRight, 1, 0) retain];
         [self addSubview:_titleLabel];
@@ -375,26 +372,23 @@
 @end
 
 @implementation TableViewCellBackground
-@synthesize separatorLineStyle = _separatorLineStyle;
-@synthesize bottomLineColor = _bottomLineColor;
-@synthesize topLineColor = _topLineColor;
-
+- (void)setup{
+    self.separatorLineStyle = SeparatorLineStyleBottom;
+    [self setBackgroundColor:[UIColor clearColor]];
+    self.topLineColor = gLineTopColor;
+    self.bottomLineColor = gLineBottomColor;
+}
 - (id)initWithFrame:(CGRect)frame{
 	
 	if (self = [super initWithFrame:frame]) {
-		_separatorLineStyle = SeparatorLineStyleBottom;
-        [self setBackgroundColor:[UIColor clearColor]];
-        _topLineColor = [gLineTopColor retain];
-        _bottomLineColor = [gLineBottomColor retain];
+        [self setup];
 	}
 	return self;
 }
 - (id)initWithCoder:(NSCoder *)aDecoder{
 	if (self = [super initWithCoder:aDecoder]) {
-		_separatorLineStyle = SeparatorLineStyleBottom;
-        _topLineColor = [gLineTopColor retain];
-        _bottomLineColor = [gLineBottomColor retain];
-	}
+        [self setup];
+    }
 	return self;
 }
 - (void)setFrame:(CGRect)frame{
@@ -414,33 +408,44 @@
     _bottomLineColor = [bottomLineColor retain];
     [self setNeedsDisplay];
 }
-- (void) drawRect:(CGRect)rect{	
-	float _lineWidth = 0.5;
+- (void)setBackgroundImage:(UIImage *)backgroundImage{
+    RELEASE(_backgroundImage);
+    _backgroundImage = [backgroundImage retain];
+    [self setNeedsDisplay];
+}
+- (void) drawRect:(CGRect)rect{
+	float lineWidth = 0.5;
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+    if (self.backgroundImage) {
+        [self.backgroundImage drawInRect:rect];
+    }
 	CGContextSetShouldAntialias(ctx,false);
-	CGContextSetLineWidth(ctx, _lineWidth);
+	CGContextSetLineWidth(ctx, lineWidth);
 	CGPoint p1,p2;
 	if (_separatorLineStyle & SeparatorLineStyleTop) {
 		
-		p1 = CGPointMake(rect.origin.x,rect.origin.y + _lineWidth);	
-		p2 = CGPointMake(rect.size.width,rect.origin.y+_lineWidth);					 
+		p1 = CGPointMake(rect.origin.x,rect.origin.y + lineWidth);	
+		p2 = CGPointMake(rect.size.width,rect.origin.y+lineWidth);					 
 		[self drawLine:p1 toPoint:p2 color:_topLineColor inContext:ctx];							 
 		
-		p1.y += _lineWidth;
-		p2.y += _lineWidth;	
+		p1.y += lineWidth;
+		p2.y += lineWidth;	
 		[self drawLine:p1 toPoint:p2 color:_bottomLineColor inContext:ctx];
 	}
 	if (_separatorLineStyle & SeparatorLineStyleBottom) {
-		p1 = CGPointMake(rect.origin.x,rect.origin.y+rect.size.height-2*_lineWidth);	
-		p2 = CGPointMake(rect.size.width,rect.origin.y+rect.size.height-2*_lineWidth);					 
+		p1 = CGPointMake(rect.origin.x,rect.origin.y+rect.size.height-2*lineWidth);	
+		p2 = CGPointMake(rect.size.width,rect.origin.y+rect.size.height-2*lineWidth);					 
 		[self drawLine:p1 toPoint:p2 color:_topLineColor inContext:ctx];							 
 		
-		p1 = CGPointMake(rect.origin.x,rect.origin.y+rect.size.height-_lineWidth);
-		p2 = CGPointMake(rect.size.width,rect.origin.y+rect.size.height-_lineWidth);	
+		p1 = CGPointMake(rect.origin.x,rect.origin.y+rect.size.height-lineWidth);
+		p2 = CGPointMake(rect.size.width,rect.origin.y+rect.size.height-lineWidth);	
 		[self drawLine:p1 toPoint:p2 color:_bottomLineColor inContext:ctx];
-	}				 
+	}
+    CGContextRestoreGState(ctx);
 }
 - (void)dealloc{
+    RELEASE(_backgroundImage);
     RELEASE(_topLineColor);
     RELEASE(_bottomLineColor);
     [super dealloc];
