@@ -14,6 +14,7 @@
 		83851CDF169D884200451E23 /* libBCommon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC6169D884200451E23 /* libBCommon.a */; };
 		83851CE5169D884200451E23 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83851CE3169D884200451E23 /* InfoPlist.strings */; };
 		83851CE8169D884300451E23 /* BCommonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83851CE7169D884300451E23 /* BCommonTests.m */; };
+		83D7585E171F93ED006D33B6 /* BUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 83D7585C171F93ED006D33B6 /* BUser.m */; };
 		83DBE5E4171F901E00B283DC /* Dao.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE561171F901E00B283DC /* Dao.m */; };
 		83DBE5E5171F901E00B283DC /* RequestStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE563171F901E00B283DC /* RequestStatus.m */; };
 		83DBE5E6171F901E00B283DC /* TableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE565171F901E00B283DC /* TableCell.m */; };
@@ -111,6 +112,8 @@
 		83851CE4169D884200451E23 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		83851CE6169D884200451E23 /* BCommonTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCommonTests.h; sourceTree = "<group>"; };
 		83851CE7169D884300451E23 /* BCommonTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCommonTests.m; sourceTree = "<group>"; };
+		83D7585B171F93ED006D33B6 /* BUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUser.h; sourceTree = "<group>"; };
+		83D7585C171F93ED006D33B6 /* BUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUser.m; sourceTree = "<group>"; };
 		83DBE560171F901E00B283DC /* Dao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dao.h; sourceTree = "<group>"; };
 		83DBE561171F901E00B283DC /* Dao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dao.m; sourceTree = "<group>"; };
 		83DBE562171F901E00B283DC /* RequestStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RequestStatus.h; sourceTree = "<group>"; };
@@ -324,9 +327,35 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		83D75856171F93ED006D33B6 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				83D75857171F93ED006D33B6 /* app */,
+				83D7585A171F93ED006D33B6 /* member */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		83D75857171F93ED006D33B6 /* app */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = app;
+			sourceTree = "<group>";
+		};
+		83D7585A171F93ED006D33B6 /* member */ = {
+			isa = PBXGroup;
+			children = (
+				83D7585B171F93ED006D33B6 /* BUser.h */,
+				83D7585C171F93ED006D33B6 /* BUser.m */,
+			);
+			path = member;
+			sourceTree = "<group>";
+		};
 		83DBE55E171F901E00B283DC /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				83D75856171F93ED006D33B6 /* model */,
 				83DBE55F171F901E00B283DC /* base */,
 				83DBE568171F901E00B283DC /* BCommon.h */,
 				83DBE569171F901E00B283DC /* BCommon.m */,
@@ -727,6 +756,7 @@
 				83DBE61C171F901E00B283DC /* BHttpClient.m in Sources */,
 				83DBE61D171F901E00B283DC /* BHttpRequestCache.m in Sources */,
 				83DBE61E171F901E00B283DC /* BHttpRequestOperation.m in Sources */,
+				83D7585E171F93ED006D33B6 /* BUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
