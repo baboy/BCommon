@@ -7,7 +7,6 @@
 //
 
 #import "TabBarMoreViewController.h"
-#import "G.h"
 
 @implementation TabBarMoreViewController
 @synthesize items = _items;

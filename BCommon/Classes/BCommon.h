@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "G.h"
+#import "Global.h"
+#import "BApi.h"
 #import "JSONKit.h"
-#import "Api.h"
 #import "DBCache.h"
 #import "BQueue.h"
 #import "Utils.h"
@@ -38,6 +38,7 @@
 #import "NSMutableData+x.h"
 #import "NSString+x.h"
 #import "UIImage+x.h"
+#import "UIColor+x.h"
 
 //ext
 #import "XScrollView.h"

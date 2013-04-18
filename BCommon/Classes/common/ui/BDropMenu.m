@@ -7,8 +7,6 @@
 //
 
 #import "BDropMenu.h"
-#import "BLineView.h"
-#import "G.h"
 
 #define DropMenuVerticalPadding 4.0f
 

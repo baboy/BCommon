@@ -8,8 +8,6 @@
 
 #import "NSString+x.h"
 #import "pinyin.h"
-#import "RegexKitLite.h"
-#import "G.h"
 
 
 @implementation NSString(x)

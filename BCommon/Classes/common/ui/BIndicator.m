@@ -7,9 +7,6 @@
 //
 
 #import "BIndicator.h"
-#import <QuartzCore/QuartzCore.h>
-#import "UIUtils.h"
-#import "G.h"
 
 static UIView * IndicatorView = nil;
 static int IndicatorContentTag = 999;

@@ -7,7 +7,6 @@
 //
 
 #import "BLineView.h"
-#import "G.h"
 
 @interface BLineView()
 - (void)setup;

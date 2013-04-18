@@ -7,7 +7,6 @@
 //
 
 #import "BHttpRequestOperation.h"
-#import "G.h"
 
 typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
 

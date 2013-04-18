@@ -7,8 +7,6 @@
 //
 
 #import "Dao.h"
-#import "G.h"
-#import "Utils.h"
 
 //#define dbFile			@"db.sqlite"
 //#define sqlFile			@"sql.plist"

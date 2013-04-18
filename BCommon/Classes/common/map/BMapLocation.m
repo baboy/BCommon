@@ -7,8 +7,6 @@
 //
 
 #import "BMapLocation.h"
-#import "G.h"
-#import "JSONKit.h"
 
 @implementation BMapLocation
 @synthesize address = _address;

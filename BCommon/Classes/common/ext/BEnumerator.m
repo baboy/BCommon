@@ -7,7 +7,6 @@
 //
 
 #import "BEnumerator.h"
-#import "G.h"
 
 @interface BEnumerator()
 @property (nonatomic, assign) int pos;

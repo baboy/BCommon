@@ -6,7 +6,7 @@
 //  Copyright 2011 LavaTech. All rights reserved.
 //
 
-#import "G.h"
+#import "Global.h"
 
 @interface G()
 

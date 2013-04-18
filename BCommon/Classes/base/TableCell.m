@@ -7,7 +7,6 @@
 //
 
 #import "TableCell.h"
-#import "G.h"
 
 @implementation TableCell
 @synthesize titleLabel = _titleLabel;

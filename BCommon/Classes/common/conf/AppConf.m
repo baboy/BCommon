@@ -7,8 +7,6 @@
 //
 
 #import "AppConf.h"
-#import "UIColor+x.h"
-#import "G.h"
 
 @implementation AppConf
 @synthesize title = _title;

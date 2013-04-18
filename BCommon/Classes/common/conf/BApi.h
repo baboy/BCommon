@@ -12,12 +12,12 @@ extern NSString *ApiDomain;
 
 #define ApiClient               @"http://m.tvie.com.cn/mcms/api2/client.php"
 /*
-#define ApiPathConf             @"/mcms/api2/config.php"
-//反馈相关
-#define ApiPathFeedback          @"/mcms/api2/mod/comment/?"
-//直播
-#define ApiPathLiveChannel       "/mcms/api2/mod/live/"
-*/
+ #define ApiPathConf             @"/mcms/api2/config.php"
+ //反馈相关
+ #define ApiPathFeedback          @"/mcms/api2/mod/comment/?"
+ //直播
+ #define ApiPathLiveChannel       "/mcms/api2/mod/live/"
+ */
 #define ApiConf                 [NSString stringWithFormat:@"%@/config.origin.php", ApiDomain]
 #define ApiMemberLogin          [NSString stringWithFormat:@"%@/mod/member/login.php", ApiDomain]
 #define ApiMemberRegister       [NSString stringWithFormat:@"%@/mod/member/register.php", ApiDomain]

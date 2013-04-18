@@ -7,8 +7,6 @@
 //
 
 #import "RequestStatus.h"
-#import "Utils.h"
-#import "G.h"
 
 @implementation RequestStatus
 @synthesize status = _status;

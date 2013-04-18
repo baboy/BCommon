@@ -7,8 +7,7 @@
 //
 
 #import "BDropTitleView.h"
-#import <QuartzCore/QuartzCore.h>
-#import "G.h"
+
 @implementation BDropTitleView
 - (id)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {

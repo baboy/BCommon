@@ -7,12 +7,6 @@
 //
 
 #import "BPhotoScrollView.h"
-#import <UIKit/UIKit.h>
-#import <QuartzCore/QuartzCore.h>
-#import "G.h"
-#import "BIndicator.h"
-#import "NSString+x.h"
-#import "UIUtils.h"
 
 @interface BPhotoScrollView()<UIScrollViewDelegate>
 @property (nonatomic, retain)UIView *container;

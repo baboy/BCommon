@@ -7,7 +7,6 @@
 //
 
 #import "XUILabel.h"
-#import "G.h"
 
 @implementation XUILabel
 @synthesize verticalAlignment = _verticalAlignment;

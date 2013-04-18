@@ -7,9 +7,6 @@
 //
 
 #import "BProgressBar.h"
-#import <QuartzCore/QuartzCore.h>
-#import "UIUtils.h"
-#import "G.h"
 
 
 @implementation BProgressBar

@@ -7,10 +7,6 @@
 //
 
 #import "Utils.h"
-#import "RegexKitLite.h"
-#import "G.h"
-#import "GTMBase64.h"
-#import "NSString+x.h"
 
 #define WEB_CACHE_DIR		@"web_cache"
 #define WEB_TMP_DIR		@"web_tmp"

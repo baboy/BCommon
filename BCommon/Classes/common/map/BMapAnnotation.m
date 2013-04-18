@@ -7,7 +7,6 @@
 //
 
 #import "BMapAnnotation.h"
-#import "G.h"
 
 @interface BMapAnnotation()
 @property (nonatomic,assign) CLLocationDegrees latitude;
