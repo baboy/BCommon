@@ -25,15 +25,6 @@ Pod::Spec.new do |s|
 	end
   end
   s.subspec 'common' do |common|     
-    common.subspec 'asi' do |asi|
-    	asi.source_files = 'BCommon/Classes/common/asi'
-    	asi.subspec 'CloudFiles' do |CloudFiles|
-    		CloudFiles.source_files = 'BCommon/Classes/common/asi/CloudFiles'
-    	end
-    	asi.subspec 's3' do |s3|
-    		s3.source_files = 'BCommon/Classes/common/asi/S3'
-    	end
-    end 
     common.subspec 'categories' do |cate|
     	cate.source_files = 'BCommon/Classes/common/categories'
     end 
