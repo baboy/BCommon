@@ -50,6 +50,7 @@ Pod::Spec.new do |s|
     end
     common.subspec 'Web' do |web|
     	web.source_files = 'BCommon/Classes/common/web'
+		web.prefix_header_file = "BCommon/BCommon-Prefix.pch"
     end
   end
 
