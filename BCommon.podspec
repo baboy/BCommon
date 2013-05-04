@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name         = "BCommon"
-  s.version      = "0.22"
+  s.version      = "0.23"
   s.summary      = "Lavatech common libs, this lib just use for our internal projects."
   s.homepage     = "http://github.com/baboy/BCommon"
   s.author       = { "baboy" => "baboyzyh@gmail.com" }
-  s.source       = { :git => "https://github.com/baboy/BCommon.git", :tag => "0.22" }
+  s.source       = { :git => "https://github.com/baboy/BCommon.git", :tag => "0.23" }
   s.platform     = :ios
 
   s.source_files = 'BCommon/Classes/*.{h,m}'
