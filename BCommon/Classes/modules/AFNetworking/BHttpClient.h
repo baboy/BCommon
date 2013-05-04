@@ -9,6 +9,13 @@
 #import "AFHTTPClient.h"
 #import "BHttpRequestOperation.h"
 
+enum{
+    HttpRequestMethodGET,
+    HttpRequestMethodPOST,
+    HttpRequestMethodPUT
+};
+typedef UInt32 HttpRequestMethod;
+
 @interface BHttpClient : AFHTTPClient
 
 + (id)defaultClient;

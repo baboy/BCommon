@@ -8,6 +8,7 @@
 
 #import "NSString+x.h"
 #import "pinyin.h"
+#import <CommonCrypto/CommonHMAC.h>
 
 
 @implementation NSString(x)
@@ -112,5 +113,23 @@
         NSLog(@"[NSString] jsonObject error:%@",err);
     }
     return json;
+}
+- (NSString *)base64SHA1HmacWithKey:(NSString *)key{
+    const char *cKey  = [key cStringUsingEncoding:NSUTF8StringEncoding];
+    const char *cMessage = [self cStringUsingEncoding:NSUTF8StringEncoding];
+    unsigned char result[CC_SHA1_DIGEST_LENGTH];
+    CCHmac(kCCHmacAlgSHA1, cKey, strlen(cKey), cMessage, strlen(cMessage), result);
+    NSData *data = [GTMBase64 encodeBytes:result length:CC_SHA1_DIGEST_LENGTH];
+    return ([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+}
+- (NSError *)removeFile{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:self]) {
+        NSError *error;
+        BOOL success = [fileManager removeItemAtPath:self error:&error];
+        if (!success)
+            return error;
+    }
+    return nil;
 }
 @end

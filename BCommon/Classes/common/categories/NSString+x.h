@@ -24,4 +24,6 @@
 - (BOOL)deleteFile;
 - (long long)sizeOfFile;
 - (id)json;
+- (NSString *)base64SHA1HmacWithKey:(NSString *)key;
+- (NSError *)removeFile;
 @end

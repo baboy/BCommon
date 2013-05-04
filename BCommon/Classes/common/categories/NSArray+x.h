@@ -12,4 +12,5 @@
 - (NSArray *)reverse ;
 - (NSData *)jsonData;
 - (NSString *)jsonString;
+- (BOOL)containsStringIgnoreCase:(NSString *)string;
 @end

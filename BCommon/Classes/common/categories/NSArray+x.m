@@ -35,6 +35,14 @@
     NSString *s = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     return s;
 }
+- (BOOL)containsStringIgnoreCase:(NSString *)string{
+    for (NSString *item in self) {
+        if ([item isKindOfClass:[NSString class]] && [[item lowercaseString] isEqualToString:[string lowercaseString]]) {
+            return YES;
+        }
+    }
+    return NO;
+}
 @end
 
 

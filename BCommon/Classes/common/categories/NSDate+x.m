@@ -10,7 +10,7 @@
 
 @implementation NSDate(x)
 - (NSString *)weekName{
-    NSDateFormatter *df = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *df = AUTORELEASE([[NSDateFormatter alloc] init]);
     [df setLocale:[NSLocale currentLocale]];
     [df setDateStyle:NSDateFormatterLongStyle];
     [df setTimeStyle:NSDateFormatterLongStyle];
@@ -18,7 +18,7 @@
     return [df stringFromDate:self];
 }
 - (NSString *)format:(NSString *)f{
-	NSDateFormatter *df = [[NSDateFormatter alloc] init];
+	NSDateFormatter *df = AUTORELEASE([[NSDateFormatter alloc] init]);
 	NSLocale *loc = [NSLocale currentLocale];
 	[df setLocale:loc];
 	[df setDateStyle:NSDateFormatterShortStyle];
@@ -26,7 +26,14 @@
 	[df setDateFormat:f];
 	
 	NSString *s = [df stringFromDate:self];
-	[df release];
 	return s;
+}
+- (NSString *)GMTFormat{
+    NSDateFormatter *gmtFormatter = AUTORELEASE([[NSDateFormatter alloc] init]);
+    [gmtFormatter setLocale:AUTORELEASE([[NSLocale alloc] initWithLocaleIdentifier:@"en_US"])];
+    [gmtFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss z"];
+    NSTimeZone *tz = [NSTimeZone timeZoneForSecondsFromGMT:0];
+    [gmtFormatter setTimeZone:tz];
+    return [gmtFormatter stringFromDate:self];
 }
 @end

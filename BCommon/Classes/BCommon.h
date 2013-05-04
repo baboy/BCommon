@@ -39,6 +39,7 @@
 #import "NSString+x.h"
 #import "UIImage+x.h"
 #import "UIColor+x.h"
+#import "BEnumerator.h"
 
 //ext
 #import "XScrollView.h"

@@ -12,4 +12,5 @@
 
 - (NSString *)weekName;
 - (NSString *)format:(NSString *)f;
+- (NSString *)GMTFormat;
 @end
