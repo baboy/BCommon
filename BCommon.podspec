@@ -50,9 +50,9 @@ Pod::Spec.new do |s|
     end
     common.subspec 'Web' do |web|
     	web.source_files = 'BCommon/Classes/common/web'
+		s.prefix_header_file = "BCommon/BCommon-Prefix.pch"
     end
   end
-  s.prefix_header_file = "BCommon/BCommon-Prefix.pch"
 
   s.frameworks = 'UIKit', 'QuartzCore', 'CFNetwork', 'AVFoundation', 'CoreFoundation', 'CoreGraphics', 'Security', 'AudioToolbox', 'MediaPlayer', 'MobileCoreServices', 'SystemConfiguration', 'CoreMedia', 'Mapkit', 'CoreLocation', 'MessageUI', 'ImageIO'
 
