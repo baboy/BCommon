@@ -8,7 +8,6 @@ Pod::Spec.new do |s|
   s.platform     = :ios
 
   s.source_files = 'BCommon/Classes/*.{h,m}'
-  s.prefix_header_file = "BCommon/BCommon-Prefix.pch"
   s.subspec 'base' do |base|    
     base.source_files = 'BCommon/Classes/base'
   end
@@ -53,6 +52,7 @@ Pod::Spec.new do |s|
     	web.source_files = 'BCommon/Classes/common/web'
     end
   end
+  s.prefix_header_file = "BCommon/BCommon-Prefix.pch"
 
   s.frameworks = 'UIKit', 'QuartzCore', 'CFNetwork', 'AVFoundation', 'CoreFoundation', 'CoreGraphics', 'Security', 'AudioToolbox', 'MediaPlayer', 'MobileCoreServices', 'SystemConfiguration', 'CoreMedia', 'Mapkit', 'CoreLocation', 'MessageUI', 'ImageIO'
 
