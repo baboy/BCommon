@@ -29,6 +29,8 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
     RELEASE(_cacheFilePath);
     RELEASE(_requestCache);
     RELEASE(_tmpFilePath);
+    if (_receiveBlock)
+        RELEASE(_receiveBlock);
     [super dealloc];
 }
 + (BOOL)canProcessRequest:(NSURLRequest *)urlRequest{
@@ -113,6 +115,7 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
     return [super error];
 }
 - (void)setReceiveDataBlock:(void (^)(NSData *data))block{
-    
+    RELEASE(_receiveBlock);
+    _receiveBlock = [block copy];
 }
 @end

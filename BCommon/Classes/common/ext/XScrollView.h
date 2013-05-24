@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-enum DragState{
+enum {
 	DragStateUnInit = 0,
 	DragStateDraging,
 	DragStateDragBeyond,
@@ -18,7 +18,7 @@ enum DragState{
 };
 typedef int DragState;
 
-enum DragLocation {
+enum  {
     DragLocationTop ,
     DragLocationBottom
 };

@@ -76,19 +76,17 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     nibBundleOrNil = nibBundleOrNil?nibBundleOrNil:[NSBundle mainBundle];
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        _requestPool = [[NSMutableDictionary alloc] init];
+        self.requestPool = [NSMutableDictionary dictionary];
     }
     return self;
 }
 - (id)init{
     if (self = [super init]) {
-        _requestPool = [[NSMutableDictionary alloc] init];
+        self.requestPool = [NSMutableDictionary dictionary];
     }
     return self;
 }
-- (void) loadView{
-    [super loadView];
-    
+- (void) awake{
     self.view.autoresizingMask |= UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_frame = self.view.bounds;
     if (self.navigationController) {
@@ -148,6 +146,7 @@
 }
 - (void)viewDidLoad{
     [super viewDidLoad];
+    [self awake];
     [self.view setBackgroundColor:gViewBgColor];
     if (self.navigationItem && !self.navTitleLabel) {
         CGRect rect = CGRectInset(self.navigationController.navigationBar.bounds, 60, 0);

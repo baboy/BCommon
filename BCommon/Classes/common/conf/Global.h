@@ -20,6 +20,8 @@
 #define AppModReport        @"report"
 ///////
 #define DLOG(...)  NSLog(@"[DEBUG] %@",[NSString stringWithFormat:__VA_ARGS__]);
+
+#define DISPATCH_RELEASE(__OBJ__)   if(__OBJ__) { dispatch_release(__OBJ__); __OBJ__ = NULL; }
 #define RELEASE(__POINTER)  [__POINTER release]; __POINTER = nil;
 #define AUTORELEASE(__POINTER)  [__POINTER autorelease]
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
