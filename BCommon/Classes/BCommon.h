@@ -48,5 +48,5 @@
 #import "VTabBarView.h"
 
 //
-#import "GTMBase64.h"
+#import "Base64.h"
 #import "OpenUDID.h"

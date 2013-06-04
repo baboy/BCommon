@@ -7,6 +7,7 @@
 //
 
 #import "CacheURLProtocol.h"
+#import "Base64.h"
 
 @interface CacheURLProtocol()
 @property(nonatomic, retain) BHttpRequestOperation *cacheOperation;
@@ -75,7 +76,7 @@
 @implementation NSURL(cache)
 
 + (NSString*) URLStringWithScheme:(NSString *)scheme urlString:(NSString*)urlString{    
-    NSString *base64 = [GTMBase64 stringByWebSafeEncodeString:urlString];
+    NSString *base64 = [Base64 stringByWebSafeEncodeString:urlString];
     NSString *url = [NSString stringWithFormat:@"%@://%@",scheme,base64];
     return url;
 }
@@ -107,7 +108,7 @@
     return [[self absoluteString] hasPrefix:[NSString stringWithFormat:@"%@://",VideoScheme]];
 }
 - (NSString *)httpURLString{
-    NSString *urlString = [GTMBase64 stringByWebSafeDecodeString:[self host]];
+    NSString *urlString = [Base64 stringByWebSafeDecodeString:[self host]];
     urlString = [urlString stringByReplacingOccurrencesOfString:@"&amp;" withString:@"&"];
     return urlString;
 }

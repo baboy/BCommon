@@ -25,7 +25,6 @@ extern id nullToNil(id obj);
 extern id nilToNull(id obj);
 extern BOOL strIsNil(NSString *s);
 extern BOOL isURL(NSString *s);
-extern NSString * getCacheSchemeUrl(NSString *url);
 extern NSString * getChineseCalendar(NSDate * date);
 
 @interface Utils : NSObject {

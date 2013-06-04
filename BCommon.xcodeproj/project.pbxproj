@@ -70,7 +70,7 @@
 		83DBE618171F901E00B283DC /* UIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE5D3171F901E00B283DC /* UIUtils.m */; };
 		83DBE619171F901E00B283DC /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE5D5171F901E00B283DC /* Utils.m */; };
 		83DBE61A171F901E00B283DC /* CacheURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE5D8171F901E00B283DC /* CacheURLProtocol.m */; };
-		83DBE61B171F901E00B283DC /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE5DA171F901E00B283DC /* GTMBase64.m */; };
+		83DBE61B171F901E00B283DC /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE5DA171F901E00B283DC /* Base64.m */; };
 		83DBE61C171F901E00B283DC /* BHttpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE5DF171F901E00B283DC /* BHttpClient.m */; };
 		83DBE61D171F901E00B283DC /* BHttpRequestCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE5E1171F901E00B283DC /* BHttpRequestCache.m */; };
 		83DBE61E171F901E00B283DC /* BHttpRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83DBE5E3171F901E00B283DC /* BHttpRequestOperation.m */; };
@@ -225,9 +225,9 @@
 		83DBE5D5171F901E00B283DC /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		83DBE5D7171F901E00B283DC /* CacheURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheURLProtocol.h; sourceTree = "<group>"; };
 		83DBE5D8171F901E00B283DC /* CacheURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheURLProtocol.m; sourceTree = "<group>"; };
-		83DBE5D9171F901E00B283DC /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
-		83DBE5DA171F901E00B283DC /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
-		83DBE5DB171F901E00B283DC /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
+		83DBE5D9171F901E00B283DC /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
+		83DBE5DA171F901E00B283DC /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
+		83DBE5DB171F901E00B283DC /* Base64Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64Defines.h; sourceTree = "<group>"; };
 		83DBE5DE171F901E00B283DC /* BHttpClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BHttpClient.h; sourceTree = "<group>"; };
 		83DBE5DF171F901E00B283DC /* BHttpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BHttpClient.m; sourceTree = "<group>"; };
 		83DBE5E0171F901E00B283DC /* BHttpRequestCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BHttpRequestCache.h; sourceTree = "<group>"; };
@@ -556,9 +556,9 @@
 			children = (
 				83DBE5D7171F901E00B283DC /* CacheURLProtocol.h */,
 				83DBE5D8171F901E00B283DC /* CacheURLProtocol.m */,
-				83DBE5D9171F901E00B283DC /* GTMBase64.h */,
-				83DBE5DA171F901E00B283DC /* GTMBase64.m */,
-				83DBE5DB171F901E00B283DC /* GTMDefines.h */,
+				83DBE5D9171F901E00B283DC /* Base64.h */,
+				83DBE5DA171F901E00B283DC /* Base64.m */,
+				83DBE5DB171F901E00B283DC /* Base64Defines.h */,
 			);
 			path = web;
 			sourceTree = "<group>";
@@ -752,7 +752,7 @@
 				83DBE618171F901E00B283DC /* UIUtils.m in Sources */,
 				83DBE619171F901E00B283DC /* Utils.m in Sources */,
 				83DBE61A171F901E00B283DC /* CacheURLProtocol.m in Sources */,
-				83DBE61B171F901E00B283DC /* GTMBase64.m in Sources */,
+				83DBE61B171F901E00B283DC /* Base64.m in Sources */,
 				83DBE61C171F901E00B283DC /* BHttpClient.m in Sources */,
 				83DBE61D171F901E00B283DC /* BHttpRequestCache.m in Sources */,
 				83DBE61E171F901E00B283DC /* BHttpRequestOperation.m in Sources */,

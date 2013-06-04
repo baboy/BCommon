@@ -23,7 +23,7 @@
 
 
 #import <Foundation/Foundation.h>
-#import "GTMDefines.h"
+#import "Base64Defines.h"
 
 // GTMBase64
 //
@@ -35,7 +35,7 @@
 /// encoding.  You must use the webSafe* methods together, the data does not
 /// interop with the RFC methods.
 //
-@interface GTMBase64 : NSObject
+@interface Base64 : NSObject
 
 //
 // Standard Base64 (RFC) handling

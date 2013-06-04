@@ -73,9 +73,6 @@ BOOL isURL(NSString *s){
 	}
 	return NO;
 }
-NSString * getCacheSchemeUrl(NSString *url){
-    return [NSString stringWithFormat:@"%@://%@",CacheSchemeName,[GTMBase64 stringByWebSafeEncodeString:url]];
-}
 NSString * getChineseCalendar(NSDate * date){      
     if(!date)return nil;
     NSArray *chineseYears = [NSArray arrayWithObjects:  

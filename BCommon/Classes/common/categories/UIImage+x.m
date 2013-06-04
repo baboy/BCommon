@@ -8,6 +8,8 @@
 
 #import "UIImage+x.h"
 
+CGFloat RadiansOfDegrees(CGFloat degrees) {return degrees * M_PI / 180;};
+
 static CGMutablePathRef createRoundCornerPath(CGRect rect,float rad){
 	CGMutablePathRef path = CGPathCreateMutable();
 	float minx = CGRectGetMinX(rect), midx = CGRectGetMidX(rect), maxx = CGRectGetMaxX(rect);
@@ -225,7 +227,28 @@ void createPath(CGContextRef ctx,CGRect rect,float rad){
     
     return _img;
 }
-
+- (UIImage *)imageRotatedByDegrees:(float)degrees
+{
+    UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.size.width, self.size.height)];
+    CGAffineTransform t = CGAffineTransformMakeRotation(RadiansOfDegrees(degrees));
+    rotatedViewBox.transform = t;
+    CGSize rotatedSize = rotatedViewBox.frame.size;
+    
+    UIGraphicsBeginImageContext(rotatedSize);
+    CGContextRef bitmap = UIGraphicsGetCurrentContext();
+    
+    CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
+    
+    CGContextRotateCTM(bitmap, RadiansOfDegrees(degrees));
+    
+    CGContextScaleCTM(bitmap, 1.0, -1.0);
+    CGContextDrawImage(bitmap, CGRectMake(-self.size.width / 2, -self.size.height / 2, self.size.width, self.size.height), [self CGImage]);
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+    
+}
 @end  
 
 CGGradientRef createGradient(CGContextRef ctx,NSArray *colors,CGFloat locations[]){

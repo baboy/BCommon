@@ -40,6 +40,7 @@
 #define gDescFont               [UIFont systemFontOfSize:14.0]
 #define gDescColor              [UIColor colorWithWhite:0.3 alpha:1]
 #define gTitleShadowColor       [UIColor colorWithWhite:1 alpha:0.9]
+#define gShadowColor            [UIColor colorWithWhite:0.1 alpha:0.6]
 
 /*******按钮圆形图片*******/
 #define gButtonCircleBgGradColor1    [UIColor colorWithWhite:0.8 alpha:1]

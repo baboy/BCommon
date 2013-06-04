@@ -27,6 +27,7 @@ extern void createPath(CGContextRef ctx,CGRect rect,float rad);
 +(UIImage *) playButtonWithColor:(UIColor *)color rect:(CGRect)rect;
 
 - (UIImage *)imageWithCornerRadius:(int)rad borderColor:(UIColor *)borderColor size:(CGSize)imgSize;
+- (UIImage *)imageRotatedByDegrees:(float)degrees;
 @end  
 
 extern CGGradientRef createGradient(CGContextRef ctx,NSArray *colors,CGFloat locations[]);

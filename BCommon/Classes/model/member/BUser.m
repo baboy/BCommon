@@ -1,20 +1,14 @@
 //
-//  BMember.m
-//  iLookForiPhone
+//  BUser.m
+//  iShow
 //
-//  Created by hz on 12-10-18.
-//  Copyright (c) 2012年 LavaTech. All rights reserved.
+//  Created by baboy on 13-6-3.
+//  Copyright (c) 2013年 baboy. All rights reserved.
 //
 
 #import "BUser.h"
 
 @implementation BUser
-@synthesize uid = _uid;
-@synthesize username = _username;
-@synthesize password = _password;
-@synthesize email = _email;
-@synthesize ukey = _ukey;
-@synthesize name = _name;
 - (void)dealloc{
     RELEASE(_uid);
     RELEASE(_username);
@@ -55,7 +49,7 @@
     }
     return USER;
 }
-+ (BOOL)login:(BUser *)user{
++ (BOOL)loginWithUser:(BUser *)user{
     if (user) {
         [DBCache setValue:[[user dict] JSONString] forKey:@"USER"];
         [G setValue:user forKey:@"USER"];
@@ -70,5 +64,41 @@
     if (user) {
         [[NSNotificationCenter defaultCenter] postNotificationName:NotifyLogout object:nil];
     }
+}
++ (BHttpRequestOperation *)loginWithUserName:(NSString *)uname password:(NSString *)pwd success:(void (^)(BUser *, NSError *))success failure:(void (^)(NSError *))failure{
+    
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSDictionary *params = @{UserNameKey:uname,UserPwdKey:pwd};
+    NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiMemberLogin] parameters:params];
+    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id data) {
+                                                                     
+                                                                 }
+                                                                 failure:^(BHttpRequestOperation *request, NSError *error) {
+                                                                     DLOG(@"[BUser] loginWithUserName error:%@",error);
+                                                                 }];
+    //no cache
+    //[operation setRequestCache:[BHttpRequestCache fileCache]];
+    [client enqueueHTTPRequestOperation:operation];
+    
+    return operation;
+}
++ (BHttpRequestOperation *)registerWithUserName:(NSString *)uname email:(NSString *)email password:(NSString *)pwd success:(void (^)(BUser *, NSError *))success failure:(void (^)(NSError *))failure{
+    
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSDictionary *params = @{UserNameKey:uname,UserPwdKey:pwd,UserEmailKey:email};
+    NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiMemberRegister] parameters:params];
+    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id data) {
+                                                                     
+                                                                 }
+                                                                 failure:^(BHttpRequestOperation *request, NSError *error) {
+                                                                     DLOG(@"[BUser] registerWithUserName error:%@",error);
+                                                                 }];
+    //no cache;
+    //[operation setRequestCache:[BHttpRequestCache fileCache]];
+    [client enqueueHTTPRequestOperation:operation];
+    
+    return operation;
 }
 @end
