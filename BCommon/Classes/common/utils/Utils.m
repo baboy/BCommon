@@ -29,6 +29,11 @@ NSString * getBundleFile(NSString *fn){
 	NSString *fp = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:fn];
 	return [[NSFileManager defaultManager] fileExistsAtPath:fp]?fp:nil;
 }
+NSString * getBundleFileFromBundle(NSString *fn, NSString *fileType,NSString *bundleName, NSString *inDir){
+    NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:bundleName ofType:@"bundle"]];
+	NSString *fp = [bundle pathForResource:fn ofType:fileType inDirectory:inDir];
+	return fp;//[[NSFileManager defaultManager] fileExistsAtPath:fp]?fp:nil;
+}
 
 NSString * getFilePath(NSString *fn, NSString *ext, NSString *dir){
     NSString *documentsDirectory = [DOMAIN_DIRS objectAtIndex:0];

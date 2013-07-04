@@ -60,6 +60,13 @@ typedef NSInteger SeparatorLineStyle;
 - (CGRect)rectForLine:(NSInteger)line offsetY:(float)y inContext:(CGContextRef)ctx;
 @end
 
+@class TableView;
+@protocol TableView <NSObject>
+@optional
+- (void)update:(TableView *)tableView;
+- (void)loadMore:(TableView *)tableView;
+@end
+
 @interface TableView : UITableView <UIScrollViewDelegate>
 @property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, retain) BLineView *topLine;
@@ -69,6 +76,7 @@ typedef NSInteger SeparatorLineStyle;
 @property (nonatomic, assign, getter = isSupportLoadMore) BOOL supportLoadMore;
 @property (nonatomic, assign, getter = isSupportUpdate) BOOL supportUpdate;
 
+- (void)addFormRow:(int)fromRow toRow:(int)toRow forSection:(int)section;
 - (void)updateFinished;
 - (void)startUpdate;
 - (void)startLoadMore;

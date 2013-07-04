@@ -82,20 +82,14 @@
 	if (target && action) {		
 		_target = target;
 		_action = action;
-		UITapGestureRecognizer *_tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(handleTap:)];
-		_tapRecognizer.numberOfTapsRequired = 1;
-		_tapRecognizer.numberOfTouchesRequired = 1;
-		[self addGestureRecognizer: _tapRecognizer];
-		[_tapRecognizer release];
+		UITapGestureRecognizer *tap = AUTORELEASE([[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(handleTap:)]);
+		[self addGestureRecognizer:tap];
 	}
 }
 - (void) handleTap:(UIGestureRecognizer *)recognizer{
 	if (recognizer.state == UIGestureRecognizerStateEnded) {
 		if (_target && _action) {
-			if (!_object) {
-				_object = [self retain];
-			}
-			[_target performSelector:_action withObject:_object afterDelay:0];
+			[_target performSelector:_action withObject:self afterDelay:0];
 		}
 	}
 }

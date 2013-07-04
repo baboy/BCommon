@@ -9,14 +9,24 @@
 #import <Foundation/Foundation.h>
 
 @interface BUser : NSObject
+@property (nonatomic, retain) NSString *origin;
 @property (nonatomic, retain) NSString *uid;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *password;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *ukey;
 @property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *avatar;
+@property (nonatomic, assign) NSInteger gender;
+@property (nonatomic, retain) NSString *education;
+@property (nonatomic, retain) NSString *school;
+@property (nonatomic, retain) NSString *mobile;
+@property (nonatomic, retain) NSDate *birthday;
+@property (nonatomic, assign) NSInteger age;
+@property (nonatomic, retain) NSDictionary *metadata;
 - (id)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dict;
+- (BOOL)isLogin;
 //当前登录用户
 + (BUser*) currentUser;
 //用该用户信息登录

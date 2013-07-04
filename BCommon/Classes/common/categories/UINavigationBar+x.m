@@ -51,6 +51,11 @@
 	CGGradientRelease(grad);
 }
 - (void)setBackgroundImage:(UIImage*)bgImg{
+    if ([self respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+        [self setBackgroundImage:bgImg forBarMetrics:UIBarMetricsDefault];
+        return;
+    }
+    
     BOOL flag = NO;
     UIView *bgView = [self viewWithTag:NavBgViewTag];
     if (bgView) {

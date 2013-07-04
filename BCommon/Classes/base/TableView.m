@@ -53,6 +53,15 @@
 - (void)reloadData{
     [super reloadData];
 }
+
+- (void)addFormRow:(int)fromRow toRow:(int)toRow forSection:(int)section{
+    NSMutableArray *indexPaths = [NSMutableArray array];
+    for (int i = fromRow; i < toRow; i++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:section];
+        [indexPaths addObject:indexPath];
+    }
+    [self insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+}
 - (NSString *)imageCacheForIndexPath:(NSIndexPath *)indexPath{
 	if (!_imgCache) {
 		return nil;
@@ -170,8 +179,8 @@
 }
 
 - (void)updateFinished{
-    [self.layer removeAllAnimations];
-    [UIView animateWithDuration:0.2
+    //[self.layer removeAllAnimations];
+    [UIView animateWithDuration:0.5
                      animations:^{
                          self.contentInset = UIEdgeInsetsZero;
                      }];
@@ -184,13 +193,13 @@
 }
 - (void)startUpdate{
     if (self.isSupportUpdate) {
-        [self.layer removeAllAnimations];
-        [UIView animateWithDuration:0.2
-                         animations:^{
-                             if (self.contentInset.top != [self.updateView activeHeight]-5) {
-                                 self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
-                             }
-                         }];
+        if (self.contentInset.top != [self.updateView activeHeight]-5) {
+            self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
+        }
+//        [self.layer removeAllAnimations];
+//        [UIView animateWithDuration:0.5
+//                         animations:^{
+//                         }];
         [self.updateView setState:DragStateLoading];
         if (self.delegate && [self.delegate respondsToSelector:@selector(update:)]) {
             [(id<XScrollViewDelegate>)self.delegate update:self];
@@ -200,11 +209,11 @@
 }
 - (void)startLoadMore{
     if (self.isSupportLoadMore) {
-        [self.layer removeAllAnimations];
-        [UIView animateWithDuration:0.2
-                         animations:^{
-                             self.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, [self.moreView activeHeight] - 5 , 0.0f);
-                         }];
+        self.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, [self.moreView activeHeight] - 5 , 0.0f);
+//        [self.layer removeAllAnimations];
+//        [UIView animateWithDuration:0.2
+//                         animations:^{
+//                         }];
         [self.moreView setState:DragStateLoading];
         if (self.delegate && [self.delegate respondsToSelector:@selector(loadMore:)]) {
             [(id<XScrollViewDelegate>)self.delegate loadMore:self];

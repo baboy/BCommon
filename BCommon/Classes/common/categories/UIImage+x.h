@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "UIUtils.h"
-
+extern UIImage * createImageWithImage(UIImage *originImage, CGSize imageSize, UIColor *shadowColor, CGSize shadowOffset,UIColor *borderColor, int borderWidth, int rad);
 extern void createPath(CGContextRef ctx,CGRect rect,float rad);
 @interface UIImage (x)
 - (UIImage *)resizableWithCapInsets:(UIEdgeInsets)capInsets;
@@ -18,6 +18,7 @@ extern void createPath(CGContextRef ctx,CGRect rect,float rad);
 - (UIImage *)cropToScale:(float) scale;
 - (UIImage *)imageWithAlpha:(float) alpha;
 - (UIImage *)imageWithColor:(UIColor *)color;
+- (UIImage *)grayImage;
 - (UIImage *)maskWithImage:(UIImage *)mask;
 - (UIImage *)imageWithShadowColor:(UIColor *)color size:(CGSize)imgSize offset:(CGSize)offset;
 - (UIImage *)imageWithShadowColor:(UIColor *)color offset:(CGSize)offset;

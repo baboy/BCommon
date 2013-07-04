@@ -13,6 +13,7 @@ typedef enum {
     BImageTitleStyleDefault,
     BImageTitleStyleBelow
 } BImageTitleStyle;
+
 @interface BImageView : UIView {
 	NSString *		_imageLocalPath;
 	id				_target;

@@ -16,6 +16,14 @@
     RELEASE(_email);
     RELEASE(_ukey);
     RELEASE(_name);
+    RELEASE(_origin);
+    RELEASE(_metadata);
+    RELEASE(_avatar);
+    RELEASE(_mobile);
+    RELEASE(_avatar);
+    RELEASE(_education);
+    RELEASE(_school);
+    RELEASE(_birthday);
     [super dealloc];
 }
 - (id)initWithDictionary:(NSDictionary *)dict{
@@ -26,6 +34,21 @@
         [self setUkey:nullToNil([dict valueForKey:@"ukey"])];
         [self setName:nullToNil([dict valueForKey:@"name"])];
         [self setPassword:nullToNil([dict valueForKey:@"password"])];
+        [self setAvatar:nullToNil([dict valueForKey:@"avatar"])];
+        [self setGender:[nullToNil([dict valueForKey:@"gender"]) intValue]];
+        [self setAge:[nullToNil([dict valueForKey:@"age"]) intValue]];
+        
+        [self setMobile:nullToNil([dict valueForKey:@"mobile"])];
+        [self setEducation:nullToNil([dict valueForKey:@"education"])];
+        [self setSchool:nullToNil([dict valueForKey:@"school"])];
+        NSString *bd = nullToNil([dict valueForKey:@"school"]);
+        if (bd) {
+            [self setBirthday:[bd dateWithFormat:FULLDATEFORMAT]];
+        }
+        NSString *meta = [dict valueForKey:@"metadata"];
+        if (meta) {
+            [self setMetadata:[meta objectFromJSONString]];
+        }
     }
     return self;
 }
@@ -37,7 +60,21 @@
     if(self.name) [dict setValue:self.name forKey:@"name"];
     if(self.password) [dict setValue:self.password forKey:@"password"];
     if(self.ukey) [dict setValue:self.ukey forKey:@"ukey"];
+    if(self.avatar) [dict setValue:self.avatar forKey:@"avatar"];
+    if(self.metadata) [dict setValue:self.metadata forKey:@"metadata"];
+    
+    [dict setValue:[NSNumber numberWithInt:self.gender] forKey:@"gender"];
+    [dict setValue:[NSNumber numberWithInt:self.age] forKey:@"age"];
+    
+    if (self.education) [dict setValue:self.education forKey:@"education"];
+    if (self.school) [dict setValue:self.school forKey:@"school"];
+    if (self.mobile) [dict setValue:self.mobile forKey:@"mobile"];
+    if (self.birthday) [dict setValue:self.birthday forKey:@"birthday"];
+    
     return dict;
+}
+- (BOOL)isLogin{
+    return USER?YES:NO;
 }
 + (BUser *)user{
     if (!USER) {

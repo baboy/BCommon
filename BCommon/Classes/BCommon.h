@@ -29,6 +29,7 @@
 
 //web
 #import "CacheURLProtocol.h"
+#import "RequestStatus.h"
 
 //categories
 #import "NSNull+x.h"
@@ -46,6 +47,7 @@
 #import "BHttpClient.h"
 #import "HTabBarView.h"
 #import "VTabBarView.h"
+#import "XUILabel.h"
 
 //
 #import "Base64.h"

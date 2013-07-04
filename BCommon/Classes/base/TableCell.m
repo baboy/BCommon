@@ -18,6 +18,10 @@
     RELEASE(_introLabel);
     [super dealloc];
 }
+- (void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    DLOG(@"[TableCell] setFrame:%@", NSStringFromCGRect(frame));
+}
 - (void)setIntro:(NSString *)intro{
     [_introLabel setText:intro];
 }

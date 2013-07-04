@@ -52,13 +52,16 @@
     }
     UIImage *backImg = [UIImage imageNamed:@"back"];
     UIButton *btn = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, backImg.size.width, backImg.size.height)] autorelease];
-    [btn addTarget:self action:@selector(popViewController) forControlEvents:UIControlEventTouchUpInside];
+    [btn addTarget:viewController action:@selector(popViewController:) forControlEvents:UIControlEventTouchUpInside];
     [btn setImage:backImg forState:UIControlStateNormal];
     UIBarButtonItem *backButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];  
     [viewController.navigationItem setLeftBarButtonItem:backButton animated:YES];
 }
 - (BOOL)shouldAutorotate{
     return NO;
+}
+-(NSUInteger)supportedInterfaceOrientations{
+    return UIInterfaceOrientationMaskPortrait;
 }
 @end
 @interface XUIViewController ()
@@ -86,11 +89,15 @@
     }
     return self;
 }
+- (void)loadView{
+    [super loadView];
+    [self awake];
+}
 - (void) awake{
-    self.view.autoresizingMask |= UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_frame = self.view.bounds;
     if (self.navigationController) {
-        _frame.size.height -= self.navigationController.navigationBar.bounds.size.height;
+       // _frame.size.height -= self.navigationController.navigationBar.bounds.size.height;
     }
 	if (self.tabBarController && !self.hidesBottomBarWhenPushed) {
 		_frame.size.height -= self.tabBarController.tabBar.frame.size.height;

@@ -11,6 +11,7 @@
 extern NSString *ApiDomain;
 
 #define ApiClient               @"http://m.tvie.com.cn/mcms/api2/client.php"
+#define ApiRequestBatchNum      20
 /*
  #define ApiPathConf             @"/mcms/api2/config.php"
  //反馈相关

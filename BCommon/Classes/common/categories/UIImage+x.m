@@ -10,7 +10,8 @@
 
 CGFloat RadiansOfDegrees(CGFloat degrees) {return degrees * M_PI / 180;};
 
-static CGMutablePathRef createRoundCornerPath(CGRect rect,float rad){
+
+CGMutablePathRef createRoundCornerPath(CGRect rect,float rad){
 	CGMutablePathRef path = CGPathCreateMutable();
 	float minx = CGRectGetMinX(rect), midx = CGRectGetMidX(rect), maxx = CGRectGetMaxX(rect);
 	float miny = CGRectGetMinY(rect), midy = CGRectGetMidY(rect), maxy = CGRectGetMaxY(rect);
@@ -30,6 +31,50 @@ void createPath(CGContextRef ctx,CGRect rect,float rad){
 	CGContextAddArcToPoint(ctx, maxx, maxy, midx, maxy, rad);
 	CGContextAddArcToPoint(ctx, minx, maxy, minx, midy, rad);
 }
+UIImage * createImageWithImage(UIImage *originImage, CGSize imageSize, UIColor *shadowColor, CGSize shadowOffset,UIColor *borderColor, int borderWidth, int radius){
+    CGFloat scale = [[UIScreen mainScreen] scale];
+	float blur = 2.0;
+    imageSize = CGSizeMake(imageSize.width+2*blur, imageSize.height+2*blur);
+    int w = imageSize.width;
+    int h = imageSize.height;
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGRect rect = CGRectInset(CGRectMake(0, 0, w, h), blur, blur);
+	CGContextSaveGState(ctx);
+	CGMutablePathRef path = NULL;
+    if (shadowColor) {
+        CGContextSetShadowWithColor(ctx, shadowOffset, blur, [shadowColor CGColor]);
+    }
+    path = createRoundCornerPath(rect, radius);
+    CGContextBeginPath(ctx);
+    CGContextAddPath(ctx, path);
+    CGContextClosePath(ctx);
+    CGContextSetFillColorWithColor(ctx,borderColor.CGColor);
+    CGContextFillPath(ctx);
+    CGPathRelease(path);
+    CGContextSetShadowWithColor(ctx, CGSizeZero, 0, NULL);
+	if (borderColor) {
+		rect = CGRectInset(rect, borderWidth, borderWidth);
+	}
+	path = createRoundCornerPath(rect, radius);
+	CGContextBeginPath(ctx);
+    CGContextAddPath(ctx, path);
+	CGContextClosePath(ctx);
+    CGContextClip(ctx);
+	CGPathRelease(path);
+	
+	CGContextDrawImage(ctx, rect, originImage.CGImage);
+    CGImageRef mask = CGBitmapContextCreateImage(ctx);
+	CGContextRestoreGState(ctx);
+    //CGContextRelease(ctx);
+    CGColorSpaceRelease(colorSpace);
+	UIImage *newImage = [UIImage imageWithCGImage:mask scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
+	CGImageRelease(mask);
+    return newImage;
+}
+
 @implementation UIImage (x)  
 - (UIImage *)resizableWithCapInsets:(UIEdgeInsets)capInsets{
     if ([self respondsToSelector:@selector(resizableImageWithCapInsets:resizingMode:) ]) {
@@ -91,13 +136,15 @@ void createPath(CGContextRef ctx,CGRect rect,float rad){
 	return img;
 }
 - (UIImage *)imageWithColor:(UIColor *)color {
-    UIGraphicsBeginImageContext(self.size);
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGSize scaleSize = CGSizeMake(self.size.width*scale, self.size.height*scale);
+    UIGraphicsBeginImageContext(scaleSize);
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGRect area = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGRect area = CGRectMake(0, 0, scaleSize.width, scaleSize.height);
     
     CGContextScaleCTM(ctx, 1, -1);
-    CGContextTranslateCTM(ctx, 0, -area.size.height);
+    CGContextTranslateCTM(ctx, 0, -scaleSize.height);
     
     CGContextSaveGState(ctx);
     CGContextClipToMask(ctx, area, self.CGImage);    
@@ -111,7 +158,24 @@ void createPath(CGContextRef ctx,CGRect rect,float rad){
     UIGraphicsEndImageContext();    
     return _newImg;
 }
-
+- (UIImage *)grayImage{
+    int width = self.size.width;
+    int height = self.size.height;
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    CGContextRef context = CGBitmapContextCreate (nil,width,height,8,0,colorSpace,kCGImageAlphaNone);
+    CGColorSpaceRelease(colorSpace);
+    
+    if (context == NULL) {
+        return nil;
+    }
+    
+    CGContextDrawImage(context,CGRectMake(0, 0, width, height), self.CGImage);
+    UIImage *grayImage = [UIImage imageWithCGImage:CGBitmapContextCreateImage(context)];
+    CGContextRelease(context);
+    
+    return grayImage;
+}
 - (UIImage *)maskWithImage:(UIImage *)mask
 {
 	UIGraphicsBeginImageContext(self.size);

@@ -132,4 +132,20 @@
     }
     return nil;
 }
+- (int)textCount{
+    float number = 0.0;
+    for (int index = 0; index<[self length]; index++)
+    {
+        NSString *character = [self substringWithRange:NSMakeRange(index, 1)];
+        if ([character lengthOfBytesUsingEncoding:NSUTF8StringEncoding] == 3)
+        {
+            number++;
+        }
+        else
+        {
+            number = number +0.5;
+        }
+    }
+    return  ceil(number);
+}
 @end

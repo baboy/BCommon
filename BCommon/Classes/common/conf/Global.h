@@ -13,6 +13,8 @@
 #define gConf			@"http://m.tvie.com.cn/mcms/api2/config.php"
 
 #define APP                 [UIApplication sharedApplication]
+#define APPDelegate         [[UIApplication sharedApplication] delegate]
+#define APPRootController  (id)[(id)[[UIApplication sharedApplication] delegate] rootViewController]
 #define AppKeyWindow        [[UIApplication sharedApplication] keyWindow]
 #define AppModNews          @"news"
 #define AppModVod           @"video"
@@ -23,6 +25,7 @@
 
 #define DISPATCH_RELEASE(__OBJ__)   if(__OBJ__) { dispatch_release(__OBJ__); __OBJ__ = NULL; }
 #define RELEASE(__POINTER)  [__POINTER release]; __POINTER = nil;
+#define RETAIN(__POINTER)  [__POINTER retain];
 #define AUTORELEASE(__POINTER)  [__POINTER autorelease]
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
 
@@ -33,12 +36,12 @@
 #define UserPwdKey                         @"password"
 #define UserEmailKey                         @"email"
 
-#define USER                            [G valueForKey:@"USER"]
+#define USER                              [G valueForKey:@"USER"]
 #define UserKey                           [[G valueForKey:@"USER"] ukey]
 #define UserID                            [[G valueForKey:@"USER"] uid]
 #define UserName                          [[G valueForKey:@"USER"] username]
 #define UserEmail                          [[G valueForKey:@"USER"] username]
-
+#define UserParams                  [NSMutableDictionary dictionaryWithObjectsAndKeys:UserID,UserIDKey, UserKey, UserKeyKey, nil]
 //临时用户名
 #define TmpUserName               (USER?UserName:[NSString stringWithFormat:@"%@手机网友",([G valueForKey:@"CurrentAdress"]?[G valueForKey:@"CurrentAdress"]:@"")])
 #define TmpUserID                 (USER?UserID:0)

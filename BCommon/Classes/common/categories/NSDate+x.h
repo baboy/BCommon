@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#define FULLDATEFORMAT_ZONE  @"yyyy-MM-dd HH:mm:ss Z"
+#define FULLDATEFORMAT      @"yyyy-MM-dd HH:mm:ss"
 
 @interface NSDate(x)
 
