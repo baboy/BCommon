@@ -29,7 +29,7 @@
 
 //web
 #import "CacheURLProtocol.h"
-#import "RequestStatus.h"
+#import "BResponse.h"
 
 //categories
 #import "NSNull+x.h"
