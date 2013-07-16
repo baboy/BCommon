@@ -30,6 +30,7 @@
 //web
 #import "CacheURLProtocol.h"
 #import "BResponse.h"
+#import "BMapLocation.h"
 
 //categories
 #import "NSNull+x.h"
@@ -52,3 +53,4 @@
 //
 #import "Base64.h"
 #import "OpenUDID.h"
+#import "BHttpRequestOperation.h"

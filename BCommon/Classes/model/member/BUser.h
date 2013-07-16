@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+#define Uid         [[BUser user] uid]
+#define UKEY        [[BUser user] ukey]
+#define USER        [G valueForKey:@"USER"]
+
+#define UserParams  [NSMutableDictionary dictionaryWithObjectsAndKeys:Uid,@"uid", UKEY, @"ukey", nil]
+
+
+
 @interface BUser : NSObject
 @property (nonatomic, retain) NSString *origin;
 @property (nonatomic, retain) NSString *uid;
@@ -28,7 +36,7 @@
 - (NSDictionary *)dict;
 - (BOOL)isLogin;
 //当前登录用户
-+ (BUser*) currentUser;
++ (BUser*) user;
 //用该用户信息登录
 + (BOOL)loginWithUser:(BUser *)user;
 //登出

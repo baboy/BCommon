@@ -8,6 +8,8 @@
 
 #import "BUser.h"
 
+static dispatch_once_t _init_once_user;
+
 @implementation BUser
 - (void)dealloc{
     RELEASE(_uid);
@@ -77,19 +79,20 @@
     return USER?YES:NO;
 }
 + (BUser *)user{
-    if (!USER) {
+    static id _current_user = nil;
+    if (!_init_once_user) {
         NSDictionary *json = [[DBCache valueForKey:@"USER"] objectFromJSONString];
-        if(json){
-            BUser *user = [[[BUser alloc] initWithDictionary:json] autorelease];
-            [G setValue:user forKey:@"USER"];
-        }
+        dispatch_once(&_init_once_user, ^{
+            RELEASE(_current_user);
+            _current_user = [[[self class] alloc] initWithDictionary:json];
+        });
     }
-    return USER;
+    return _current_user;
 }
 + (BOOL)loginWithUser:(BUser *)user{
     if (user) {
         [DBCache setValue:[[user dict] JSONString] forKey:@"USER"];
-        [G setValue:user forKey:@"USER"];
+        _init_once_user = 0;
         [[NSNotificationCenter defaultCenter] postNotificationName:NotifyLogin object:nil];
         return YES;
     }
@@ -105,7 +108,7 @@
 + (BHttpRequestOperation *)loginWithUserName:(NSString *)uname password:(NSString *)pwd success:(void (^)(BUser *, NSError *))success failure:(void (^)(NSError *))failure{
     
     BHttpClient *client = [BHttpClient defaultClient];
-    NSDictionary *params = @{UserNameKey:uname,UserPwdKey:pwd};
+    NSDictionary *params = @{@"username":uname,@"password":pwd};
     NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiMemberLogin] parameters:params];
     BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
                                                                  success:^(BHttpRequestOperation *operation, id data) {
@@ -123,7 +126,7 @@
 + (BHttpRequestOperation *)registerWithUserName:(NSString *)uname email:(NSString *)email password:(NSString *)pwd success:(void (^)(BUser *, NSError *))success failure:(void (^)(NSError *))failure{
     
     BHttpClient *client = [BHttpClient defaultClient];
-    NSDictionary *params = @{UserNameKey:uname,UserPwdKey:pwd,UserEmailKey:email};
+    NSDictionary *params = @{@"username":uname,@"password":pwd,@"email":email};
     NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiMemberRegister] parameters:params];
     BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
                                                                  success:^(BHttpRequestOperation *operation, id data) {

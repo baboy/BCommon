@@ -28,26 +28,6 @@
 #define RETAIN(__POINTER)  [__POINTER retain];
 #define AUTORELEASE(__POINTER)  [__POINTER autorelease]
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
-
-// log key
-#define UserIDKey                        @"uid"
-#define UserNameKey                      @"username"
-#define UserKeyKey                       @"ukey"
-#define UserPwdKey                         @"password"
-#define UserEmailKey                         @"email"
-
-#define USER                              [G valueForKey:@"USER"]
-#define UserKey                           [[G valueForKey:@"USER"] ukey]
-#define UserID                            [[G valueForKey:@"USER"] uid]
-#define UserName                          [[G valueForKey:@"USER"] username]
-#define UserEmail                          [[G valueForKey:@"USER"] username]
-#define UserParams                  [NSMutableDictionary dictionaryWithObjectsAndKeys:UserID,UserIDKey, UserKey, UserKeyKey, nil]
-//临时用户名
-#define TmpUserName               (USER?UserName:[NSString stringWithFormat:@"%@手机网友",([G valueForKey:@"CurrentAdress"]?[G valueForKey:@"CurrentAdress"]:@"")])
-#define TmpUserID                 (USER?UserID:0)
-#define TmpUserKey                (USER?UserKey:TmpUserID)
-
-#define PASSWORD                       [[G valueForKey:@"USER"] password]
 #define G_LOGIN_TIME					@"loginTime"
 #define G_APP_MAP_FILE					@"appmap.plist"
 

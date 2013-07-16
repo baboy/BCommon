@@ -65,12 +65,11 @@
 }
 + (BHttpRequestOperation *)feedback:(NSString *)content success:(void (^)(id json))success failure:(void (^)(NSError *error))failure{
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithCapacity:3];
+    ;
     [param setValue:content forKey:@"content"];
     [param setValue:BundleID forKey:@"domain"];
     [param setValue:@"feedback" forKey:@"mod"];
     [param setValue:BundleVersion forKey:@"sid"];
-    [param setValue:TmpUserID forKey:UserIDKey];
-    [param setValue:TmpUserName forKey:UserNameKey];
     return [self post:[NSURL URLWithString:ApiFeedback]
                 param:param
               success:success

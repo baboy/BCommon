@@ -1,21 +1,14 @@
 //
-//  CourseLocation.m
-//  course
+//  BMapPlace.m
+//  BCommon
 //
-//  Created by Yinghui Zhang on 8/23/12.
-//  Copyright (c) 2012 LavaTech. All rights reserved.
+//  Created by baboy on 13-7-16.
+//  Copyright (c) 2013年 baboy. All rights reserved.
 //
 
-#import "BMapLocation.h"
+#import "BMapPlace.h"
 
-@implementation BMapLocation
-@synthesize address = _address;
-@synthesize province = _province;
-@synthesize country = _country;
-@synthesize district = _district;
-@synthesize city = _city;
-@synthesize latitude;
-@synthesize longitude;
+@implementation BMapPlace
 - (void)dealloc{
     RELEASE(_country);
     RELEASE(_province);
@@ -24,7 +17,6 @@
     RELEASE(_address);
     [super dealloc];
 }
-
 - (id)initWithGeoData:(NSDictionary *)dict{
     if (self = [super init]) {
         [self setAddress:[dict valueForKey:@"formatted_address"]];
@@ -75,22 +67,22 @@
     [d setValue:[NSNumber numberWithDouble:self.longitude] forKey:@"longitude"];
     return d;
 }
-+ (BMapLocation *)currentLocation{
++ (BMapPlace *)currentLocation{
     return [G valueForKey:@"location"];
 }
-+ (void)saveCurrentLocation:(BMapLocation *)location{
++ (void)saveCurrentLocation:(BMapPlace *)location{
     [G setValue:location forKey:@"location"];
     NSString *currentAddress = [NSString stringWithFormat:@"%@%@%@", [location country]?[location country]:@"", [location province]?[location province]:@"",([location city] && ![[location city] isEqualToString:[location province]])?[location city]:@""];
     [G setValue:currentAddress forKey:@"CurrentAdress"];
 }
-+ (BHttpRequestOperation *)getLocationByIpSuccess:(void (^)(BMapLocation *loc))success failure:(void (^)(NSError *error))failure{
++ (BHttpRequestOperation *)getLocationByIpSuccess:(void (^)(BMapPlace *loc))success failure:(void (^)(NSError *error))failure{
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:@"http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json"] parameters:nil];
     BHttpRequestOperation *operation = [client jsonRequestWithURLRequest:request
                                                                  success:^(BHttpRequestOperation *operation, id json) {
-                                                                     BMapLocation *loc = nil;
+                                                                     BMapPlace *loc = nil;
                                                                      if (json) {
-                                                                         loc = [[[BMapLocation alloc] init] autorelease];
+                                                                         loc = [[[BMapPlace alloc] init] autorelease];
                                                                          loc.country = [json valueForKey:@"country"];
                                                                          loc.province = [json valueForKey:@"province"];
                                                                          loc.city = [json valueForKey:@"city"];
@@ -113,7 +105,6 @@
     BHttpRequestOperation *operation =
     [client jsonRequestWithURLRequest:request
                               success:^(BHttpRequestOperation *operation, id json) {
-                                  BMapLocation *loc = nil;
                                   BResponse *response = [BResponse responseWithDictionary:json];
                                   NSMutableArray *addrs = nil;
                                   NSError *error = nil;
@@ -123,14 +114,14 @@
                                           addrs = [NSMutableArray array];
                                           int n = [list count];
                                           for (int i=0; i<n; i++) {
-                                              BMapLocation *loc = AUTORELEASE([[BMapLocation alloc] initWithGeoData:[list objectAtIndex:i]]);
+                                              BMapPlace *loc = AUTORELEASE([[BMapPlace alloc] initWithGeoData:[list objectAtIndex:i]]);
                                               [addrs addObject:loc];
                                           }
                                       }
                                   }
                                   if ( !addrs || [addrs count] ==0 ) {
                                       NSDictionary *userInfo = @{NSLocalizedDescriptionKey:NSLocalizedString(@"未获取到地址信息", nil)};
-                                      NSError *error = [NSError errorWithDomain:HttpRequestDomain code:-1 userInfo:userInfo];
+                                      error = [NSError errorWithDomain:HttpRequestDomain code:-1 userInfo:userInfo];
                                   }
                                   callback(operation, addrs, error);
                                   

@@ -20,7 +20,7 @@ typedef int ResponseStatusCode;
 @property (nonatomic, assign) ResponseStatusCode status;
 @property (nonatomic, retain) NSString *msg;
 @property (nonatomic, retain) NSMutableDictionary *dict;
-+ (id)statusWithDictionary:(NSDictionary *)dict;
++ (id)responseWithDictionary:(NSDictionary *)dict;
 - (BOOL)isSuccess;
 - (NSError *)error;
 - (id)initWithDictionary:(NSDictionary *)dict;

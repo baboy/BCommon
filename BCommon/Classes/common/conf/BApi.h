@@ -62,6 +62,9 @@ extern NSString *ApiDomain;
 #define ApiNewsType                 [NSString stringWithFormat:@"%@/mod/news/category.php?type", ApiDomain]
 #define ApiNewsQuery                [NSString stringWithFormat:@"%@/mod/news/query.php", ApiDomain]
 
+//地图
+#define ApiQueryLocation            [NSString stringWithFormat:@"%@/mod/map/geo.php", ApiDomain]
+
 //登记设备
 #define ApiAddDevice                [NSString stringWithFormat:@"%@/mod/device/ios.php", @"http://m.tvie.com.cn/mcms/api2"]
 

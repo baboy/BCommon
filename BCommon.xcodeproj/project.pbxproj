@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		83647BE41794D50D00C9E331 /* BMapPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 83647BE31794D50D00C9E331 /* BMapPlace.m */; };
 		83851CCA169D884200451E23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC9169D884200451E23 /* Foundation.framework */; };
 		83851CD9169D884200451E23 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CD8169D884200451E23 /* SenTestingKit.framework */; };
 		83851CDB169D884200451E23 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CDA169D884200451E23 /* UIKit.framework */; };
@@ -102,6 +103,8 @@
 /* Begin PBXFileReference section */
 		4256CEAE34E94BCBB0C8F9C8 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		7DFDA534FC97413A927CC623 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		83647BE21794D50D00C9E331 /* BMapPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMapPlace.h; sourceTree = "<group>"; };
+		83647BE31794D50D00C9E331 /* BMapPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMapPlace.m; sourceTree = "<group>"; };
 		83851CC6169D884200451E23 /* libBCommon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBCommon.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		83851CC9169D884200451E23 /* Foundation.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83851CCD169D884200451E23 /* BCommon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BCommon-Prefix.pch"; sourceTree = "<group>"; };
@@ -488,6 +491,8 @@
 				83DBE5AA171F901E00B283DC /* BMapAnnotation.m */,
 				83DBE5AB171F901E00B283DC /* BMapLocation.h */,
 				83DBE5AC171F901E00B283DC /* BMapLocation.m */,
+				83647BE21794D50D00C9E331 /* BMapPlace.h */,
+				83647BE31794D50D00C9E331 /* BMapPlace.m */,
 				83DBE5AD171F901E00B283DC /* CalloutMapAnnotationView.h */,
 				83DBE5AE171F901E00B283DC /* CalloutMapAnnotationView.m */,
 				83DBE5AF171F901E00B283DC /* MKMapView+x.h */,
@@ -757,6 +762,7 @@
 				83DBE61D171F901E00B283DC /* BHttpRequestCache.m in Sources */,
 				83DBE61E171F901E00B283DC /* BHttpRequestOperation.m in Sources */,
 				83D7585E171F93ED006D33B6 /* BUser.m in Sources */,
+				83647BE41794D50D00C9E331 /* BMapPlace.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

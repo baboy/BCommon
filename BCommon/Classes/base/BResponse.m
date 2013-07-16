@@ -9,7 +9,7 @@
 #import "BResponse.h"
 NSString *HttpRequestDomain = @"X-Channel request error";
 @implementation BResponse
-+ (id)statusWithDictionary:(NSDictionary *)dict{
++ (id)responseWithDictionary:(NSDictionary *)dict{
     BResponse *status = AUTORELEASE([[BResponse alloc] initWithDictionary:dict]);
     return status;
 }
@@ -41,6 +41,9 @@ NSString *HttpRequestDomain = @"X-Channel request error";
     return [[self.dict valueForKey:@"status"] intValue];
 }
 - (NSError *)error{
+    if (self.isSuccess) {
+        return nil;
+    }
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey:self.msg?self.msg:@""};
     NSError *error = [NSError errorWithDomain:HttpRequestDomain code:self.status userInfo:userInfo];
     return error;
