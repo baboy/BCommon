@@ -10,22 +10,13 @@
 
 @implementation BQueueItem
 
-@synthesize tabId = _tabId;
-@synthesize qid = _qid;
-@synthesize data = _data;
-@synthesize data2 = _data2;
-@synthesize data3 = _data3;
-@synthesize data4 = _data4;
-@synthesize data5 = _data5;
-@synthesize data6 = _data6;
-@synthesize status = _status;
-@synthesize domain = _domain;
-
 - (id) initWithDictionary:(NSDictionary *)dict{
     if (self = [super init]) {
-        [self setQid:[dict valueForKey:@"qid"]];
         [self setDomain:[dict valueForKey:@"domain"]];
-        [self setTabId:[[dict valueForKey:@"id"] intValue]];
+        
+        [self setQid:[dict valueForKey:@"qid"]];
+        [self setKey:[dict valueForKey:@"key"]];
+        [self setID:[[dict valueForKey:@"id"] intValue]];
         [self setData:nullToNil([dict valueForKey:@"data"])];
         [self setData2:nullToNil([dict valueForKey:@"data2"])];
         [self setData3:nullToNil([dict valueForKey:@"data3"])];
@@ -36,16 +27,9 @@
     }
     return self;
 }
-- (NSDictionary *)jsonData{
-    return [self.data objectFromJSONString];
-}
-- (NSDictionary *)jsonData2{
-    return [self.data2 objectFromJSONString];
-}
-- (NSDictionary *)jsonData3{
-    return [self.data3 objectFromJSONString];
-}
 - (void)dealloc{
+    RELEASE(_domain);
+    RELEASE(_key);
     RELEASE(_qid);
     RELEASE(_data);
     RELEASE(_data2);
@@ -53,14 +37,122 @@
     RELEASE(_data4);
     RELEASE(_data5);
     RELEASE(_data6);
-    RELEASE(_domain);
     [super dealloc];
 }
 
 
 @end
 
+@implementation BQueueItem(BQueueItemDeprecated)
+
+- (int)tabId{
+}
+- (void) setTabId:(int)tabId{
+    [self setID:tabId];
+}
+- (NSDictionary *)jsonData{
+    return [self.data json];
+}
+- (NSDictionary *)jsonData2{
+    return [self.data2 json];
+}
+- (NSDictionary *)jsonData3{
+    return [self.data3 json];
+}
+@end
+
 @implementation BQueue
+
++ (BOOL) addForQueue:(NSString *)qid withKey:(NSString *)key withDatas:(NSString *)data, ...{
+    if (!data || !qid) {
+        return NO;
+    }
+    NSMutableArray *datas = [NSMutableArray arrayWithCapacity:5];
+    va_list args;
+    va_start(args, data);
+    id arg;
+    
+    while ( (arg = va_arg(args, NSString*) ) != nil) {
+        [datas addObject:arg];
+        if ([datas count]>=5) {
+            break;
+        }
+    }
+    va_end(args);
+    for (int i=[datas count]; i<5; i++) {
+        [datas addObject:[NSNull null]];
+    }
+    FMDatabase *db = [self db];
+	BOOL ret =[db executeUpdate:@"INSERT INTO queue (qid, key, data, data2, data3, data4, data5, data6) VALUES (?,?,?,?,?,?,?,?)",qid, key?:[NSNull null], data, [datas objectAtIndex:0], [datas objectAtIndex:1], [datas objectAtIndex:2], [datas objectAtIndex:3], [datas objectAtIndex:4]];
+    DLOG(@"[BQueue] add queue<%@,%@> state<%d>", qid, key, ret);
+	[self close:db];
+	return ret;
+}
++ (BOOL) addForQueue:(NSString *)qid withKey:(NSString *)key withData:(NSString *)data{
+    return [self addForQueue:qid withKey:key withDatas:data, nil];
+}
++ (BOOL) addForQueue:(NSString *)qid withData:(NSString *)data{
+    return [self addForQueue:qid withKey:nil withDatas:data, nil];
+}
+
++ (BQueueItem *) getOneItemByQueue:(NSString *)qid{
+    BQueueItem *ret = nil;
+    FMDatabase *db = [self db];
+	FMResultSet *rs = [db executeQuery:@"SELECT * FROM queue WHERE qid=? LIMIT 0,1",qid];
+    if ([rs next]) {
+        ret = [[[BQueueItem alloc] initWithDictionary:[rs resultDict]] autorelease];
+    }
+    [self close:db];
+	return ret;
+}
++ (NSArray *) getAllItemsByQueue:(NSString *)qid{
+    NSMutableArray *ret = nil;
+    FMDatabase *db = [self db];
+	FMResultSet *rs = [db executeQuery:@"SELECT * FROM queue WHERE qid=? ORDER BY id ASC", qid];
+    ret = [NSMutableArray array];
+    while ([rs next]) {
+        BQueueItem *qData = [[[BQueueItem alloc] initWithDictionary:[rs resultDict]] autorelease];
+        [ret addObject:qData];
+    }
+	[self close:db];
+	return ret;
+}
++ (BOOL) removeById:(int) ID{
+    BOOL ret = NO;
+    FMDatabase *db = [self db] ;
+    ret = [db executeUpdate:@"DELETE FROM queue WHERE id=?",[NSNumber numberWithInt:ID]];
+	[self close:db];
+	return ret;
+}
++ (BOOL) removeByQueue:(NSString *)qid{
+    
+    return [self removeByField:DBQFieldQID value:qid];
+}
++ (BOOL) removeByField:(NSString *)field value:(NSString *)val{
+    
+    BOOL ret = NO;
+    FMDatabase *db = [self db];
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM queue WHERE %@=?",field];
+    ret = [db executeUpdate:sql,val];
+	[self close:db];
+	return ret;
+}
++ (BOOL) updateField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2{
+    BOOL ret = NO;
+    FMDatabase *db = [self db] ;
+    NSString *sql = @"UPDATE queue set %@=? WHERE %@=? ";
+    sql = [NSString stringWithFormat:sql,field,field2];
+    ret = [db executeUpdate:sql,val,val2];
+	[self close:db];
+	return ret;
+}
++ (BOOL) updateField:(NSString *)field value:(NSString *)val forId:(int)ID{
+    return [self updateField:field value:val forField:DBQFieldID value:[NSNumber numberWithInt:ID]];
+}
+
+@end
+
+@implementation BQueue(BQueueDeprecated)
 
 
 + (BOOL) addDomain:(NSString *)domain queue:(NSString *)qid datas:(NSString *)data, ...{
@@ -146,13 +238,6 @@
 + (NSArray *) getAllItemsByQueue:(NSString *)qid{
 	return [self getAllItemsByDomain:@"G" queue:qid];
 }
-+ (BOOL) removeById:(int) itemId{
-    BOOL ret = NO;
-    FMDatabase *db = [self db] ;
-    ret = [db executeUpdate:@"DELETE FROM queue WHERE id=?",[NSNumber numberWithInt:itemId]];
-	[self close:db];
-	return ret;
-}
 + (BOOL) removeByDomain:(NSString *)domain{
     BOOL ret = NO;
     FMDatabase *db = [self db];
@@ -172,22 +257,8 @@
 + (BOOL) removeByQueue:(NSString *)qid{
     return [self removeByDomain:@"G" queue:qid];
 }
-+ (BOOL) removeByField:(NSString *)field value:(NSString *)val{
-    BOOL ret = NO;
-    FMDatabase *db = [self db];
-    NSString *sql = [NSString stringWithFormat:@"DELETE FROM queue WHERE %@=?",field];
-    ret = [db executeUpdate:sql,val];
-	[self close:db];
-	return ret;
-}
 + (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2{
     
-    BOOL ret = NO;
-    FMDatabase *db = [self db] ;
-    NSString *sql = @"UPDATE queue set %@=? WHERE %@=? ";
-    sql = [NSString stringWithFormat:sql,field,field2];
-    ret = [db executeUpdate:sql,val,val2];
-	[self close:db];
-	return ret;
+    [self updateField:field value:val forField:field2 value:val2];
 }
 @end

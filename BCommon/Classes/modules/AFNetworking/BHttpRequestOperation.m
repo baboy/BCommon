@@ -44,7 +44,7 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
 }
 
 - (void)setCacheFilePath:(NSString *)cacheFilePath{
-    DLOG(@"cache file:%@",cacheFilePath);
+    //DLOG(@"cache file:%@",cacheFilePath);
     RELEASE(_cacheFilePath);
     _cacheFilePath = [cacheFilePath retain];
     NSString *tmpFilePath = [cacheFilePath stringByAppendingPathExtension:@"download"];
@@ -79,7 +79,7 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
             self.readFromCache = YES;
             [self finish];
             [self.lock unlock];
-            DLOG(@"read from cache directory");
+            //DLOG(@"read from cache directory");
             return;
         };
     }

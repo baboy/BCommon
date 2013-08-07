@@ -28,16 +28,23 @@
     });
     return _fileRequestCache;
 }
+
 - (NSString *)cachePathForURL:(NSURL *)url{
+    return [BHttpRequestCache cachePathForURL:url];
+}
+- (NSData *)cacheDataForURL:(NSURL *)url{
+    return [BHttpRequestCache cacheDataForURL:url];
+}
++ (NSString *)cachePathForURL:(NSURL *)url{
     NSString *fn = [[url absoluteString] md5];
     NSString *ext = [url pathExtension];
     return getFilePath(fn, ext, gImageCacheDir);
 }
-- (NSData *)cacheDataForURL:(NSURL *)url{
++ (NSData *)cacheDataForURL:(NSURL *)url{
     NSString *fp = [self cachePathForURL:url];
     if (fp && [[NSFileManager defaultManager] fileExistsAtPath:fp]) {
         return [NSData dataWithContentsOfFile:fp];
     }
-return nil;
+    return nil;
 }
 @end

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UIImageView(cache)
-- (void)setImageURL:(NSURL *)url;
+- (void)setImageURL:(NSURL *)imageURL;
+- (void)setImageURL:(NSURL *)imageURL withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback;
 @end

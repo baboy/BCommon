@@ -43,7 +43,7 @@
                               
                           }];
     [operation setRequestCache:[BHttpRequestCache fileCache]];
-    [operation start];
+    [client enqueueHTTPRequestOperation:operation];
     [self setOperation:operation];
 }
 - (void)setImageURLString:(NSString *)urlString{
@@ -62,6 +62,12 @@
 - (void)addTarget:(id)target action:(SEL)action{
     UITapGestureRecognizer *tap = [[[UITapGestureRecognizer alloc] initWithTarget:target action:@selector(tapEvent:)] autorelease];
     [self addGestureRecognizer:tap];
+}
++ (NSString *)cachePathForURL:(NSURL *)url{
+    return [BHttpRequestCache cachePathForURL:url];
+}
++ (NSData *)cacheDataForURL:(NSURL *)url{
+    return [BHttpRequestCache cacheDataForURL:url];
 }
 - (void)dealloc{
     if (self.operation) {

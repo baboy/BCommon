@@ -29,9 +29,30 @@
     }
     return data;
 }
+- (NSMutableDictionary *)json{
+    NSMutableDictionary *json = [NSMutableDictionary dictionary];
+    for (NSString *key in [self allKeys]) {
+        if (![key isKindOfClass:[NSString class]]) {
+            continue;
+        }
+        id v = [self valueForKey:key];
+        if ([v isKindOfClass:[NSString class]] ||
+            [v isKindOfClass:[NSNumber class]] ||
+            [v isKindOfClass:[NSNull class]]) {
+            [json setValue:v forKey:key];
+        }else if( [v isKindOfClass:[NSDictionary class]] || [v isKindOfClass:[NSArray class]]){
+            id dv = [v json];
+            if (dv) {
+                [json setValue:dv forKey:key];
+            }
+        }
+    }
+    return json;
+}
+
 - (NSString *)jsonString{
     NSError *err = nil;
-    NSData *data = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&err];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:[self json] options:NSJSONWritingPrettyPrinted error:&err];
     if (err) {
         NSLog(@"[NSString] jsonObject error:%@",err);
     }

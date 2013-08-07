@@ -34,4 +34,6 @@ typedef enum _BHttpRequestCachePolicy {
 + (id)fileCache;
 - (NSString *)cachePathForURL:(NSURL *)url;
 - (NSData *)cacheDataForURL:(NSURL *)url;
++ (NSString *)cachePathForURL:(NSURL *)url;
++ (NSData *)cacheDataForURL:(NSURL *)url;
 @end

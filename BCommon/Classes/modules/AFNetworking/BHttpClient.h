@@ -29,4 +29,7 @@ typedef UInt32 HttpRequestMethod;
 
 - (NSMutableURLRequest *)requestWithPostURL:(NSURL *)url parameters:(NSDictionary *)parameters;
 - (NSMutableURLRequest *)requestWithGetURL:(NSURL *)url parameters:(NSDictionary *)parameters;
+- (NSMutableURLRequest *)requestWithMethod:(NSString *)method
+                                       url:(NSURL *)url
+                                parameters:(NSDictionary *)parameters;
 @end

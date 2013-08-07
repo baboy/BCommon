@@ -41,6 +41,7 @@ UIImage * createImageWithImage(UIImage *originImage, CGSize imageSize, UIColor *
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     UIGraphicsBeginImageContextWithOptions(imageSize, NO, 0);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [[UIColor clearColor] set];
     CGRect rect = CGRectInset(CGRectMake(0, 0, w, h), blur, blur);
 	CGContextSaveGState(ctx);
 	CGMutablePathRef path = NULL;

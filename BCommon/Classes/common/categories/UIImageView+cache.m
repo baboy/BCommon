@@ -8,20 +8,30 @@
 
 #import "UIImageView+cache.h"
 @implementation UIImageView(cache)
-- (void)setImageURL:(NSURL *)url{
+
+- (void)setImageURL:(NSURL *)imageURL withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback{
     BHttpClient *client = [BHttpClient defaultClient];
-    NSURLRequest *request = [client requestWithGetURL:url parameters:nil];
+    NSURLRequest *request = [client requestWithGetURL:imageURL parameters:nil];
     BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
                                                                  success:^(BHttpRequestOperation *operation, id data) {
+                                                                     NSString *fp = operation.cacheFilePath;
                                                                      if (self && [self isKindOfClass:[UIImageView class]]) {
-                                                                         NSString *fp = operation.cacheFilePath;
                                                                          [self setImage:[UIImage imageWithContentsOfFile:fp]];
+                                                                     }
+                                                                     if (callback) {
+                                                                         callback(imageURL, fp, nil);
                                                                      }
                                                                  }
                                                                  failure:^(BHttpRequestOperation *request, NSError *error) {
                                                                      
+                                                                     if (callback) {
+                                                                         callback(imageURL, nil, error);
+                                                                     }
                                                                  }];
     [operation setRequestCache:[BHttpRequestCache fileCache]];
-    [operation start];
+    [client enqueueHTTPRequestOperation:operation];
+}
+- (void)setImageURL:(NSURL *)imageURL{
+    [self setImageURL:imageURL withImageLoadedCallback:nil];
 }
 @end

@@ -8,7 +8,7 @@
 
 #import "BUser.h"
 
-static dispatch_once_t _init_once_user;
+static id _current_user = nil;
 
 @implementation BUser
 - (void)dealloc{
@@ -47,9 +47,11 @@ static dispatch_once_t _init_once_user;
         if (bd) {
             [self setBirthday:[bd dateWithFormat:FULLDATEFORMAT]];
         }
-        NSString *meta = [dict valueForKey:@"metadata"];
-        if (meta) {
-            [self setMetadata:[meta objectFromJSONString]];
+        id meta = [dict valueForKey:@"metadata"];
+        if ([meta isKindOfClass:[NSString class]]) {
+            [self setMetadata:[meta json]];
+        }else{
+            [self setMetadata:meta];
         }
     }
     return self;
@@ -79,20 +81,21 @@ static dispatch_once_t _init_once_user;
     return USER?YES:NO;
 }
 + (BUser *)user{
-    static id _current_user = nil;
-    if (!_init_once_user) {
-        NSDictionary *json = [[DBCache valueForKey:@"USER"] objectFromJSONString];
-        dispatch_once(&_init_once_user, ^{
-            RELEASE(_current_user);
-            _current_user = [[[self class] alloc] initWithDictionary:json];
-        });
+    @synchronized(self){
+        if (!_current_user) {
+            NSDictionary *json = [[DBCache valueForKey:@"USER"] objectFromJSONString];
+            if (json){
+                _current_user = [[[self class] alloc] initWithDictionary:json];
+            }
+        }
     }
     return _current_user;
 }
 + (BOOL)loginWithUser:(BUser *)user{
     if (user) {
-        [DBCache setValue:[[user dict] JSONString] forKey:@"USER"];
-        _init_once_user = 0;
+        DLOG(@"dict:%@", [[user dict] jsonString]);
+        [DBCache setValue:[[user dict] jsonString] forKey:@"USER"];
+        RELEASE(_current_user);
         [[NSNotificationCenter defaultCenter] postNotificationName:NotifyLogin object:nil];
         return YES;
     }
@@ -100,8 +103,8 @@ static dispatch_once_t _init_once_user;
 }
 + (void)logout{
     [DBCache removeForKey:@"USER"];
-    BUser *user = [G remove:@"USER"];
-    if (user) {
+    if (_current_user) {
+        RELEASE(_current_user);
         [[NSNotificationCenter defaultCenter] postNotificationName:NotifyLogout object:nil];
     }
 }
@@ -120,7 +123,6 @@ static dispatch_once_t _init_once_user;
     //no cache
     //[operation setRequestCache:[BHttpRequestCache fileCache]];
     [client enqueueHTTPRequestOperation:operation];
-    
     return operation;
 }
 + (BHttpRequestOperation *)registerWithUserName:(NSString *)uname email:(NSString *)email password:(NSString *)pwd success:(void (^)(BUser *, NSError *))success failure:(void (^)(NSError *))failure{

@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-#define Uid         [[BUser user] uid]
-#define UKEY        [[BUser user] ukey]
-#define USER        [G valueForKey:@"USER"]
+#define Uid         [[BUser user] uid]?:@""
+#define UKEY        @"4Eg17LaBz60DSIEOA0"
+//[[BUser user] ukey]?@""
+#define USER        [BUser user]
 
-#define UserParams  [NSMutableDictionary dictionaryWithObjectsAndKeys:Uid,@"uid", UKEY, @"ukey", nil]
+#define UserParams  [NSMutableDictionary dictionaryWithObjectsAndKeys:UKEY, @"ukey", nil]
 
 
 

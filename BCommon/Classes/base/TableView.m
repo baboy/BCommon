@@ -86,7 +86,7 @@
 	}
 	[_imgCache setObject:imgLocalPath forKey:[url md5]];
 }
-- (void) loadImg:(NSString *)imgURL forIndexPath:(NSIndexPath *)indexPath{
+- (void) loadImage:(NSString *)imgURL forIndexPath:(NSIndexPath *)indexPath{
 	if (!imgURL) {
 		return;
 	}
@@ -99,7 +99,7 @@
     NSURLRequest *request = [client requestWithGetURL:url parameters:nil];
     BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
                                                                  success:^(BHttpRequestOperation *operation, id data) {
-                                                                     if (self && [self isKindOfClass:[UIImageView class]]) {
+                                                                     if (self && [self isKindOfClass:[TableView class]]) {
                                                                          NSString *fp = operation.cacheFilePath;
                                                                          
                                                                          NSIndexPath *indexPath = [[operation userInfo] valueForKey:@"indexPath"];
@@ -107,22 +107,26 @@
                                                                      }
                                                                  }
                                                                  failure:^(BHttpRequestOperation *request, NSError *error) {
-                                                                     
+                                                                     DLOG(@"[TableView] loadImage fail:%@",error);
                                                                  }];
     [operation setUserInfo:[NSDictionary dictionaryWithObject:indexPath forKey:@"indexPath"]];
     [operation setRequestCache:[BHttpRequestCache fileCache]];
 	[_queue addOperation:operation];
 }
 - (void)setImagePath:(NSString *)fp forURL:(NSURL *)url forIndexPath:(NSIndexPath *)indexPath{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:didLoadedImageAtPath:forIndexPath:)]) {
+        [self.delegate tableView:self didLoadedImageAtPath:fp forIndexPath:indexPath];
+        return;
+    }
     if (indexPath && [self cellForRowAtIndexPath:indexPath]) {
         UITableViewCell *cell = [self cellForRowAtIndexPath:indexPath];
-        if ([cell respondsToSelector:@selector(setImgLocalPath:)]) {
-            [cell performSelector:@selector(setImgLocalPath:) withObject:fp];
+        if ([cell respondsToSelector:@selector(setImgFilePath:)]) {
+            [cell performSelector:@selector(setImgFilePath:) withObject:fp];
         }else if([cell respondsToSelector:@selector(setImg:)]){
             [cell performSelector:@selector(setImg:) withObject:[UIImage imageWithContentsOfFile:fp]];
         }
-        if (self.delegate && [self.delegate respondsToSelector:@selector(cacheImage:forIndexPath:)]) {
-            [self.delegate performSelector:@selector(cacheImage:forIndexPath:) withObject:fp withObject:indexPath];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(tableView:cacheImagePath:forIndexPath:)] ) {
+            [self.delegate tableView:self cacheImagePath:fp forIndexPath:indexPath];
         }else{
             [self cacheImage:fp forUrl:[url absoluteString]];
         }
@@ -246,7 +250,7 @@
 		}else{
 			self.updateView.state = DragStateDraging;
 		}
-        DLOG(@"scrollViewDidScroll:%d",self.updateView.state);
+        //DLOG(@"scrollViewDidScroll:%d",self.updateView.state);
 	}
     if (self.isSupportLoadMore && scrollView.dragging && oh > oh2){
         if ( (oh-oh2) >  [self.moreView activeHeight]) {
@@ -595,6 +599,4 @@
 - (void)dealloc {
     [super dealloc];
 }
-
-
 @end

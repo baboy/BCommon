@@ -32,6 +32,8 @@ enum{
 - (void)addBackButton;
 - (void)reset;
 -(id)loadViewFromNibNamed:(NSString*)nibName;
+- (BOOL)shouldPopViewController:(UIViewController *)controller;
+- (IBAction)popViewController:(id)sender;
 - (void)showMessage:(NSString *)msg;
 - (void)showMessageAndFadeOut:(NSString *)msg;
 - (void)fadeOut;

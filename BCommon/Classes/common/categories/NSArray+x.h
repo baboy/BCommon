@@ -13,4 +13,7 @@
 - (NSData *)jsonData;
 - (NSString *)jsonString;
 - (BOOL)containsStringIgnoreCase:(NSString *)string;
+- (BOOL)containsStringIgnoreCase:(NSString *)string forObjectKey:(NSString *)key;
+- (NSString *)join:(NSString *)sep;
+- (id)json;
 @end

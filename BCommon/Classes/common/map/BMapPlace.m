@@ -10,96 +10,50 @@
 
 @implementation BMapPlace
 - (void)dealloc{
-    RELEASE(_country);
-    RELEASE(_province);
-    RELEASE(_district);
-    RELEASE(_city);
-    RELEASE(_address);
+    RELEASE(_icon);
+    RELEASE(_id);
+    RELEASE(_name);
+    RELEASE(_reference);
+    RELEASE(_types);
+    RELEASE(_vicinity);
     [super dealloc];
 }
-- (id)initWithGeoData:(NSDictionary *)dict{
-    if (self = [super init]) {
+- (id) initWithDictionary:(NSDictionary*)dict{
+    if(self = [super init]){
         [self setAddress:[dict valueForKey:@"formatted_address"]];
-        NSDictionary *location = [dict valueForKeyPath:@"geometry.location"];
-        if (location) {
-            [self setLatitude:[[location valueForKey:@"lat"] doubleValue]];
-            [self setLongitude:[[location valueForKey:@"lng"] doubleValue]];
-        }
-        NSArray *address_components = [dict valueForKey:@"address_components"];
-        int n = [address_components count];
-        NSString *city = nil;
-        if ( n > 0) {
-            for (int i=0; i<n; i++) {
-                NSDictionary *component = [address_components objectAtIndex:i];
-                NSArray *types = [component valueForKey:@"types"];
-                NSString *locality = [types count] > 0 ? [types objectAtIndex:0] : nil;
-                if ([locality isEqual:@"sublocality"]) {
-                    city = [component valueForKey:@"long_name"];
-                }
-                if ([locality isEqual:@"locality"]) {
-                    city = [component valueForKey:@"long_name"];
-                    break;
-                }
-            }
-        }
-        [self setCity:city];
+        [self setLat:[[dict valueForKeyPath:@"geometry.location.lat"] doubleValue]];
+        [self setLng:[[dict valueForKeyPath:@"geometry.location.lng"] doubleValue]];
+        [self setIcon:nullToNil([dict valueForKey:@"icon"])];
+        [self setId:nullToNil([dict valueForKey:@"id"])];
+        [self setName:nullToNil([dict valueForKey:@"name"])];
+        [self setReference:nullToNil([dict valueForKey:@"reference"])];
+        [self setVicinity:nullToNil([dict valueForKey:@"vicinity"])];
+        [self setTypes:nullToNil([dict valueForKey:@"types"])];
     }
     return self;
 }
-- (id)initWithDictionary:(NSDictionary *)dict{
-    if (self = [super init]) {
-        [self setAddress:[dict valueForKey:@"address"]];
-        [self setCity:[dict valueForKey:@"city"]];
-        [self setLatitude:[[dict valueForKey:@"latitude"] doubleValue]];
-        [self setLongitude:[[dict valueForKey:@"longitude"] doubleValue]];
-    }
-    return self;
-}
-- (NSDictionary *)dict{
-    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:3];
-    if (self.address)
+- (NSDictionary *) dict{
+    NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:7];
+    [d setValue:[NSNumber numberWithDouble:self.lat] forKey:@"lat"];
+    [d setValue:[NSNumber numberWithDouble:self.lng] forKey:@"lng"];
+    if(self.icon)
+        [d setValue:self.icon forKey:@"icon"];
+    if(self.address)
         [d setValue:self.address forKey:@"address"];
-    [d setValue:self.country forKey:@"country"];
-    [d setValue:self.city forKey:@"city"];
-    [d setValue:self.district forKey:@"district"];
-    [d setValue:self.province forKey:@"province"];
-    [d setValue:[NSNumber numberWithDouble:self.latitude] forKey:@"latitude"];
-    [d setValue:[NSNumber numberWithDouble:self.longitude] forKey:@"longitude"];
+    if(self.id)
+        [d setValue:self.id forKey:@"id"];
+    if(self.name)
+        [d setValue:self.name forKey:@"name"];
+    if(self.reference)
+        [d setValue:self.reference forKey:@"reference"];
+    if(self.types)
+        [d setValue:self.types forKey:@"types"];
+    if(self.vicinity)
+        [d setValue:self.vicinity forKey:@"vicinity"];
     return d;
 }
-+ (BMapPlace *)currentLocation{
-    return [G valueForKey:@"location"];
-}
-+ (void)saveCurrentLocation:(BMapPlace *)location{
-    [G setValue:location forKey:@"location"];
-    NSString *currentAddress = [NSString stringWithFormat:@"%@%@%@", [location country]?[location country]:@"", [location province]?[location province]:@"",([location city] && ![[location city] isEqualToString:[location province]])?[location city]:@""];
-    [G setValue:currentAddress forKey:@"CurrentAdress"];
-}
-+ (BHttpRequestOperation *)getLocationByIpSuccess:(void (^)(BMapPlace *loc))success failure:(void (^)(NSError *error))failure{
-    BHttpClient *client = [BHttpClient defaultClient];
-    NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:@"http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json"] parameters:nil];
-    BHttpRequestOperation *operation = [client jsonRequestWithURLRequest:request
-                                                                 success:^(BHttpRequestOperation *operation, id json) {
-                                                                     BMapPlace *loc = nil;
-                                                                     if (json) {
-                                                                         loc = [[[BMapPlace alloc] init] autorelease];
-                                                                         loc.country = [json valueForKey:@"country"];
-                                                                         loc.province = [json valueForKey:@"province"];
-                                                                         loc.city = [json valueForKey:@"city"];
-                                                                         loc.district = [json valueForKey:@"district"];
-                                                                     }
-                                                                     success(loc);
-                                                                     
-                                                                 } failure:^(BHttpRequestOperation *operation, NSError *error) {
-                                                                     if (failure) {
-                                                                         failure(error);
-                                                                     }
-                                                                 }];
-    [operation start];
-    return operation;
-}
 + (BHttpRequestOperation *)search:(NSString *)location callback:(void (^)(BHttpRequestOperation *operation,NSArray *locs, NSError *error))callback{
-    NSString *url = [Utils url:ApiQueryLocation withParam:@{@"q":location}];
+    NSString *url = [Utils url:ApiQueryLocation withParam:@{@"loc":location}];
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:url] parameters:nil];
     BHttpRequestOperation *operation =
@@ -109,12 +63,13 @@
                                   NSMutableArray *addrs = nil;
                                   NSError *error = nil;
                                   if (response.isSuccess) {
-                                      NSArray *list = response.data;
+                                      NSDictionary *data = response.data;
+                                      NSArray *list = [data valueForKey:@"list"];
                                       if ([list isKindOfClass:[NSArray class]]) {
                                           addrs = [NSMutableArray array];
                                           int n = [list count];
                                           for (int i=0; i<n; i++) {
-                                              BMapPlace *loc = AUTORELEASE([[BMapPlace alloc] initWithGeoData:[list objectAtIndex:i]]);
+                                              BMapPlace *loc = AUTORELEASE([[BMapPlace alloc] initWithDictionary:[list objectAtIndex:i]]);
                                               [addrs addObject:loc];
                                           }
                                       }

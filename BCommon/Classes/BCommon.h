@@ -26,11 +26,12 @@
 #import "BCalloutMapAnnotationView.h"
 #import "CalloutMapAnnotationView.h"
 #import "MKMapView+x.h"
+#import "BMapLocation.h"
+#import "BMapPlace.h"
 
 //web
 #import "CacheURLProtocol.h"
 #import "BResponse.h"
-#import "BMapLocation.h"
 
 //categories
 #import "NSNull+x.h"

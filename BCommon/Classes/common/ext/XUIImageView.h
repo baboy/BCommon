@@ -16,6 +16,8 @@
 - (void)setImageURL:(NSURL *)url;
 - (void)setImageURLString:(NSString *)urlString;
 - (void)addTarget:(id)target action:(SEL)action;
++ (NSString *)cachePathForURL:(NSURL *)url;
++ (NSData *)cacheDataForURL:(NSURL *)url;
 @end
 
 @protocol XUIImageViewDelegate<NSObject>

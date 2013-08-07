@@ -96,7 +96,7 @@
     NSError *err = nil;
 	BOOL flag = [fileManager removeItemAtPath:self error:&err];
     if (err) {
-        DLOG(@"[NSString] deleteFile error:%@",err);
+        //DLOG(@"[NSString] deleteFile error:%@",err);
     }
     return flag;
 }

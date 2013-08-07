@@ -12,4 +12,5 @@
 - (NSMutableData *)postData;
 - (NSData *)jsonData;
 - (NSString *)jsonString;
+- (NSMutableDictionary *)json;
 @end

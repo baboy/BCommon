@@ -8,6 +8,12 @@
 
 #import <MapKit/MapKit.h>
 
+@interface MKLocationManager
++ (id)sharedLocationManager;// 创建并获取MKLocationManager实例
+- (BOOL) chinaShiftEnabled; // 判断IOS系统是否支持计算偏移
+- (CLLocation*)_applyChinaLocationShift:(CLLocation*)arg;   // 传入原始位置，计算偏移后的位置
+@end
+
 @interface MKMapView (ZoomLevel)
 
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate

@@ -23,9 +23,10 @@
 
 @interface BQueueItem : NSObject
 - (id) initWithDictionary:(NSDictionary *)dict;
-@property (nonatomic, assign) int tabId;
+@property (nonatomic, assign) int ID;
 @property (nonatomic, retain) NSString *domain;
 @property (nonatomic, retain) NSString *qid;
+@property (nonatomic, retain) NSString *key;
 @property (nonatomic, retain) NSString *data;
 @property (nonatomic, retain) NSString *data2;
 @property (nonatomic, retain) NSString *data3;
@@ -33,12 +34,34 @@
 @property (nonatomic, retain) NSString *data5;
 @property (nonatomic, retain) NSString *data6;
 @property (nonatomic, assign) int status;
+@end
+
+@interface BQueue : Dao
+
+/**
+ *insert
+ */
++ (BOOL) addForQueue:(NSString *)qid withKey:(NSString *)key withDatas:(NSString *)data, ...;
++ (BOOL) addForQueue:(NSString *)qid withKey:(NSString *)key withData:(NSString *)data;
++ (BOOL) addForQueue:(NSString *)qid withData:(NSString *)data;
+
++ (BQueueItem *) getOneItemByQueue:(NSString *)qid;
++ (NSArray *) getAllItemsByQueue:(NSString *)qid;
++ (BOOL) removeById:(int) ID;
++ (BOOL) removeByQueue:(NSString *)qid;
++ (BOOL) removeByField:(NSString *)field value:(NSString *)val;
++ (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2;
+@end
+
+@interface BQueueItem(BQueueItemDeprecated)
+- (int)tabId;
+- (void) setTabId:(int)tabId;
 - (NSDictionary *)jsonData;
 - (NSDictionary *)jsonData2;
 - (NSDictionary *)jsonData3;
 @end
 
-@interface BQueue : Dao
+@interface BQueue (BQueueDeprecated)
 
 + (BOOL) addDomain:(NSString *)domain queue:(NSString *)qid datas:(NSString *)data, ...;
 + (BOOL) addDomain:(NSString *)domain queue:(NSString *)qid data:(NSString *)data;
@@ -48,11 +71,8 @@
 + (NSArray *) getAllItemsByDomain:(NSString *)domain;
 + (NSArray *) getAllItemsByDomain:(NSString *)domain queue:(NSString *)qid;
 + (NSArray *) getAllItemsByQueue:(NSString *)qid;
-+ (BOOL) removeById:(int) itemId;
 + (BOOL) removeByDomain:(NSString *)domain;
 + (BOOL) removeByDomain:(NSString *)domain queue:(NSString *)qid;
 + (BOOL) removeByQueue:(NSString *)qid;
-+ (BOOL) removeByField:(NSString *)field value:(NSString *)val;
 + (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2;
-
 @end

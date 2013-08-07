@@ -198,7 +198,9 @@
     NSLog(@"viewDidUnload & reset");
     [self reset];
 }
-- (void)reset{}
+- (void)reset{
+    DLOG(@"[%@] reset...", NSStringFromClass([self class]));
+}
 
 -(id)loadViewFromNibNamed:(NSString*)nibName {
     NSArray *objectsInNib = [[NSBundle mainBundle] loadNibNamed:nibName
@@ -210,11 +212,14 @@
 - (BOOL)shouldPopViewController:(UIViewController *)controller{
     return YES;
 }
+- (void)popViewControllerAnimated:(BOOL)animated{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (IBAction)popViewController:(id)sender {
     if ( ![self shouldPopViewController:self]) {
         return;
     }
-    [self.navigationController popViewControllerAnimated:YES];
+    [self popViewControllerAnimated:YES];
 }
 - (void)setTitle:(NSString *)title{
     [super setTitle:title];
@@ -235,8 +240,9 @@
     float h = size.height + withIndicator?28:0;
     h = MAX(h, w*3/4);
     w = MAX(w, 120);
-    CGRect rect = CGRectMake(0, 0, w+20, h+20);    
-	UIView *view = [[[UIView alloc] initWithFrame:rect] autorelease];
+    CGRect rect = CGRectMake(0, 0, w+20, h+20);
+    
+	UIView *view = AUTORELEASE([[UIView alloc] initWithFrame:rect] );
 	view.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
 	view.layer.cornerRadius = 8.0;
     
@@ -257,7 +263,10 @@
         [self.indicatorView removeFromSuperview];
     }
     self.indicatorView = view;
-    view.center = CGPointMake(container.center.x, self.view.bounds.size.height*0.33);
+    DLOG(@"indicator: %@, %@", NSStringFromCGRect(container.bounds), NSStringFromCGRect(container.frame));
+    CGRect viewFrame = view.frame;
+    viewFrame.origin = CGPointMake((container.bounds.size.width-viewFrame.size.width)/2, (container.bounds.size.height-viewFrame.size.height)*0.35);
+    view.frame = viewFrame;
     [container addSubview:view];
     return  view;
 }
@@ -282,7 +291,6 @@
 						 CGAffineTransform _transform = CGAffineTransformMakeScale( 0.1 , 0.1 );
 						 [self.indicatorView setTransform:_transform];
 						 self.indicatorView.alpha = 0;
-                         
 					 } 
 					completion :^(BOOL finished){	
                         [self.indicatorView removeFromSuperview];

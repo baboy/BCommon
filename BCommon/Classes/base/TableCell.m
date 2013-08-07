@@ -9,30 +9,42 @@
 #import "TableCell.h"
 
 @implementation TableCell
-@synthesize titleLabel = _titleLabel;
-@synthesize introLabel = _introLabel;
-@synthesize imgView = _imgView;
 - (void)dealloc{
+    RELEASE(_object);
     RELEASE(_imgView);
     RELEASE(_titleLabel);
-    RELEASE(_introLabel);
+    RELEASE(_detailLabel);
     [super dealloc];
 }
 - (void)setFrame:(CGRect)frame{
     [super setFrame:frame];
-    DLOG(@"[TableCell] setFrame:%@", NSStringFromCGRect(frame));
+    //DLOG(@"[TableCell] setFrame:%@", NSStringFromCGRect(frame));
 }
-- (void)setIntro:(NSString *)intro{
-    [_introLabel setText:intro];
-}
-- (void)setImage:(UIImage *)image{
-    [self setImg:image];
+- (void)setDetail:(NSString *)text{
+    [self.detailTextLabel setText:text];
 }
 - (void)setImg:(UIImage *)image{
-    DLOG(@"[TableCell]setImage:%@,%@",_imgView,image);
     [_imgView setImage:image];
+}
+- (void)setImgFilePath:(NSString *)imgFilePath{
+    [_imgView setImage:[UIImage imageWithContentsOfFile:imgFilePath]];
 }
 - (void)setTitle:(NSString *)title{
     [_titleLabel setText:title];
+}
+- (void)setImageViewHidden:(BOOL)imageHidden{
+    CGFloat x = self.imgView.frame.origin.x + self.imgView.frame.size.width+5;
+    CGFloat w = self.bounds.size.width - 60;
+    CGRect titleFrame = self.titleLabel.frame;
+    CGRect detailFrame = self.detailLabel.frame;
+    
+    titleFrame.origin.x = imageHidden?self.imgView.frame.origin.x:x;
+    titleFrame.size.width = imageHidden?w:(w - self.imgView.frame.origin.x);
+    detailFrame.origin.x = titleFrame.origin.x;
+    detailFrame.size.width = titleFrame.size.width;
+    self.titleLabel.frame = titleFrame;
+    self.detailLabel.frame = detailFrame;
+    
+    self.imgView.hidden = imageHidden;
 }
 @end

@@ -14,6 +14,7 @@ enum  {
 	TableViewCellStyleImage,
 };
 typedef NSInteger TableViewCellStyle;
+
 enum{
     SeparatorLineStyleNone,
 	SeparatorLineStyleTop = 1 << 0,
@@ -43,11 +44,8 @@ typedef NSInteger SeparatorLineStyle;
 
 
 @interface TableCellContentView : UIView {
-	TableViewCellStyle	_style;
-	NSInteger			_numOfLines;
 	CGRect				_imgRect;
 	id					_cell;
-	float				_aspectRatio;
 }
 @property (nonatomic, assign) TableViewCellStyle style;
 @property (nonatomic, assign) NSInteger numOfLines;
@@ -60,11 +58,14 @@ typedef NSInteger SeparatorLineStyle;
 - (CGRect)rectForLine:(NSInteger)line offsetY:(float)y inContext:(CGContextRef)ctx;
 @end
 
+
 @class TableView;
-@protocol TableView <NSObject>
+@protocol TableViewDelegate <NSObject>
 @optional
 - (void)update:(TableView *)tableView;
 - (void)loadMore:(TableView *)tableView;
+- (void)tableView:(id)tableView didLoadedImageAtPath:(NSString *)imagePath forIndexPath:(NSIndexPath *)indexPath;
+- (void)tableView:(id)tableView cacheImagePath:(NSString *)imagePath forIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @interface TableView : UITableView <UIScrollViewDelegate>
@@ -80,7 +81,7 @@ typedef NSInteger SeparatorLineStyle;
 - (void)updateFinished;
 - (void)startUpdate;
 - (void)startLoadMore;
-- (void)loadImg:(NSString *)imgURL forIndexPath:(NSIndexPath *)indexPath;
+- (void)loadImage:(NSString *)imgURL forIndexPath:(NSIndexPath *)indexPath;
 
 - (NSString *)imageCacheForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)imageCacheForUrl:(NSString *)url;

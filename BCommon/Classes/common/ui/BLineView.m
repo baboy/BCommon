@@ -16,6 +16,9 @@
 - (id)initWithCoder:(NSCoder *)aDecoder{
     self = [super initWithCoder:aDecoder];
     if (self) {
+        self.lineWidth = 0.5;
+        if (self.tag)
+            self.lineWidth = self.tag;
         [self setup];
     }
     return self;
@@ -24,6 +27,7 @@
     
     self = [super initWithFrame:frame];
     if (self) {
+        self.lineWidth = 0.5;
         [self setup];
     }
     return self;
@@ -32,13 +36,13 @@
     
     self = [super initWithFrame:frame];
     if (self) {
+        self.lineWidth = 0.5;
         [self setup];
     }
     return self;
 }
 - (void)setup{    
     self.backgroundColor = [UIColor clearColor];
-    _lineWidth = 0.5;
     [self setColors:[NSArray arrayWithObjects:gLineTopColor,gLineBottomColor, nil]];
 }
 - (void) setLines:(NSArray *)lines{
@@ -51,7 +55,7 @@
 - (void) setColors:(NSArray *)colors{
 	int n = [colors count];
 	NSMutableArray *lines = [NSMutableArray arrayWithCapacity:n];
-    float y = 0.3;
+    float y = self.lineWidth/2.0;
 	for (int i=0; i<n; i++) {
 		UIColor *color = [colors objectAtIndex:i];
 		CGPoint p1 = CGPointMake(0, y);
