@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 		af.source_files = 'BCommon/Classes/modules/AFNetworking'
 	end
 	mod.subspec 'share' do |share|
-		share.source_files = 'BCommon/Classes/modules/sahre'
+		share.source_files = 'BCommon/Classes/modules/share'
 	end
 	mod.subspec 'sliding menu' do |sld|
 		sld.source_files = 'BCommon/Classes/modules/sliding menu'
