@@ -11,4 +11,5 @@
 @interface UIButton(x)
 - (void)centerImageAndTitle:(float)space;
 - (void)centerImageAndTitle;
+- (void)setImageURL:(NSURL *)url forState:(UIControlState)state;
 @end

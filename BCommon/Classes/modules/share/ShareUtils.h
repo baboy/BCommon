@@ -1,0 +1,50 @@
+//
+//  ShareUtils.h
+//  iShow
+//
+//  Created by baboy on 13-6-4.
+//  Copyright (c) 2013年 baboy. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+extern NSString *ShatePlatformSinaWeibo;
+extern NSString *ShatePlatformSohuWeibo;
+extern NSString *ShatePlatformTencentWeibo;
+extern NSString *ShatePlatformQZone;
+extern NSString *ShatePlatformDouban;
+extern NSString *ShatePlatformRenRen;
+extern NSString *ShatePlatformWeChat;
+extern NSString *ShatePlatformQQ;
+
+@interface SharePlatform : NSObject
+
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *platformId;
+@property (nonatomic, retain) NSString *icon;
+@property (nonatomic, retain) NSString *appId;
+@property (nonatomic, retain) NSString *appKey;
+@property (nonatomic, retain) NSString *appSecret;
+@property (nonatomic, retain) NSString *redirectUri;
+@property (nonatomic, assign) BOOL login;
+@property (nonatomic, assign) BOOL bind;
+@property (nonatomic, assign) BOOL canBind;
+@property (nonatomic, assign) int shareType;
+
+- (id) initWithDictionary:(NSDictionary*)dict;
+- (NSDictionary *) dict;
+- (BOOL) hasAuthorized;
+- (BOOL) cancelAuth;
+@end
+
+
+
+@interface ShareUtils : NSObject
++ (void)setupWithKey:(NSString *)key;
++ (NSArray *)platforms;
++ (NSArray *)bindPlatforms;
++ (void)loginWithPlatform:(SharePlatform *)platform callback:(void (^)(id user, NSError *error))callback;
++ (BOOL) hasAuthorizedWithPlatform:(SharePlatform *)platform;
++ (BOOL) cancelAuthWithPlatform:(SharePlatform *)platform;
+
++ (void) shareOnPlatform:(NSArray *)platforms withContent:(NSString *)content withImagePath:(NSString *)imagePath callback:(void (^)(NSError *error))callback;
+@end

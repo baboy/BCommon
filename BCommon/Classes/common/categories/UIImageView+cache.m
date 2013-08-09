@@ -14,12 +14,14 @@
     NSURLRequest *request = [client requestWithGetURL:imageURL parameters:nil];
     BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
                                                                  success:^(BHttpRequestOperation *operation, id data) {
+                                                                     NSDictionary *userInfo = [operation userInfo];
+                                                                     id object = userInfo?[userInfo valueForKey:@"object"]:nil;
                                                                      NSString *fp = operation.cacheFilePath;
-                                                                     if (self && [self isKindOfClass:[UIImageView class]]) {
+                                                                     if (self == object) {
                                                                          [self setImage:[UIImage imageWithContentsOfFile:fp]];
-                                                                     }
-                                                                     if (callback) {
-                                                                         callback(imageURL, fp, nil);
+                                                                         if (callback) {
+                                                                             callback(imageURL, fp, nil);
+                                                                         }
                                                                      }
                                                                  }
                                                                  failure:^(BHttpRequestOperation *request, NSError *error) {
@@ -28,6 +30,7 @@
                                                                          callback(imageURL, nil, error);
                                                                      }
                                                                  }];
+    [operation setUserInfo:[NSDictionary dictionaryWithObject:self forKey:@"object"]];
     [operation setRequestCache:[BHttpRequestCache fileCache]];
     [client enqueueHTTPRequestOperation:operation];
 }

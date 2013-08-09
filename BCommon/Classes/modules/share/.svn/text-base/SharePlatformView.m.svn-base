@@ -1,0 +1,172 @@
+//
+//  SharePlatformView.m
+//  iShow
+//
+//  Created by baboy on 13-7-2.
+//  Copyright (c) 2013年 baboy. All rights reserved.
+//
+
+#import "SharePlatformView.h"
+
+#define SHARE_ICON_WIDTH    48
+
+@interface SharePlatformView()
+@property (nonatomic, retain) NSArray *shareViews;
+@property (nonatomic, retain) UIView *backgroundView;
+@property (nonatomic, retain) UIView *container;
+@property (nonatomic, retain) UIButton *cancelBtn;
+@end
+
+@implementation SharePlatformView
+- (void)dealloc{
+    RELEASE(_backgroundView);
+    RELEASE(_shareViews);
+    RELEASE(_container);
+    RELEASE(_cancelBtn);
+    RELEASE(_shareContent);
+    RELEASE(_shareImagePath);
+    [super dealloc];
+}
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = [UIColor clearColor];
+        [self setup];
+    }
+    return self;
+}
+- (id)init
+{
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    self = [self initWithFrame:window.bounds];
+    if (self) {
+    }
+    return self;
+}
+- (void)setContainerShadow{
+    [self.container.layer setShadowColor:[UIColor colorWithWhite:0 alpha:0.6].CGColor];
+    [self.container.layer setShadowOffset:CGSizeMake(0, -2)];
+    [self.container.layer setShadowRadius:3.0];
+    [self.container.layer setShadowOpacity:1.0];
+}
+- (void)setup{
+    if (self.container) {
+        return;
+    }
+    self.backgroundView = AUTORELEASE([[UIView alloc] initWithFrame:self.bounds]);
+    self.backgroundView.backgroundColor = [UIColor clearColor];
+    self.backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addSubview:self.backgroundView];
+    
+    UITapGestureRecognizer *tap = AUTORELEASE([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancel:)]);
+    [self.backgroundView addGestureRecognizer:tap];
+    
+    
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    CGRect containerFrame = CGRectMake(0, 0, window.bounds.size.width, 2000);
+    self.container = AUTORELEASE([[UIView alloc] initWithFrame:containerFrame]);
+    self.container.backgroundColor = [UIColor whiteColor];
+    self.container.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+    int numOfLine = 4;
+    float padding = (containerFrame.size.width - numOfLine*SHARE_ICON_WIDTH)/(numOfLine+1);
+    NSArray *sharePlatforms = [ShareUtils platforms];
+    int n = [sharePlatforms count];
+    CGRect rect = CGRectMake(0, 0, SHARE_ICON_WIDTH, SHARE_ICON_WIDTH+20);
+    NSMutableArray *shareViews = [NSMutableArray arrayWithCapacity:3];
+    for (int i = 0; i < n; i++) {
+        int line = i/numOfLine;
+        int column = i%numOfLine;
+        rect = CGRectMake(column*(rect.size.width+padding)+padding, line*(rect.size.height+10)+padding, rect.size.width, rect.size.height);
+        
+        SharePlatform *platform = [sharePlatforms objectAtIndex:i];
+        BImageView *iconView = AUTORELEASE([[BImageView alloc] initWithFrame:rect]);
+        [iconView addTarget:self action:@selector(shareWithPlatform:)];
+        [iconView setTitleStyle:BImageTitleStyleBelow];
+        [iconView setImageURL:platform.icon];
+        iconView.titleLabel.text = platform.name;
+        iconView.titleLabel.textColor = gDescColor;
+        iconView.titleLabel.shadowColor = nil;
+        iconView.object = platform;
+        [shareViews addObject:iconView];
+        [self.container addSubview:iconView];
+    }
+    self.shareViews = shareViews;
+    UIButton *cancenBtn = AUTORELEASE([[UIButton alloc] initWithFrame:CGRectMake(10, rect.origin.y + rect.size.height + 10, containerFrame.size.width-20, 24)]);
+    [cancenBtn setTitle:NSLocalizedString(@"取消", nil) forState:UIControlStateNormal];
+    [cancenBtn setBackgroundColor:[UIColor grayColor]];
+    [cancenBtn addTarget:self action:@selector(cancel:) forControlEvents:UIControlEventTouchUpInside];
+    [self.container addSubview:cancenBtn];
+    containerFrame.size.height = cancenBtn.frame.origin.y + cancenBtn.frame.size.height + 10;
+    containerFrame.origin.y = self.frame.size.height - containerFrame.size.height;
+    self.container.frame = containerFrame;
+    [self addSubview:self.container];
+    [self setContainerShadow];
+}
++ (id)sharePlatformView{
+    return AUTORELEASE([[SharePlatformView alloc] init]);
+}
+- (void)show{
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    self.frame = window.bounds;
+    CGRect containerFrame = self.container.frame;
+    containerFrame.origin.y = self.bounds.size.height;
+    self.container.frame = containerFrame;
+    [window addSubview:self];
+    [UIView animateWithDuration:0.2
+                     animations:^{
+                         self.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
+                         CGRect frame = self.container.frame;
+                         frame.origin.y = self.bounds.size.height - frame.size.height;
+                         self.container.frame = frame;
+                         
+                         CGAffineTransform transform = CGAffineTransformMakeScale(  0.97,  0.97 );
+                         [[APPRootController view] setTransform:transform];
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
+}
+- (IBAction)shareWithPlatform:(id)sender{
+    SharePlatform *platform = [sender object];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(shareView:willSelectSharePlatform:)]) {
+        [self.delegate shareView:self willSelectSharePlatform:platform];
+    }
+    [self cancelWithBlock:^{
+        if (self.delegate && [self.delegate respondsToSelector:@selector(shareView:didSelectedSharePlatform:)]) {
+            [self.delegate shareView:self didSelectedSharePlatform:platform];
+        }
+        if(self.autoShare){
+            ShareView *shareView = [ShareView shareView];
+            [shareView setTitle:platform.name];
+            [shareView setContent:self.shareContent];
+            [shareView setImagePath:self.shareImagePath];
+            [shareView setShowCountLabel:YES];
+            [shareView setAutoSend:YES];
+            [shareView setSharePlatform:platform];
+            [shareView show];
+        }
+    }];
+}
+- (void)cancelWithBlock:(void(^)())block{
+    [UIView animateWithDuration:0.2
+                     animations:^{
+                         self.backgroundColor = [UIColor clearColor];
+                         CGRect frame = self.container.frame;
+                         frame.origin.y = self.bounds.size.height;
+                         self.container.frame = frame;
+                         
+                         CGAffineTransform transform = CGAffineTransformMakeScale(  1.0,  1.0 );
+                         [[APPRootController view] setTransform:transform];
+                     }
+                     completion:^(BOOL finished) {
+                         [self removeFromSuperview];
+                         if (block) {
+                             block();
+                         }
+                     }];
+}
+- (void)cancel:(id)sender{
+    [self cancelWithBlock:nil];
+}
+@end

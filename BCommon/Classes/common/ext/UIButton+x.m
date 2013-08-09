@@ -21,4 +21,25 @@
 - (void)centerImageAndTitle{
     [self centerImageAndTitle:3.0];
 }
+- (void)setImageURL:(NSURL *)imageURL forState:(UIControlState)state{
+    
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:imageURL parameters:nil];
+    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
+                                                                 success:^(BHttpRequestOperation *operation, id data) {
+                                                                     NSDictionary *userInfo = [operation userInfo];
+                                                                     id object = userInfo?[userInfo valueForKey:@"object"]:nil;
+                                                                     NSString *fp = operation.cacheFilePath;
+                                                                     if (self == object) {
+                                                                         UIControlState state = [[userInfo valueForKey:@"state"] intValue];
+                                                                         [self setImage:[UIImage imageWithContentsOfFile:fp] forState:state];                                                                     }
+                                                                 }
+                                                                 failure:^(BHttpRequestOperation *request, NSError *error) {
+                                                                     DLOG(@"[UIButton] setImageURL error:%@", error);
+                                                                 }];
+    id userInfo = @{@"object":self, @"state":[NSNumber numberWithInt:state]};
+    [operation setUserInfo:userInfo];
+    [operation setRequestCache:[BHttpRequestCache fileCache]];
+    [client enqueueHTTPRequestOperation:operation];
+}
 @end

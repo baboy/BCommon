@@ -25,6 +25,7 @@ static id _current_user = nil;
     RELEASE(_avatar);
     RELEASE(_education);
     RELEASE(_school);
+    RELEASE(_desc);
     RELEASE(_birthday);
     [super dealloc];
 }
@@ -40,6 +41,10 @@ static id _current_user = nil;
         [self setGender:[nullToNil([dict valueForKey:@"gender"]) intValue]];
         [self setAge:[nullToNil([dict valueForKey:@"age"]) intValue]];
         
+        [self setDesc:nullToNil([dict valueForKey:@"desc"])];
+        if (!self.desc) {
+            [self setDesc:nullToNil([dict valueForKey:@"description"])];
+        }
         [self setMobile:nullToNil([dict valueForKey:@"mobile"])];
         [self setEducation:nullToNil([dict valueForKey:@"education"])];
         [self setSchool:nullToNil([dict valueForKey:@"school"])];
@@ -74,6 +79,7 @@ static id _current_user = nil;
     if (self.school) [dict setValue:self.school forKey:@"school"];
     if (self.mobile) [dict setValue:self.mobile forKey:@"mobile"];
     if (self.birthday) [dict setValue:self.birthday forKey:@"birthday"];
+    if (self.desc) [dict setValue:self.desc forKey:@"desc"];
     
     return dict;
 }

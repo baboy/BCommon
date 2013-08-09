@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import "Global.h"
 #import "BApi.h"
 #import "JSONKit.h"
@@ -20,6 +21,12 @@
 #import "BIndicator.h"
 #import "TableView.h"
 #import "TableCell.h"
+#import "BImageView.h"
+
+
+#import "BaseViewController.h"
+#import "BaseTableViewController.h"
+
 
 //map
 #import "BMapAnnotation.h"
@@ -42,6 +49,7 @@
 #import "NSString+x.h"
 #import "UIImage+x.h"
 #import "UIColor+x.h"
+#import "UIButton+x.h"
 #import "BEnumerator.h"
 
 //ext
@@ -50,6 +58,8 @@
 #import "HTabBarView.h"
 #import "VTabBarView.h"
 #import "XUILabel.h"
+#import "BImageView.h"
+#import "BUser.h"
 
 //
 #import "Base64.h"

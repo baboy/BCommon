@@ -25,6 +25,7 @@
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *ukey;
 @property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *desc;
 @property (nonatomic, retain) NSString *avatar;
 @property (nonatomic, assign) NSInteger gender;
 @property (nonatomic, retain) NSString *education;

@@ -4,8 +4,9 @@ pod 'JSONKit'
 pod 'Reachability'
 pod 'FMDB'
 pod 'RegexKitLite'
-pod 'AFNetworking'
+pod 'AFNetworking', "1.3.1"
 pod 'OpenUDID'
+pod 'ViewDeck'
 
 
 generate_bridge_support!

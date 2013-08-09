@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/tvie/!svn/ver/15157/branches/mobile/ios/iVideo/iVideo/Classes/common/share
+END
+SharePlatformViewDelegate.h
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/tvie/!svn/ver/15157/branches/mobile/ios/iVideo/iVideo/Classes/common/share/SharePlatformViewDelegate.h
+END
+ShareView.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/tvie/!svn/ver/15157/branches/mobile/ios/iVideo/iVideo/Classes/common/share/ShareView.h
+END
+SharePlatformView.h
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/tvie/!svn/ver/15157/branches/mobile/ios/iVideo/iVideo/Classes/common/share/SharePlatformView.h
+END
+SharePlatformViewDelegate.m
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/tvie/!svn/ver/15157/branches/mobile/ios/iVideo/iVideo/Classes/common/share/SharePlatformViewDelegate.m
+END
+ShareView.m
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/tvie/!svn/ver/15157/branches/mobile/ios/iVideo/iVideo/Classes/common/share/ShareView.m
+END
+ShareUtils.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/tvie/!svn/ver/15183/branches/mobile/ios/iVideo/iVideo/Classes/common/share/ShareUtils.h
+END
+SharePlatformView.m
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/tvie/!svn/ver/15157/branches/mobile/ios/iVideo/iVideo/Classes/common/share/SharePlatformView.m
+END
+ShareView.xib
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/tvie/!svn/ver/15157/branches/mobile/ios/iVideo/iVideo/Classes/common/share/ShareView.xib
+END
+ShareUtils.m
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/tvie/!svn/ver/15183/branches/mobile/ios/iVideo/iVideo/Classes/common/share/ShareUtils.m
+END
