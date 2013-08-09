@@ -7,7 +7,12 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/baboy/BCommon.git", :tag => "0.31" }
   s.platform     = :ios
 
-  s.source_files = 'BCommon/Classes/*.{h,m}'
+  s.source_files = 'BCommon/Classes/*.{h,m}', 'BCommon/framework'
+
+  s.subspec 'framework' do |fw|    
+    fw.source_files = 'BCommon/framework'
+  end
+
   s.subspec 'base' do |base|    
     base.source_files = 'BCommon/Classes/base'
   end
