@@ -43,6 +43,7 @@
     _scrollView.backgroundColor = [UIColor clearColor];
     [self addSubview:_scrollView];
     _selectedIndex = 0;
+    self.showIndicator = YES;
 }
 - (id)initWithFrame:(CGRect)frame{
 	self = [super initWithFrame:frame];
@@ -110,7 +111,7 @@
 	}
 	self.scrollView.contentSize = CGSizeMake(rect.origin.x-self.spacing, 0);
     CGRect r = self.scrollView.frame;
-	if ( self.scrollView.contentSize.width > (r.size.width+5) ) {
+	if ( self.scrollView.contentSize.width > (r.size.width+5) && self.showIndicator) {
         [self.scrollView setFrame:CGRectInset(r, HTabBarIndicatorWidth, 0)];
 		[self createIndicator];
 		[self scrollViewDidScroll:_scrollView];

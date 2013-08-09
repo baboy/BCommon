@@ -17,6 +17,7 @@
 @property (nonatomic, assign) float itemBorderWidth;
 @property (nonatomic, assign) float spacing;
 @property (nonatomic, assign) float separatorWidth;
+@property (nonatomic, assign) float showIndicator;
 @property (nonatomic, assign) int selectedIndex;
 @property (nonatomic, retain) UIColor *selectedTitleColor;
 @property (nonatomic, retain) UIColor *unSelectedTitleColor;
