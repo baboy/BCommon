@@ -7,13 +7,10 @@
 //
 
 #import "XUIViewController.h"
-#import "SharePlatformView.h"
 @interface AppNavigitionController : XUINavigationController
 @property (nonatomic, assign) id rootController;
 @end
 
-@interface BaseViewController : XUIViewController<ShareViewDelegate>
+@interface BaseViewController : XUIViewController
 @property (nonatomic, assign) BOOL canPullBack;
-- (void)shareWithContent:(NSString *)content withImagePath:(NSString *)imagePath;
-- (void)commentWithPlaceholders:(NSString *)placeholders;
 @end
