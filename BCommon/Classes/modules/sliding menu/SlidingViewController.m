@@ -115,9 +115,10 @@ typedef UInt32 SlidingViewOrientation;
     [self slideToOrientation:SlidingViewToLeftSide buncesToOrientation:SlidingViewToLeftSide];
 }
 - (UIView *)containerForView:(id)controller{
-    UIView *view = [controller respondsToSelector:@selector(navigationController)]?
-                [controller navigationController].view.superview :
-                [controller view].superview;
+    UIView *view = [controller isKindOfClass:[UINavigationController class]]?
+                    [[controller view] superview]:
+                    [[[controller navigationController] view] superview];
+    BOOL flag = [controller respondsToSelector:@selector(navigationController)];
     return view;
 }
 - (id)pushBackController{
@@ -174,11 +175,11 @@ typedef UInt32 SlidingViewOrientation;
         }
     }
     //check 如果没有显示的controller了
-    BOOL check = YES;
+    BOOL check = NO;
     for (id vc in self.viewControllers) {
         UIView *containerView = [self containerForView:vc];
-        if (containerView && containerView.frame.origin.x < containerView.frame.size.width) {
-            check = NO;
+        if (containerView && containerView.frame.origin.x >= containerView.frame.size.width) {
+            check = YES;
             break;
         }
     }
@@ -200,7 +201,7 @@ typedef UInt32 SlidingViewOrientation;
     }
     
     int i = [self.viewControllers indexOfObject:[self.slidingController navigationController]];
-    if (i>1) {
+    if (i>=1) {
         return [self.viewControllers objectAtIndex:(i-1)];
     }
     return nil;
