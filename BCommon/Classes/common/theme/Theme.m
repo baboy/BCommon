@@ -59,4 +59,25 @@
 	}
 	return [UIFont systemFontOfSize:14];
 }
+
++ (UIImage *) imageForKey:(NSString *)key{
+	NSString *v = [DBCache valueForKey:key domain:@"Theme"];
+    if (!v) {
+        return nil;
+    }
+    if ([v hasPrefix:@"#"]) {
+        UIImage *image = [UIImage imageWithColor:[UIColor colorFromString:v] size:CGSizeMake(10, 10)];
+        [image resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height/2, image.size.width/2, image.size.height/2, image.size.width/2)];
+        return image;
+    }
+    if ( ![[NSFileManager defaultManager] fileExistsAtPath:v] ) {
+        UIImage *image  = [UIImage imageNamed:v];
+        return image;
+    }
+    if (v) {
+        UIImage *image = [UIImage imageWithContentsOfFile:v];
+        return image;
+    }
+    return nil;
+}
 @end

@@ -148,4 +148,7 @@
     }
     return  ceil(number);
 }
+- (BOOL)fileExists{
+    return [[NSFileManager defaultManager] fileExistsAtPath:self];
+}
 @end

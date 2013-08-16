@@ -6,5 +6,7 @@
 	<string>21,1</string>
 	<key>navigationbar-title-color</key>
 	<string>#284005</string>
+	<key>navigationbar-background</key>
+	<string>navigationbar-background</string>
 </dict>
 </plist>

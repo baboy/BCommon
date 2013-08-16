@@ -28,8 +28,11 @@
 #define gTableSectionBgColor    [UIColor colorWithWhite:0.75 alpha:1]
 #define gNavTitleColor          [Theme colorForKey:@"navigationbar-title-color"]
 #define gNavTitleFont           [Theme fontForKey:@"navigationbar-title-font"]
+#define gNavBackground          [Theme imageForKey:@"navigationbar-background"]
+
 #define gViewBgColor            [UIColor colorWithWhite:0.9 alpha:1]
 #define gThumbnailColor         [UIColor colorWithWhite:1.0 alpha:1]
+
 #define gNoteFont               [UIFont systemFontOfSize:12.0]
 #define gNoteColor              [UIColor colorWithWhite:0.3 alpha:1]
 #define gTagFont               [UIFont systemFontOfSize:12.0]
@@ -74,4 +77,5 @@
 + (void)setup:(NSString *)theme;
 + (UIColor *) colorForKey:(NSString *)key;
 + (UIFont *)  fontForKey:(NSString *)key;
++ (UIImage *) imageForKey:(NSString *)key;
 @end

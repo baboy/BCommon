@@ -18,7 +18,7 @@
 - (id) initWithRootViewController:(UIViewController *)rootViewController{
     if (self = [super initWithRootViewController:rootViewController]) {
         if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-            UIImage *navigationBarBackground = [UIImage imageNamed:@"navigationbar-background"];
+            UIImage *navigationBarBackground = gNavBackground;
             if (navigationBarBackground)
                 [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
         }else{
@@ -29,7 +29,7 @@
 - (id) init{
     if (self = [super init]) {
         if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-            UIImage *navigationBarBackground = [UIImage imageNamed:@"navigationbar-background"];
+            UIImage *navigationBarBackground = gNavBackground;
             if (navigationBarBackground)
                 [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
         }else{

@@ -27,4 +27,5 @@
 - (NSString *)base64SHA1HmacWithKey:(NSString *)key;
 - (NSError *)removeFile;
 - (int)textCount;
+- (BOOL)fileExists;
 @end

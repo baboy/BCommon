@@ -13,8 +13,9 @@
     [self setup];
 }
 + (void)setup:(NSString *)string{
-    NSString *f = getBundleFile([NSString stringWithFormat:@"%@.string.plist", string]);
-    NSDictionary *conf = [NSDictionary dictionaryWithContentsOfFile:f];
+    NSString *fn = [NSString stringWithFormat:@"%@.string.plist", string];
+    NSString *fp = getBundleFile(fn);
+    NSDictionary *conf = [NSDictionary dictionaryWithContentsOfFile:fp];
     for (NSString *k in [conf allKeys]) {
         NSString *v = [conf valueForKey:k];
         [DBCache setValue:v forKey:k domain:@"string"];
