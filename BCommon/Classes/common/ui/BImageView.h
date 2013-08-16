@@ -27,6 +27,7 @@ typedef enum {
 @property (nonatomic, retain) NSString *imageURL;
 @property (nonatomic, assign) float padding;
 @property (nonatomic, assign) BImageTitleStyle titleStyle;
+@property (nonatomic, assign) float titleHeight;
 
 - (id)initWithFrame:(CGRect)frame imageURL:(NSString *)url;
 - (void) addTarget:(id)target action:(SEL)action;

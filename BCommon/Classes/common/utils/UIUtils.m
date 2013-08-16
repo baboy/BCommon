@@ -98,11 +98,15 @@ UIBarButtonItem * createBarButtonItem(NSString *title,id target,SEL action){
     return [item autorelease];
 }
 UIBarButtonItem * createBarImageButtonItem(NSString *iconName,id target,SEL action){
+    
+    NSString *imgName2 = [iconName stringByReplacingOccurrencesOfString:@"-0" withString:@"-1"];
     UIImage *icon = [UIImage imageNamed:iconName];
+    UIImage *icon2 = [UIImage imageNamed:imgName2];
     CGRect rect = CGRectMake(0, 0, icon.size.width, icon.size.height);
     
     UIButton *btn = [[[UIButton alloc] initWithFrame:rect] autorelease];
     [btn setImage:icon forState:UIControlStateNormal];
+    [btn setImage:icon2 forState:UIControlStateHighlighted];
     [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:btn];
@@ -153,7 +157,7 @@ UIButton * createImgBarButton(CGRect rect,NSString *title,NSString *imgName){
 	return [_btn autorelease];
 }
  */
-UIButton * createColorizeImgButton(CGRect rect,NSString *imgName,UIColor *color){
+UIButton * createColorizeImgButton(CGRect rect,NSString *imgName,UIColor *color, id target, SEL action){
     if (!imgName) {
         return  nil;
     }
@@ -167,13 +171,14 @@ UIButton * createColorizeImgButton(CGRect rect,NSString *imgName,UIColor *color)
     if (rect.size.width==0) {
         rect.size = img1.size;
     }
-	UIButton *btn = [[UIButton alloc] initWithFrame:rect];    
+	UIButton *btn = [[UIButton alloc] initWithFrame:rect];
+    btn.backgroundColor = [UIColor clearColor];
 	[btn setImage:img1 forState:UIControlStateNormal];
 	if (img2) [btn setImage:img2 forState:UIControlStateHighlighted];
 	return [btn autorelease];
 }
-UIButton * createImgButton(CGRect rect,NSString *imgName){
-    return createColorizeImgButton(rect, imgName,nil);
+UIButton * createImgButton(CGRect rect,NSString *imgName,id target, SEL action){
+    return createColorizeImgButton(rect, imgName,nil, target, action);
 }
 
 UIButton * createPlayButton(CGRect rect,id target,SEL action){    
@@ -247,3 +252,5 @@ UIImage *createButtonCircleBg(CGSize size,float rad,UIColor *borderColor,UIColor
 @implementation UIUtils
 
 @end
+
+

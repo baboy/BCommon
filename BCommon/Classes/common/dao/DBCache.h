@@ -22,6 +22,7 @@
 + (BOOL) setDomain:(NSString *)domain key:(NSString *)key value:(NSString *)val;
 + (BOOL) removeForKey:(NSString *)key;
 + (BOOL) setValue:(id)val forKey:(NSString *)key;
++ (BOOL) setValue:(id)val forKey:(NSString *)key domain:(NSString *)domain;
 + (BOOL) setInt:(int)val forKey:(NSString *)key;
 + (BOOL) setDouble:(double)val forKey:(NSString *)key;
 + (BOOL) setFloat:(float)val forKey:(NSString *)key;

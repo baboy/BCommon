@@ -10,7 +10,6 @@
 		83278D6217B48C7E00437F80 /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CCC17B48C7E00437F80 /* BaseTableViewController.m */; };
 		83278D6317B48C7E00437F80 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CCE17B48C7E00437F80 /* BaseViewController.m */; };
 		83278D6417B48C7E00437F80 /* BResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CD017B48C7E00437F80 /* BResponse.m */; };
-		83278D6517B48C7E00437F80 /* Dao.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CD217B48C7E00437F80 /* Dao.m */; };
 		83278D6617B48C7E00437F80 /* TableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CD417B48C7E00437F80 /* TableCell.m */; };
 		83278D6717B48C7E00437F80 /* TableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CD617B48C7E00437F80 /* TableView.m */; };
 		83278D6817B48C7E00437F80 /* BCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CD817B48C7E00437F80 /* BCommon.m */; };
@@ -29,7 +28,6 @@
 		83278D7517B48C7E00437F80 /* AppConf.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CF517B48C7E00437F80 /* AppConf.m */; };
 		83278D7617B48C7E00437F80 /* BApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CF717B48C7E00437F80 /* BApi.m */; };
 		83278D7717B48C7E00437F80 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CF917B48C7E00437F80 /* Global.m */; };
-		83278D7817B48C7E00437F80 /* GUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CFC17B48C7E00437F80 /* GUI.m */; };
 		83278D7917B48C7E00437F80 /* BQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278CFF17B48C7E00437F80 /* BQueue.m */; };
 		83278D7A17B48C7E00437F80 /* DBCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D0117B48C7E00437F80 /* DBCache.m */; };
 		83278D7B17B48C7E00437F80 /* BEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D0417B48C7E00437F80 /* BEnumerator.m */; };
@@ -73,6 +71,9 @@
 		83278DA217B48C7E00437F80 /* BHttpRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D5C17B48C7E00437F80 /* BHttpRequestOperation.m */; };
 		83278DA317B48C7E00437F80 /* SlidingRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D5F17B48C7E00437F80 /* SlidingRootViewController.m */; };
 		83278DA417B48C7E00437F80 /* SlidingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D6117B48C7E00437F80 /* SlidingViewController.m */; };
+		837A595017BDCE0100EF4EA9 /* GString.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A594F17BDCE0100EF4EA9 /* GString.m */; };
+		837A595317BDCE4D00EF4EA9 /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A595217BDCE4D00EF4EA9 /* Theme.m */; };
+		837A595A17BDD22300EF4EA9 /* Dao.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A595917BDD22300EF4EA9 /* Dao.m */; };
 		83851CCA169D884200451E23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC9169D884200451E23 /* Foundation.framework */; };
 		83851CD9169D884200451E23 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CD8169D884200451E23 /* SenTestingKit.framework */; };
 		83851CDC169D884200451E23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC9169D884200451E23 /* Foundation.framework */; };
@@ -113,8 +114,6 @@
 		83278CCE17B48C7E00437F80 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		83278CCF17B48C7E00437F80 /* BResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BResponse.h; sourceTree = "<group>"; };
 		83278CD017B48C7E00437F80 /* BResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BResponse.m; sourceTree = "<group>"; };
-		83278CD117B48C7E00437F80 /* Dao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dao.h; sourceTree = "<group>"; };
-		83278CD217B48C7E00437F80 /* Dao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dao.m; sourceTree = "<group>"; };
 		83278CD317B48C7E00437F80 /* TableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableCell.h; sourceTree = "<group>"; };
 		83278CD417B48C7E00437F80 /* TableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableCell.m; sourceTree = "<group>"; };
 		83278CD517B48C7E00437F80 /* TableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableView.h; sourceTree = "<group>"; };
@@ -152,8 +151,6 @@
 		83278CF817B48C7E00437F80 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		83278CF917B48C7E00437F80 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
 		83278CFA17B48C7E00437F80 /* GString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GString.h; sourceTree = "<group>"; };
-		83278CFB17B48C7E00437F80 /* GUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUI.h; sourceTree = "<group>"; };
-		83278CFC17B48C7E00437F80 /* GUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GUI.m; sourceTree = "<group>"; };
 		83278CFE17B48C7E00437F80 /* BQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BQueue.h; sourceTree = "<group>"; };
 		83278CFF17B48C7E00437F80 /* BQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BQueue.m; sourceTree = "<group>"; };
 		83278D0017B48C7E00437F80 /* DBCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBCache.h; sourceTree = "<group>"; };
@@ -241,6 +238,14 @@
 		83278D5F17B48C7E00437F80 /* SlidingRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidingRootViewController.m; sourceTree = "<group>"; };
 		83278D6017B48C7E00437F80 /* SlidingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlidingViewController.h; sourceTree = "<group>"; };
 		83278D6117B48C7E00437F80 /* SlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidingViewController.m; sourceTree = "<group>"; };
+		837A594F17BDCE0100EF4EA9 /* GString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GString.m; sourceTree = "<group>"; };
+		837A595117BDCE4D00EF4EA9 /* Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Theme.h; sourceTree = "<group>"; };
+		837A595217BDCE4D00EF4EA9 /* Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Theme.m; sourceTree = "<group>"; };
+		837A595617BDD18200EF4EA9 /* default.string.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = default.string.plist; sourceTree = "<group>"; };
+		837A595717BDD18200EF4EA9 /* default.theme.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = default.theme.plist; sourceTree = "<group>"; };
+		837A595817BDD22300EF4EA9 /* Dao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dao.h; sourceTree = "<group>"; };
+		837A595917BDD22300EF4EA9 /* Dao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dao.m; sourceTree = "<group>"; };
+		837A595B17BDD3DC00EF4EA9 /* db.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = db.plist; sourceTree = "<group>"; };
 		83851CC6169D884200451E23 /* libBCommon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBCommon.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		83851CC9169D884200451E23 /* Foundation.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83851CCD169D884200451E23 /* BCommon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BCommon-Prefix.pch"; sourceTree = "<group>"; };
@@ -297,8 +302,6 @@
 				83278CCE17B48C7E00437F80 /* BaseViewController.m */,
 				83278CCF17B48C7E00437F80 /* BResponse.h */,
 				83278CD017B48C7E00437F80 /* BResponse.m */,
-				83278CD117B48C7E00437F80 /* Dao.h */,
-				83278CD217B48C7E00437F80 /* Dao.m */,
 				83278CD317B48C7E00437F80 /* TableCell.h */,
 				83278CD417B48C7E00437F80 /* TableCell.m */,
 				83278CD517B48C7E00437F80 /* TableView.h */,
@@ -310,6 +313,7 @@
 		83278CD917B48C7E00437F80 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				837A594E17BDCDDD00EF4EA9 /* theme */,
 				83278CDA17B48C7E00437F80 /* categories */,
 				83278CF317B48C7E00437F80 /* conf */,
 				83278CFD17B48C7E00437F80 /* dao */,
@@ -363,9 +367,12 @@
 				83278CF717B48C7E00437F80 /* BApi.m */,
 				83278CF817B48C7E00437F80 /* Global.h */,
 				83278CF917B48C7E00437F80 /* Global.m */,
+				837A595117BDCE4D00EF4EA9 /* Theme.h */,
+				837A595217BDCE4D00EF4EA9 /* Theme.m */,
 				83278CFA17B48C7E00437F80 /* GString.h */,
-				83278CFB17B48C7E00437F80 /* GUI.h */,
-				83278CFC17B48C7E00437F80 /* GUI.m */,
+				837A594F17BDCE0100EF4EA9 /* GString.m */,
+				837A595617BDD18200EF4EA9 /* default.string.plist */,
+				837A595717BDD18200EF4EA9 /* default.theme.plist */,
 			);
 			path = conf;
 			sourceTree = "<group>";
@@ -373,6 +380,9 @@
 		83278CFD17B48C7E00437F80 /* dao */ = {
 			isa = PBXGroup;
 			children = (
+				837A595B17BDD3DC00EF4EA9 /* db.plist */,
+				837A595817BDD22300EF4EA9 /* Dao.h */,
+				837A595917BDD22300EF4EA9 /* Dao.m */,
 				83278CFE17B48C7E00437F80 /* BQueue.h */,
 				83278CFF17B48C7E00437F80 /* BQueue.m */,
 				83278D0017B48C7E00437F80 /* DBCache.h */,
@@ -542,6 +552,13 @@
 				83278D6117B48C7E00437F80 /* SlidingViewController.m */,
 			);
 			path = "sliding menu";
+			sourceTree = "<group>";
+		};
+		837A594E17BDCDDD00EF4EA9 /* theme */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = theme;
 			sourceTree = "<group>";
 		};
 		83851CBB169D884200451E23 = {
@@ -726,7 +743,6 @@
 				83278D6217B48C7E00437F80 /* BaseTableViewController.m in Sources */,
 				83278D6317B48C7E00437F80 /* BaseViewController.m in Sources */,
 				83278D6417B48C7E00437F80 /* BResponse.m in Sources */,
-				83278D6517B48C7E00437F80 /* Dao.m in Sources */,
 				83278D6617B48C7E00437F80 /* TableCell.m in Sources */,
 				83278D6717B48C7E00437F80 /* TableView.m in Sources */,
 				83278D6817B48C7E00437F80 /* BCommon.m in Sources */,
@@ -745,7 +761,6 @@
 				83278D7517B48C7E00437F80 /* AppConf.m in Sources */,
 				83278D7617B48C7E00437F80 /* BApi.m in Sources */,
 				83278D7717B48C7E00437F80 /* Global.m in Sources */,
-				83278D7817B48C7E00437F80 /* GUI.m in Sources */,
 				83278D7917B48C7E00437F80 /* BQueue.m in Sources */,
 				83278D7A17B48C7E00437F80 /* DBCache.m in Sources */,
 				83278D7B17B48C7E00437F80 /* BEnumerator.m in Sources */,
@@ -789,6 +804,9 @@
 				83278DA217B48C7E00437F80 /* BHttpRequestOperation.m in Sources */,
 				83278DA317B48C7E00437F80 /* SlidingRootViewController.m in Sources */,
 				83278DA417B48C7E00437F80 /* SlidingViewController.m in Sources */,
+				837A595017BDCE0100EF4EA9 /* GString.m in Sources */,
+				837A595317BDCE4D00EF4EA9 /* Theme.m in Sources */,
+				837A595A17BDD22300EF4EA9 /* Dao.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

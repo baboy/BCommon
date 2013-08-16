@@ -1,13 +1,13 @@
 //
-//  GUI.h
-//  itv
+//  Theme.h
+//  BCommon
 //
-//  Created by Zhang Yinghui on 10/29/11.
-//  Copyright 2011 LavaTech. All rights reserved.
+//  Created by baboy on 13-8-16.
+//  Copyright (c) 2013年 baboy. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-//
+#import <Foundation/Foundation.h>
+
 /*******table view****/
 #define gTableViewBgColor [UIColor colorWithWhite:1.0 alpha:1]
 #define gTableViewSelectedBgColor [UIColor colorWithWhite:0.8 alpha:1]
@@ -26,8 +26,8 @@
 #define gTableSectionTitleFont  [UIFont systemFontOfSize:14]
 #define gTableSectionTitleColor [UIColor colorWithWhite:0 alpha:1]
 #define gTableSectionBgColor    [UIColor colorWithWhite:0.75 alpha:1]
-#define gNavTitleColor          [UIColor whiteColor]
-#define gNavTitleFont           [UIFont boldSystemFontOfSize:18]
+#define gNavTitleColor          [Theme colorForKey:@"navigationbar-title-color"]
+#define gNavTitleFont           [Theme fontForKey:@"navigationbar-title-font"]
 #define gViewBgColor            [UIColor colorWithWhite:0.9 alpha:1]
 #define gThumbnailColor         [UIColor colorWithWhite:1.0 alpha:1]
 #define gNoteFont               [UIFont systemFontOfSize:12.0]
@@ -69,8 +69,9 @@
 
 #define defNavBgColor           [UIColor colorFromString:@"#1ba1e2"]
 
-@interface GUI : UIView {
 
-}
-
+@interface Theme : NSObject
++ (void)setup:(NSString *)theme;
++ (UIColor *) colorForKey:(NSString *)key;
++ (UIFont *)  fontForKey:(NSString *)key;
 @end

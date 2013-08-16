@@ -89,7 +89,7 @@ static id _current_user = nil;
 + (BUser *)user{
     @synchronized(self){
         if (!_current_user) {
-            NSDictionary *json = [[DBCache valueForKey:@"USER"] objectFromJSONString];
+            NSDictionary *json = [[DBCache valueForKey:@"USER"] json];
             if (json){
                 _current_user = [[[self class] alloc] initWithDictionary:json];
             }

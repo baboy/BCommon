@@ -194,14 +194,16 @@ typedef UInt32 SlidingViewOrientation;
     if (![self.viewControllers count] && self.delegate && [self.delegate respondsToSelector:@selector(slidingViewControllerDidBecomeEmpty:)]) {
         [self.delegate slidingViewControllerDidBecomeEmpty:self];
     }
+    DLOG(@"[SlidingViewController] removeController:%@ ended",controller);
 }
 - (id)backController{
-    if (!self.slidingController) {
+    if (!self.slidingController || [self.viewControllers count]==0) {
         return nil;
     }
     
     int i = [self.viewControllers indexOfObject:[self.slidingController navigationController]];
-    if (i>=1) {
+    if (i>=1 && self.viewControllers) {
+        DLOG(@"i:%d, %@",i, self.viewControllers);
         return [self.viewControllers objectAtIndex:(i-1)];
     }
     return nil;

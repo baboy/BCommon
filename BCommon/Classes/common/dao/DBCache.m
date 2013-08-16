@@ -22,6 +22,11 @@
 	BOOL flag =[[self db] executeUpdate:CacheSqlInsert,domain,key,val,d,d];
 	return flag;
 }
++ (BOOL) setValue:(id)val forKey:(NSString *)key domain:(NSString *)domain{
+	NSDate *d = [NSDate date];
+	BOOL flag =[[self db] executeUpdate:CacheSqlInsert,domain,key,val,d,d];
+	return flag;
+}
 + (BOOL) removeForKey:(NSString *)key{
     BOOL flag =[[self db] executeUpdate:CacheSqlRmForKey,DefDomain,key];
 	return flag;

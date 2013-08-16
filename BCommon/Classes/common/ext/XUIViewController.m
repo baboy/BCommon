@@ -17,7 +17,10 @@
 @implementation XUINavigationController
 - (id) initWithRootViewController:(UIViewController *)rootViewController{
     if (self = [super initWithRootViewController:rootViewController]) {
-        if ([self respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+        if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+            UIImage *navigationBarBackground = [UIImage imageNamed:@"navigationbar-background"];
+            if (navigationBarBackground)
+                [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
         }else{
         }
     }
@@ -25,7 +28,10 @@
 }
 - (id) init{
     if (self = [super init]) {
-        if ([self respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+        if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+            UIImage *navigationBarBackground = [UIImage imageNamed:@"navigationbar-background"];
+            if (navigationBarBackground)
+                [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
         }else{
         }
     }
@@ -65,16 +71,12 @@
 }
 @end
 @interface XUIViewController ()
-@property (nonatomic, retain) UILabel *navTitleLabel;
 @property (nonatomic, retain) UIView *indicatorView;
 @property (nonatomic, retain) NSMutableDictionary *requestPool;
+@property (nonatomic, retain) NSString *navTitle;
 @end
 
 @implementation XUIViewController
-@synthesize navTitleLabel = _navTitleLabel;
-@synthesize indicatorView = _indicatorView;
-@synthesize requestPool = _requestPool;
-@synthesize topDropMenu = _topDropMenu;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     nibBundleOrNil = nibBundleOrNil?nibBundleOrNil:[NSBundle mainBundle];
@@ -151,14 +153,22 @@
     self.navigationItem.titleView = titleView;
     [titleView release];
 }
+- (void)setTitle:(NSString *)title{
+    [self setNavTitle:title];
+    if (self.navigationItem.titleView && [self.navigationItem.titleView isKindOfClass:[UIButton class]]) {
+        [(UIButton *)self.navigationItem.titleView setTitle:title forState:UIControlStateNormal];
+    }else if(self.navigationItem.titleView && [self.navigationItem.titleView isKindOfClass:[UILabel class]]){
+        [(UILabel *)self.navigationItem.titleView setText:title];
+    }
+}
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self awake];
     [self.view setBackgroundColor:gViewBgColor];
-    if (self.navigationItem && !self.navTitleLabel) {
+    if (self.navigationItem && !self.titleLabel) {
         CGRect rect = CGRectInset(self.navigationController.navigationBar.bounds, 60, 0);
-        UILabel *titleLabel = createLabel(rect, gNavTitleFont, [UIColor clearColor], gNavTitleColor, [UIColor blackColor], CGSizeZero, UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
-        [titleLabel setText:self.title];
+        UILabel *titleLabel = createLabel(rect, gNavTitleFont, [UIColor clearColor], gNavTitleColor, [UIColor clearColor], CGSizeZero, UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
+        [titleLabel setText:self.navTitle];
         
         [titleLabel.layer setShadowOpacity:1];
         [titleLabel.layer setShadowColor:[[UIColor colorWithWhite:0 alpha:0.6] CGColor]];
@@ -166,7 +176,7 @@
         [titleLabel.layer setShadowOffset:CGSizeMake(0, 1)];
         
         [self.navigationItem setTitleView:titleLabel];
-        [self setNavTitleLabel:titleLabel];
+        [self setTitleLabel:titleLabel];
     }
     UIViewController *rootController = self.view.window.rootViewController;
     if (rootController.modalViewController) {
@@ -220,14 +230,6 @@
         return;
     }
     [self popViewControllerAnimated:YES];
-}
-- (void)setTitle:(NSString *)title{
-    [super setTitle:title];
-    if (self.navigationItem.titleView && [self.navigationItem.titleView isKindOfClass:[UIButton class]]) {
-        [(UIButton *)self.navigationItem.titleView setTitle:title forState:UIControlStateNormal];
-    }else if(self.navigationItem.titleView && [self.navigationItem.titleView isKindOfClass:[UILabel class]]){        
-        [(UILabel *)self.navigationItem.titleView setText:title];
-    }
 }
 
 /********/
@@ -363,7 +365,8 @@
         AFHTTPRequestOperation *req = [self.requestPool valueForKey:key];
         [req cancel];
     }
-    RELEASE(_navTitleLabel);
+    RELEASE(_navTitle);
+    RELEASE(_titleLabel);
     RELEASE(_indicatorView);
     RELEASE(_requestPool);
     RELEASE(_topDropMenu);

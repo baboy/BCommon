@@ -13,10 +13,13 @@
 
 static  FMDatabase *__db__ = nil;
 @implementation Dao
++ (void)initialize{
+    [self setup];
+}
 + (FMDatabase*)db{  
     if (!__db__  || ![__db__ open]) {
         RELEASE(__db__);
-        __db__ = [[FMDatabase databaseWithPath:getTempFilePath(@"db.sqlite")] retain] ;
+        __db__ = [[FMDatabase databaseWithPath:getFilePath(@"db.sqlite", nil, nil)] retain] ;
         [__db__ open];
     }
 	return __db__;
@@ -30,10 +33,11 @@ static  FMDatabase *__db__ = nil;
     }
 	return ret;
 }
-+ (BOOL)setup{    
-    NSLog(@"dbFile:%@", getTempFilePath(@"db.sqlite"));
++ (BOOL)setup:(NSString *)name{
+    NSString *f = getBundleFile([NSString stringWithFormat:@"%@.plist",name]);
+    DLOG(@"[Dao] sql:%@", f);
     BOOL ret = NO;
-    NSArray *arr = [NSArray arrayWithContentsOfFile:getBundleFile(@"sql.plist")];
+    NSArray *arr = [NSArray arrayWithContentsOfFile:f];
     if (arr && [arr count]) {
         int n = [arr count];
         int i = 0;
@@ -43,7 +47,11 @@ static  FMDatabase *__db__ = nil;
         }
         ret = i == n;
     }
+    DLOG(@"[Dao] setup create: %d", ret);
     return ret;
+}
++ (BOOL)setup{
+    return [self setup:@"db"];
 }
 + (BOOL)close:(FMDatabase*)db{
     return YES;

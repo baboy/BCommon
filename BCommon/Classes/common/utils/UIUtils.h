@@ -25,8 +25,8 @@ extern UIBarButtonItem * createBarImageButtonItem(NSString *iconName,id target,S
 extern UIButton *createButton(NSString *title,id target, SEL action);
 extern UIButton * createRoundCornerButton(CGRect rect,NSString *title,id target, SEL actionb);
 extern UIButton * createImgBarButton(CGRect rect,NSString *title,NSString *imgName);
-extern UIButton * createImgButton(CGRect rect,NSString *imgName);
-extern UIButton * createColorizeImgButton(CGRect rect,NSString *imgName,UIColor *color);
+extern UIButton * createImgButton(CGRect rect,NSString *imgName,id target, SEL action);
+extern UIButton * createColorizeImgButton(CGRect rect,NSString *imgName,UIColor *color,id target, SEL action);
 extern UIButton * createPlayButton(CGRect rect,id target,SEL action);
 extern CGSize CGSizeScale(CGSize size,float scale);
 UIImage *createButtonCircleBg(CGSize size,float rad,UIColor *borderColor,UIColor *color1,UIColor *color2,UIColor *color3,UIColor *color4);

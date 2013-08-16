@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GUI.h"
-#import "GString.h"
 
 #define gConf			@"http://m.tvie.com.cn/mcms/api2/config.php"
 
@@ -87,9 +85,10 @@
 
 #define DeviceID                [OpenUDID value]
 #define DeviceToken             [DBCache valueForKey:@"deviceToken"]
+
 //notify
-#define NotifyLogout    @"NotifyLogout"
-#define NotifyLogin    @"NotifyLogin"
+#define NotifyLogout    @"NotifyUserLogout"
+#define NotifyLogin    @"NotifyUserLogin"
 @interface G : NSObject {
 
 }
@@ -98,3 +97,6 @@
 + (id)remove:(id)key;
 + (NSDictionary *) dict;
 @end
+
+
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UserViewController</key>
+	<string>用户信息</string>
+	<key>LoginViewController</key>
+	<string>登录</string>
+	<key>RegisterViewController</key>
+	<string>注册</string>
+</dict>
+</plist>

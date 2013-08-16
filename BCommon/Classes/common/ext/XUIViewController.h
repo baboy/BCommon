@@ -26,6 +26,8 @@ enum{
 	CGRect _frame;
 }
 @property (nonatomic, retain) BDropMenu *topDropMenu;
+@property (nonatomic, retain) UILabel *titleLabel;
+
 - (void)setTitle:(NSString *)title withImageURL:(NSURL *)imageURL;
 - (void)setDropMenuTitle:(NSString *)title;
 - (void)showDropMenu:(id)sender;

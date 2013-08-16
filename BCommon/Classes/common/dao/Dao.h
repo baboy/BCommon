@@ -13,6 +13,7 @@
 @interface Dao : NSObject
 + (FMDatabase*)db;
 + (BOOL)setup;
++ (BOOL)setup:(NSString *)name;
 + (BOOL)executeSql:(NSString *)sql params:(NSArray *)params;
 + (BOOL)close:(FMDatabase*)db;
 @end

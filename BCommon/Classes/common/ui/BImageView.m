@@ -42,6 +42,7 @@
 		self.clipsToBounds = YES;
         [self createSubviews];
 		[self setImageURL:url];
+        self.titleHeight = 20;
     }
     return self;
 }
@@ -144,12 +145,12 @@
     [super layoutSubviews];
     CGRect rect = self.bounds;
     if (_titleStyle == BImageTitleStyleBelow) {
-        rect.size.height -= 20;
+        rect.size.height -= self.titleHeight;
     }
     [_imgView setFrame:CGRectInset(rect, _padding, _padding)];
-    rect = CGRectMake(0, self.bounds.size.height-20, self.bounds.size.width, 20);
+    rect = CGRectMake(0, self.bounds.size.height-self.titleHeight, self.bounds.size.width, self.titleHeight);
     [_titleLabel setFrame:rect];
-    rect.origin.y += rect.size.height-32;;
+    rect.origin.y -= 12;;
     rect.size.height=12;
     [_progressView setFrame:CGRectInset(rect, 3, 0)];
 }

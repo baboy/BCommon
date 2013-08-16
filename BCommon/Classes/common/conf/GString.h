@@ -9,3 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #define ConnectionFailedMsg    NSLocalizedString(@"Network connection failed!",nil)
+
+@interface GString : NSString
++ (void)setup:(NSString *)string;
++ (NSString *)stringForKey:(id) key;
+@end
