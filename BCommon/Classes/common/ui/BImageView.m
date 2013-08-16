@@ -27,6 +27,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code.
+        self.titleHeight = 20;
 		self.backgroundColor = [UIColor clearColor];
 		self.clipsToBounds = YES;
         [self createSubviews];
@@ -38,11 +39,11 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code.
+        self.titleHeight = 20;
 		self.backgroundColor = [UIColor clearColor];
 		self.clipsToBounds = YES;
         [self createSubviews];
 		[self setImageURL:url];
-        self.titleHeight = 20;
     }
     return self;
 }
