@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/baboy/BCommon.git", :tag => "0.35" }
   s.platform     = :ios
 
-  s.source_files = 'BCommon/Classes/*.{h,m}'
+  s.source_files = 'BCommon/Classes/*.{h,m,plist,png,jpg}'
 
 
   s.subspec 'base' do |base|    
@@ -56,6 +56,9 @@ Pod::Spec.new do |s|
     common.subspec 'Utils' do |utils|
     	utils.source_files = 'BCommon/Classes/common/utils'
     end
+	common.subspec 'theme' do |theme|
+		theme.source_files = 'BCommon/Classes/common/theme'
+	end
     common.subspec 'Web' do |web|
     	web.source_files = 'BCommon/Classes/common/web'
 		web.prefix_header_file = "BCommon/BCommon-Prefix.pch"
