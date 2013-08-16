@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/baboy/BCommon.git", :tag => "0.36" }
   s.platform     = :ios
 
-  s.source_files = 'BCommon/Classes/*.{h,m,plist,png,jpg}'
+  s.source_files = 'BCommon/Classes/*.{h,m}'
 
 
   s.subspec 'base' do |base|    
@@ -39,6 +39,7 @@ Pod::Spec.new do |s|
     	conf.source_files = 'BCommon/Classes/common/conf'
     end 
     common.subspec 'dao' do |dao|
+		dao.resource = 'BCommon/Classes/common/dao/db.plist'
     	dao.source_files = 'BCommon/Classes/common/dao'
     end 
     common.subspec 'ext' do |ext|
@@ -57,6 +58,7 @@ Pod::Spec.new do |s|
     	utils.source_files = 'BCommon/Classes/common/utils'
     end
 	common.subspec 'theme' do |theme|
+		theme.resource = 'BCommon/Classes/common/theme/default.string.plist', 'BCommon/Classes/common/theme/default.theme.plist'
 		theme.source_files = 'BCommon/Classes/common/theme'
 	end
     common.subspec 'Web' do |web|
