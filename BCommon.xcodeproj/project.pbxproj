@@ -71,8 +71,6 @@
 		83278DA217B48C7E00437F80 /* BHttpRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D5C17B48C7E00437F80 /* BHttpRequestOperation.m */; };
 		83278DA317B48C7E00437F80 /* SlidingRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D5F17B48C7E00437F80 /* SlidingRootViewController.m */; };
 		83278DA417B48C7E00437F80 /* SlidingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D6117B48C7E00437F80 /* SlidingViewController.m */; };
-		837A595017BDCE0100EF4EA9 /* GString.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A594F17BDCE0100EF4EA9 /* GString.m */; };
-		837A595317BDCE4D00EF4EA9 /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A595217BDCE4D00EF4EA9 /* Theme.m */; };
 		837A595A17BDD22300EF4EA9 /* Dao.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A595917BDD22300EF4EA9 /* Dao.m */; };
 		83851CCA169D884200451E23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC9169D884200451E23 /* Foundation.framework */; };
 		83851CD9169D884200451E23 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CD8169D884200451E23 /* SenTestingKit.framework */; };
@@ -80,6 +78,8 @@
 		83851CDF169D884200451E23 /* libBCommon.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC6169D884200451E23 /* libBCommon.a */; };
 		83851CE5169D884200451E23 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 83851CE3169D884200451E23 /* InfoPlist.strings */; };
 		83851CE8169D884300451E23 /* BCommonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83851CE7169D884300451E23 /* BCommonTests.m */; };
+		83AD4D5417BDD60B000260A0 /* GString.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AD4D5117BDD60B000260A0 /* GString.m */; };
+		83AD4D5517BDD60B000260A0 /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 83AD4D5317BDD60B000260A0 /* Theme.m */; };
 		F6531D8DB80C4735A8761FFD /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DFDA534FC97413A927CC623 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -150,7 +150,6 @@
 		83278CF717B48C7E00437F80 /* BApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BApi.m; sourceTree = "<group>"; };
 		83278CF817B48C7E00437F80 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
 		83278CF917B48C7E00437F80 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
-		83278CFA17B48C7E00437F80 /* GString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GString.h; sourceTree = "<group>"; };
 		83278CFE17B48C7E00437F80 /* BQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BQueue.h; sourceTree = "<group>"; };
 		83278CFF17B48C7E00437F80 /* BQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BQueue.m; sourceTree = "<group>"; };
 		83278D0017B48C7E00437F80 /* DBCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBCache.h; sourceTree = "<group>"; };
@@ -238,11 +237,6 @@
 		83278D5F17B48C7E00437F80 /* SlidingRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidingRootViewController.m; sourceTree = "<group>"; };
 		83278D6017B48C7E00437F80 /* SlidingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlidingViewController.h; sourceTree = "<group>"; };
 		83278D6117B48C7E00437F80 /* SlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidingViewController.m; sourceTree = "<group>"; };
-		837A594F17BDCE0100EF4EA9 /* GString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GString.m; sourceTree = "<group>"; };
-		837A595117BDCE4D00EF4EA9 /* Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Theme.h; sourceTree = "<group>"; };
-		837A595217BDCE4D00EF4EA9 /* Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Theme.m; sourceTree = "<group>"; };
-		837A595617BDD18200EF4EA9 /* default.string.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = default.string.plist; sourceTree = "<group>"; };
-		837A595717BDD18200EF4EA9 /* default.theme.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = default.theme.plist; sourceTree = "<group>"; };
 		837A595817BDD22300EF4EA9 /* Dao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dao.h; sourceTree = "<group>"; };
 		837A595917BDD22300EF4EA9 /* Dao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dao.m; sourceTree = "<group>"; };
 		837A595B17BDD3DC00EF4EA9 /* db.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = db.plist; sourceTree = "<group>"; };
@@ -255,6 +249,12 @@
 		83851CE4169D884200451E23 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		83851CE6169D884200451E23 /* BCommonTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BCommonTests.h; sourceTree = "<group>"; };
 		83851CE7169D884300451E23 /* BCommonTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BCommonTests.m; sourceTree = "<group>"; };
+		83AD4D4E17BDD60B000260A0 /* default.string.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = default.string.plist; sourceTree = "<group>"; };
+		83AD4D4F17BDD60B000260A0 /* default.theme.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = default.theme.plist; sourceTree = "<group>"; };
+		83AD4D5017BDD60B000260A0 /* GString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GString.h; sourceTree = "<group>"; };
+		83AD4D5117BDD60B000260A0 /* GString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GString.m; sourceTree = "<group>"; };
+		83AD4D5217BDD60B000260A0 /* Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Theme.h; sourceTree = "<group>"; };
+		83AD4D5317BDD60B000260A0 /* Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Theme.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,12 +367,6 @@
 				83278CF717B48C7E00437F80 /* BApi.m */,
 				83278CF817B48C7E00437F80 /* Global.h */,
 				83278CF917B48C7E00437F80 /* Global.m */,
-				837A595117BDCE4D00EF4EA9 /* Theme.h */,
-				837A595217BDCE4D00EF4EA9 /* Theme.m */,
-				83278CFA17B48C7E00437F80 /* GString.h */,
-				837A594F17BDCE0100EF4EA9 /* GString.m */,
-				837A595617BDD18200EF4EA9 /* default.string.plist */,
-				837A595717BDD18200EF4EA9 /* default.theme.plist */,
 			);
 			path = conf;
 			sourceTree = "<group>";
@@ -557,6 +551,12 @@
 		837A594E17BDCDDD00EF4EA9 /* theme */ = {
 			isa = PBXGroup;
 			children = (
+				83AD4D4E17BDD60B000260A0 /* default.string.plist */,
+				83AD4D4F17BDD60B000260A0 /* default.theme.plist */,
+				83AD4D5017BDD60B000260A0 /* GString.h */,
+				83AD4D5117BDD60B000260A0 /* GString.m */,
+				83AD4D5217BDD60B000260A0 /* Theme.h */,
+				83AD4D5317BDD60B000260A0 /* Theme.m */,
 			);
 			path = theme;
 			sourceTree = "<group>";
@@ -804,9 +804,9 @@
 				83278DA217B48C7E00437F80 /* BHttpRequestOperation.m in Sources */,
 				83278DA317B48C7E00437F80 /* SlidingRootViewController.m in Sources */,
 				83278DA417B48C7E00437F80 /* SlidingViewController.m in Sources */,
-				837A595017BDCE0100EF4EA9 /* GString.m in Sources */,
-				837A595317BDCE4D00EF4EA9 /* Theme.m in Sources */,
 				837A595A17BDD22300EF4EA9 /* Dao.m in Sources */,
+				83AD4D5417BDD60B000260A0 /* GString.m in Sources */,
+				83AD4D5517BDD60B000260A0 /* Theme.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
