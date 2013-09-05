@@ -7,35 +7,46 @@
 //
 
 #import "BIndicator.h"
+#define BIndicatorTextFont  [UIFont boldSystemFontOfSize:16]
+#define BIndicatorAnimateWidth  32
+#define BIndicatorBackgroundColor   [UIColor colorWithWhite:0.2 alpha:0.8]
 
 static UIView * IndicatorView = nil;
 static int IndicatorContentTag = 999;
 
 @implementation BIndicator
 + (UIView *)createIndicator:(BOOL)withIndicator message:(NSString *)msg inView:(UIView *)container{
-    UIFont *font = [UIFont boldSystemFontOfSize:16];
-    CGSize size = [msg sizeWithFont:font];
-    float k = withIndicator?(2*28/2):0;
+    CGSize size = [msg sizeWithFont:BIndicatorTextFont];
+    float k = withIndicator?(2*BIndicatorAnimateWidth/2):0;
     float w = sqrt(4*size.width*size.height/3+k*k)+k+10;
-    size = [msg sizeWithFont:font constrainedToSize:CGSizeMake(w, CGFLOAT_MAX)];
-    float h = size.height + withIndicator?28:0;
+    
+    size = [msg sizeWithFont:BIndicatorTextFont constrainedToSize:CGSizeMake(w, CGFLOAT_MAX)];
+    float h = size.height + withIndicator?BIndicatorAnimateWidth:0;
     h = MAX(h, w*3/4);
     w = MAX(w, 120);
-    CGRect rect = CGRectMake(0, 0, w+20, h+20);    
+    float padding = 10;
+    CGRect rect = CGRectMake(0, 0, w+2*padding, h+2*padding);
+    if (size.width == 0 && withIndicator) {
+        padding = 5;
+        rect.size = CGSizeMake(BIndicatorAnimateWidth+2*padding, BIndicatorAnimateWidth+2*padding);
+    }
+    
 	UIView *view = [[[UIView alloc] initWithFrame:rect] autorelease];
-	view.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
+	view.backgroundColor = BIndicatorBackgroundColor;
 	view.layer.cornerRadius = 8.0;
     
-    rect = CGRectInset(rect, 10, 10);
+    rect = CGRectInset(rect, padding, padding);
     if (withIndicator) {
+        CGRect r = CGRectMake(rect.origin.x+(rect.size.width-BIndicatorAnimateWidth)/2, rect.origin.y, BIndicatorAnimateWidth, BIndicatorAnimateWidth);
+        
         UIActivityIndicatorView *aiv = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
-        [aiv setFrame:CGRectMake(rect.origin.x+(rect.size.width-28)/2, rect.origin.y, 32, 32)];
+        [aiv setFrame:r];
         [aiv startAnimating];
         [view addSubview:aiv];
-        rect.origin.y += 28;
-        rect.size.height -= 28;
+        rect.origin.y += BIndicatorAnimateWidth;
+        rect.size.height -= BIndicatorAnimateWidth;
     }
-    UILabel *label = createLabel(rect, font, nil, [UIColor whiteColor], [UIColor blackColor], CGSizeMake(0, -1), UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
+    UILabel *label = createLabel(rect, BIndicatorTextFont, nil, [UIColor whiteColor], [UIColor blackColor], CGSizeMake(0, -1), UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
 	label.text = msg;
 	label.textColor = [UIColor whiteColor];
 	[view addSubview:label];
@@ -46,7 +57,9 @@ static int IndicatorContentTag = 999;
     }
     RELEASE(IndicatorView);
     IndicatorView = [[UIView alloc] initWithFrame:container.bounds];
+    IndicatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     view.center = CGPointMake(IndicatorView.bounds.size.width/2, IndicatorView.bounds.size.height*0.4);
+    view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     [IndicatorView addSubview:view];
     [container addSubview:IndicatorView];
     [container bringSubviewToFront:IndicatorView];

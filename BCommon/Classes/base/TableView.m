@@ -200,10 +200,6 @@
         if (self.contentInset.top != [self.updateView activeHeight]-5) {
             self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
         }
-//        [self.layer removeAllAnimations];
-//        [UIView animateWithDuration:0.5
-//                         animations:^{
-//                         }];
         [self.updateView setState:DragStateLoading];
         if (self.delegate && [self.delegate respondsToSelector:@selector(update:)]) {
             [(id<XScrollViewDelegate>)self.delegate update:self];
@@ -317,10 +313,17 @@
 	[super dealloc];
 }
 @end
-@implementation TableViewSection
+@interface TableViewSectionView()
+@property (nonatomic, retain) UIImageView *leftImageView;
+@property (nonatomic, retain) UIImageView *rightImageView;
+@property (nonatomic, assign) id target;
+@property (nonatomic, assign) SEL action;
+@end
+@implementation TableViewSectionView
 - (id)initWithFrame:(CGRect)frame{
 	if (self = [super initWithFrame:frame]) {
 		self.separatorLineStyle = SeparatorLineStyleTop | SeparatorLineStyleBottom;
+        
         _titleLabel = [createLabel(CGRectZero, gTableSectionTitleFont, [UIColor clearColor], gTableSectionTitleColor, nil, CGSizeZero, UITextAlignmentLeft, 1, 0) retain];
         _rightLabel = [createLabel(CGRectZero, gTableSectionTitleFont, [UIColor clearColor], gTableSectionTitleColor, nil, CGSizeZero, UITextAlignmentRight, 1, 0) retain];
         [self addSubview:_titleLabel];
@@ -328,32 +331,64 @@
         
         self.backgroundColor = gTableSectionBgColor;
         
+        UITapGestureRecognizer *tap = AUTORELEASE([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEvent:)]);
+        [self addGestureRecognizer:tap];
+        
 	}
 	return self;
 }
-- (void)setBackgroundImage:(UIImage *)img{
-    if (_bg) {
-        [_bg removeFromSuperview];
-        RELEASE(_bg);
-    }
-    if (img) {
-        _bg = [[UIImageView alloc] initWithImage:img];
-        _bg.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [_bg setFrame:self.bounds];
-        [self addSubview:_bg];
-        [self sendSubviewToBack:_bg];
-    }
-}
 - (void)layoutSubviews{
     [super layoutSubviews];
-    CGRect r = CGRectInset(self.bounds, 10, (self.bounds.size.height - [gTableSectionTitleFont pointSize]-2)/2);
-    _titleLabel.frame = r;
-    _rightLabel.frame = r;
-    if (_rightView) {
-        r = _rightView.bounds;
-        r.origin = CGPointMake(self.bounds.size.width - r.size.width-10, (self.bounds.size.height-r.size.height)/2);
-        _rightView.frame = r;
+    float padding = 10, w = self.bounds.size.width, h = self.bounds.size.height;
+    CGRect labelFrame = CGRectInset(self.bounds, padding, (h - [gTableSectionTitleFont pointSize]-4)/2);
+    if (self.leftImageView) {
+        CGRect r = self.leftImageView.frame;
+        r.origin = CGPointMake( padding, (h-self.leftImageView.bounds.size.height)/2);
+        self.leftImageView.frame = r;
+        labelFrame.origin.x += r.size.width+padding;
+        labelFrame.size.width -= r.size.width+padding;
     }
+    if (self.rightImageView) {
+        CGRect r = self.rightImageView.frame;
+        r.origin = CGPointMake( w - padding-r.size.width, (h-self.rightImageView.bounds.size.height)/2);
+        self.rightImageView.frame = r;
+        labelFrame.size.width -= r.size.width+padding;
+    }
+    self.titleLabel.frame = labelFrame;
+    if (self.rightTitle)
+        self.rightLabel.frame = labelFrame;
+    if (self.rightView) {
+        CGRect rightViewFrame = self.rightView.bounds;
+        rightViewFrame.origin.x = labelFrame.origin.x + labelFrame.size.width - rightViewFrame.size.width;
+        rightViewFrame.origin.y = (h-rightViewFrame.size.height)/2;
+        self.rightView.frame = rightViewFrame;
+    }
+}
+- (void)setLeftImage:(UIImage *)leftImage{
+    RELEASE(_leftImage);
+    _leftImage = [leftImage retain];
+    if (!_leftImageView) {
+        _leftImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, leftImage.size.width, MIN(leftImage.size.height, self.bounds.size.height*0.7))];
+        [self addSubview:_leftImageView];
+    }
+    [UIView animateWithDuration:0.2
+                     animations:^{
+                         _leftImageView.image = leftImage;
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
+    [self setNeedsLayout];
+}
+- (void)setRightImage:(UIImage *)rightImage{
+    RELEASE(_rightImage);
+    _rightImage = [_rightImage retain];
+    if (!_rightImageView) {
+        _rightImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, rightImage.size.width, MIN(rightImage.size.height, self.bounds.size.height*0.7))];
+        [self addSubview:_rightImageView];
+    }
+    _rightImageView.image = rightImage;
+    [self setNeedsLayout];
 }
 - (void)setTitle:(NSString *)title{
     RELEASE(_title);
@@ -374,12 +409,25 @@
     [self addSubview:_rightView];
     [self setNeedsLayout];
 }
+
+- (void)addTarget:(id)target action:(SEL)action{
+    self.target = target;
+    self.action = action;
+}
+- (void)tapEvent:(id)sender{
+    if (self.target && self.action) {
+        [self.target performSelector:self.action withObject:self];
+    }
+}
 - (void)dealloc{
     RELEASE(_titleLabel);
     RELEASE(_title);
     RELEASE(_rightLabel);
     RELEASE(_rightTitle);
-    RELEASE(_bg);
+    RELEASE(_leftImage);
+    RELEASE(_rightImage);
+    RELEASE(_leftImageView);
+    RELEASE(_rightImageView);
     [super dealloc];
 }
 @end
@@ -387,7 +435,6 @@
 @implementation TableViewCellBackground
 - (void)setup{
     self.separatorLineStyle = SeparatorLineStyleBottom;
-    [self setBackgroundColor:[UIColor clearColor]];
     self.topLineColor = gLineTopColor;
     self.bottomLineColor = gLineBottomColor;
 }
@@ -395,6 +442,7 @@
 	
 	if (self = [super initWithFrame:frame]) {
         [self setup];
+        [self setBackgroundColor:[UIColor clearColor]];
 	}
 	return self;
 }
@@ -403,6 +451,10 @@
         [self setup];
     }
 	return self;
+}
+- (void)awakeFromNib{
+    [super awakeFromNib];
+    self.separatorLineStyle = [self tag];
 }
 - (void)setFrame:(CGRect)frame{
 	[super setFrame:frame];

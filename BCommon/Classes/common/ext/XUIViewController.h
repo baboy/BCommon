@@ -37,6 +37,7 @@ enum{
 - (BOOL)shouldPopViewController:(UIViewController *)controller;
 - (IBAction)popViewController:(id)sender;
 - (void)showMessage:(NSString *)msg;
+- (void)showMessage:(NSString *)msg duration:(float)duration;
 - (void)showMessageAndFadeOut:(NSString *)msg;
 - (void)fadeOut;
 - (void)fadeOutAfterDelay:(float)t;

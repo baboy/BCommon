@@ -9,7 +9,7 @@
 #import "SlidingViewController.h"
 
 #define SlideViewClassFilter    @[@"UISlider", @"UIBarButtonItem"]
-
+#define DebugLog(...)    DLOG(__VA_ARGS__);
 enum {
     SlidingViewToLeftSide = 1,
     SlidingViewToRightSide = 2
@@ -90,12 +90,12 @@ typedef UInt32 SlidingViewOrientation;
     [self.viewControllers addObject:nav];
     
     if (animated) {
-        [UIView animateWithDuration:0.1
+        [UIView animateWithDuration:0.2
                          animations:^{
                              wrapper.frame = self.view.bounds;
                          }
                          completion:^(BOOL finished) {
-                             DLOG(@"[controller navigationController]:%@, %@", [controller navigationController], nav);
+                             DebugLog(@"[controller navigationController]:%@, %@", [controller navigationController], nav);
                          }];
     }else{
         nav.view.frame = self.view.bounds;
@@ -153,7 +153,7 @@ typedef UInt32 SlidingViewOrientation;
             return;
         }
     }
-    DLOG(@"[SlidingViewController] setSlidingControllerWithSlidingOrientation:%ld,%@", orientation, controller);
+    DebugLog(@"%ld,%@", orientation, controller);
     self.slidingOrientation = orientation;
     self.slidingController = controller;
 }
@@ -162,7 +162,7 @@ typedef UInt32 SlidingViewOrientation;
     return [self containerForView:controller];
 }
 - (void)removeController:(id)controller{
-    DLOG(@"[SlidingViewController] removeController:%@",controller);
+    DebugLog(@"%@",controller);
     if (![controller isKindOfClass:[UINavigationController class]]) {
         controller = [controller navigationController];
     }
@@ -194,7 +194,7 @@ typedef UInt32 SlidingViewOrientation;
     if (![self.viewControllers count] && self.delegate && [self.delegate respondsToSelector:@selector(slidingViewControllerDidBecomeEmpty:)]) {
         [self.delegate slidingViewControllerDidBecomeEmpty:self];
     }
-    DLOG(@"[SlidingViewController] removeController:%@ ended",controller);
+    DebugLog(@"%@ ended",controller);
 }
 - (id)backController{
     if (!self.slidingController || [self.viewControllers count]==0) {
@@ -203,7 +203,7 @@ typedef UInt32 SlidingViewOrientation;
     
     int i = [self.viewControllers indexOfObject:[self.slidingController navigationController]];
     if (i>=1 && self.viewControllers) {
-        DLOG(@"i:%d, %@",i, self.viewControllers);
+        DebugLog(@"i:%d, %@",i, self.viewControllers);
         return [self.viewControllers objectAtIndex:(i-1)];
     }
     return nil;
@@ -262,7 +262,7 @@ typedef UInt32 SlidingViewOrientation;
 
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner {
     CGPoint velocity = [panner velocityInView:self.view];
-    NSLog(@"gestureRecognizerShouldBegin:%@", NSStringFromCGPoint(velocity));
+    DebugLog(@"%@", NSStringFromCGPoint(velocity));
     if (self.firstTouch) {
         UIView *v = [self.firstTouch view];
         if (![v isKindOfClass:[UIScrollView class]]) {
@@ -278,7 +278,7 @@ typedef UInt32 SlidingViewOrientation;
         SlidingViewOrientation orientation = velocity.x > 0 ? SlidingViewToRightSide : SlidingViewToLeftSide;
         [self setSlidingControllerWithSlidingOrientation:orientation];
     }
-    NSLog(@"gestureRecognizerShouldBegin slidingController:%@", self.slidingController);
+    DebugLog(@"slidingController:%@", self.slidingController);
     if (ABS(velocity.x) <= ABS(velocity.y))
         return NO;
     if (!self.slidingController) {
@@ -291,7 +291,7 @@ typedef UInt32 SlidingViewOrientation;
         return YES;
     CGFloat v = [self locationOfPanner:panner];
     if ( v < 0 ) {
-        DLOG(@"no begin");
+        DebugLog(@"no begin");
         return NO;
     }
     return YES;
@@ -299,7 +299,11 @@ typedef UInt32 SlidingViewOrientation;
 
 - (BOOL)gestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     CGPoint velocity = [gestureRecognizer velocityInView:self.view];
-    NSLog(@"gestureRecognizer shouldReceiveTouch:%@%@", NSStringFromCGPoint(velocity), NSStringFromCGPoint([self slidingControllerView].frame.origin));
+    DebugLog(@"gestureRecognizer shouldReceiveTouch:%@ %@ %@",
+         NSStringFromCGPoint(velocity),
+         NSStringFromCGPoint([self slidingControllerView].frame.origin),
+         touch
+         );
     self.firstTouch = touch;
     id view = [touch view];
     if ([view isKindOfClass:[UISlider class]])
@@ -314,7 +318,6 @@ typedef UInt32 SlidingViewOrientation;
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    //return NO;
     return YES;
 }
 - (CGFloat)locationOfPanner:(UIPanGestureRecognizer*)panner{
@@ -395,7 +398,7 @@ typedef UInt32 SlidingViewOrientation;
                          if (finished) {
                              [self notifySlideOffset:slidingViewFrame.origin willShowController:willShowController];
                              [self notifyDidShowController:willShowController];
-                             DLOG(@"");
+                             DebugLog(@"");
                              if (slidingViewFrame.origin.x >= slidingViewFrame.size.width && ![self.slidingController canPullBack]) {
                                  [self removeController:self.slidingController];
                              }

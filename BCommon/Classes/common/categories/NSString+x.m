@@ -86,8 +86,8 @@
 	NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *err = nil;
 	BOOL flag = [fileManager moveItemAtPath:self toPath:newPath error:&err];
-    if (err) {
-        DLOG(@"[NSString] renameToPath error:%@",err);
+    if (!flag || err) {
+        DLOG(@"error:%@",err);
     }
     return flag;
 }
@@ -110,7 +110,7 @@
     NSError *err = nil;
     id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments|NSJSONReadingMutableContainers error:&err];
     if (err) {
-        NSLog(@"[NSString] jsonObject error:%@",err);
+        DLOG(@"[NSString] jsonObject error:%@",err);
     }
     return json;
 }

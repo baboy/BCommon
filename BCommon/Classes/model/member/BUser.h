@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #define Uid         [[BUser user] uid]?:@""
 #define UKEY        @"4Eg17LaBz60DSIEOA0"
 //[[BUser user] ukey]?@""
@@ -16,11 +15,11 @@
 #define UserParams  [NSMutableDictionary dictionaryWithObjectsAndKeys:UKEY, @"ukey", nil]
 
 
-
 @interface BUser : NSObject
 @property (nonatomic, retain) NSString *origin;
 @property (nonatomic, retain) NSString *uid;
 @property (nonatomic, retain) NSString *username;
+@property (nonatomic, retain) NSString *nickname;
 @property (nonatomic, retain) NSString *password;
 @property (nonatomic, retain) NSString *email;
 @property (nonatomic, retain) NSString *ukey;
@@ -38,7 +37,7 @@
 - (NSDictionary *)dict;
 - (BOOL)isLogin;
 //当前登录用户
-+ (BUser*) user;
++ (id) user;
 //用该用户信息登录
 + (BOOL)loginWithUser:(BUser *)user;
 //登出

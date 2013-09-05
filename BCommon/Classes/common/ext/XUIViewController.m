@@ -15,32 +15,29 @@
 @end
 
 @implementation XUINavigationController
+- (void)setNavigationBarBackgroundImage:(UIImage *)backgroundImage{
+    if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+        UIImage *navigationBarBackground = backgroundImage;
+        if (navigationBarBackground)
+            [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
+    }
+}
 - (id) initWithRootViewController:(UIViewController *)rootViewController{
     if (self = [super initWithRootViewController:rootViewController]) {
-        if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-            UIImage *navigationBarBackground = gNavBackground;
-            if (navigationBarBackground)
-                [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
-        }else{
-        }
+        [self setNavigationBarBackgroundImage:gNavBarBackgroundImage];
     }
     return self;
 }
 - (id) init{
     if (self = [super init]) {
-        if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-            UIImage *navigationBarBackground = gNavBackground;
-            if (navigationBarBackground)
-                [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
-        }else{
-        }
+        [self setNavigationBarBackgroundImage:gNavBarBackgroundImage];
     }
     return self;
 }
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         if ([self respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-        }else{
+            [self setNavigationBarBackgroundImage:gNavBarBackgroundImage];
         }
     }
     return self;
@@ -56,12 +53,7 @@
     if ([[self viewControllers] count] <= 1) {
         return;
     }
-    UIImage *backImg = [UIImage imageNamed:@"back"];
-    UIButton *btn = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, backImg.size.width, backImg.size.height)] autorelease];
-    [btn addTarget:viewController action:@selector(popViewController:) forControlEvents:UIControlEventTouchUpInside];
-    [btn setImage:backImg forState:UIControlStateNormal];
-    UIBarButtonItem *backButton = [[[UIBarButtonItem alloc] initWithCustomView:btn] autorelease];  
-    [viewController.navigationItem setLeftBarButtonItem:backButton animated:YES];
+    viewController.navigationItem.leftBarButtonItem = [Theme navBarButtonForKey:@"navigationbar-back-button" withTarget:viewController action:@selector(popViewController:)];
 }
 - (BOOL)shouldAutorotate{
     return NO;
@@ -106,7 +98,7 @@
 	}
 }
 - (void)didReceiveMemoryWarning{
-    NSLog(@"didReceiveMemoryWarning & reset");
+    DLOG(@"didReceiveMemoryWarning & reset");
     [super didReceiveMemoryWarning];
     [self reset];
 }
@@ -124,7 +116,7 @@
     float iconWidth = 32, gap = 5;
     float w = iconWidth, x = 0;
     if (title) {
-        w += [title sizeWithFont:gNavTitleFont].width+gap;
+        w += [title sizeWithFont:gNavBarTitleFont].width+gap;
     }
     w = MIN(w, self.navigationController.navigationBar.bounds.size.width*0.66);
     
@@ -141,11 +133,11 @@
     
     x += imgFrame.size.width + gap;
     
-    UILabel *titleLabel = createLabel(CGRectMake(x, 0, w-x, titleView.bounds.size.height), gNavTitleFont, [UIColor clearColor], [UIColor whiteColor], [UIColor clearColor], CGSizeZero, UITextAlignmentLeft, 1, UILineBreakModeTailTruncation);
+    UILabel *titleLabel = createLabel(CGRectMake(x, 0, w-x, titleView.bounds.size.height), gNavBarTitleFont, nil, gNavBarTitleColor, gNavBarTitleShadowColor, CGSizeZero, UITextAlignmentLeft, 1, UILineBreakModeTailTruncation);
     titleLabel.text = title;
     
-    [titleLabel.layer setShadowOpacity:1];
-    [titleLabel.layer setShadowColor:[[UIColor colorWithWhite:0 alpha:0.6] CGColor]];
+    [titleLabel.layer setShadowOpacity:gNavBarTitleShadowColor?1:0];
+    [titleLabel.layer setShadowColor:[gNavBarTitleShadowColor CGColor]];
     [titleLabel.layer setShadowRadius:1];
     [titleLabel.layer setShadowOffset:CGSizeMake(0, 1)];
     [titleView addSubview:titleLabel];
@@ -164,17 +156,16 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self awake];
-    [self.view setBackgroundColor:gViewBgColor];
+    [self.view setBackgroundColor:gViewBackgroundColor];
     if (self.navigationItem && !self.titleLabel) {
         CGRect rect = CGRectInset(self.navigationController.navigationBar.bounds, 60, 0);
-        UILabel *titleLabel = createLabel(rect, gNavTitleFont, [UIColor clearColor], gNavTitleColor, [UIColor clearColor], CGSizeZero, UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
+        UILabel *titleLabel = createLabel(rect, gNavBarTitleFont, nil, gNavBarTitleColor, nil, CGSizeZero, UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
         [titleLabel setText:self.navTitle];
-        
-        [titleLabel.layer setShadowOpacity:1];
-        [titleLabel.layer setShadowColor:[[UIColor colorWithWhite:0 alpha:0.6] CGColor]];
+        DLOG(@"%@",gNavBarTitleShadowColor);
+        [titleLabel.layer setShadowOpacity:gNavBarTitleShadowColor?1:0];
+        [titleLabel.layer setShadowColor:[gNavBarTitleShadowColor CGColor]];
         [titleLabel.layer setShadowRadius:1];
         [titleLabel.layer setShadowOffset:CGSizeMake(0, 1)];
-        
         [self.navigationItem setTitleView:titleLabel];
         [self setTitleLabel:titleLabel];
     }
@@ -205,7 +196,7 @@
 }
 - (void)viewDidUnload{
     [super viewDidUnload];
-    NSLog(@"viewDidUnload & reset");
+    DLOG(@"viewDidUnload & reset");
     [self reset];
 }
 - (void)reset{
@@ -233,71 +224,17 @@
 }
 
 /********/
-- (UIView *)createIndicator:(BOOL)withIndicator message:(NSString *)msg inView:(UIView *)container{
-    UIFont *font = [UIFont boldSystemFontOfSize:16];
-    CGSize size = [msg sizeWithFont:font];
-    float k = withIndicator?(2*28/2):0;
-    float w = sqrt(4*size.width*size.height/3+k*k)+k+10;
-    size = [msg sizeWithFont:font constrainedToSize:CGSizeMake(w, CGFLOAT_MAX)];
-    float h = size.height + withIndicator?28:0;
-    h = MAX(h, w*3/4);
-    w = MAX(w, 120);
-    CGRect rect = CGRectMake(0, 0, w+20, h+20);
-    
-	UIView *view = AUTORELEASE([[UIView alloc] initWithFrame:rect] );
-	view.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
-	view.layer.cornerRadius = 8.0;
-    
-    rect = CGRectInset(rect, 10, 10);
-    if (withIndicator) {
-        UIActivityIndicatorView *aiv = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
-        [aiv setFrame:CGRectMake(rect.origin.x+(rect.size.width-28)/2, rect.origin.y, 32, 32)];
-        [aiv startAnimating];
-        [view addSubview:aiv];
-        rect.origin.y += 28;
-        rect.size.height -= 28;
-    }
-    UILabel *label = createLabel(rect, font, nil, [UIColor whiteColor], [UIColor blackColor], CGSizeMake(0, -1), UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
-	label.text = msg;
-	label.textColor = [UIColor whiteColor];
-	[view addSubview:label];   
-    if (self.indicatorView && [self.indicatorView superview]) {
-        [self.indicatorView removeFromSuperview];
-    }
-    self.indicatorView = view;
-    DLOG(@"indicator: %@, %@", NSStringFromCGRect(container.bounds), NSStringFromCGRect(container.frame));
-    CGRect viewFrame = view.frame;
-    viewFrame.origin = CGPointMake((container.bounds.size.width-viewFrame.size.width)/2, (container.bounds.size.height-viewFrame.size.height)*0.35);
-    view.frame = viewFrame;
-    [container addSubview:view];
-    return  view;
+- (void)showMessage:(NSString *)msg duration:(float)duration{
+    [BIndicator showMessage:msg duration:duration inView:self.view];
 }
 - (void)showMessage:(NSString *)msg{
-    [self createIndicator:YES message:msg inView:self.view];
+    [BIndicator showMessage:msg inView:self.view];
 }
 - (void)showMessageAndFadeOut:(NSString *)msg{
-    [self createIndicator:NO message:msg inView:self.view];
-    [self fadeOutAfterDelay:2.0];
+    [BIndicator showMessage:msg duration:2.0 inView:self.view];
 }
 - (void)fadeOutAfterDelay:(float)t{
-    if (!self.indicatorView || ( self.indicatorView && ![self.indicatorView superview])) {
-        RELEASE(_indicatorView);
-        return;
-    }
-    [UIView animateWithDuration:0.1 delay:t 
-						options:UIViewAnimationOptionCurveEaseOut
-					 animations:^{
-                         if (!self.indicatorView) {
-                             return ;
-                         }
-						 CGAffineTransform _transform = CGAffineTransformMakeScale( 0.1 , 0.1 );
-						 [self.indicatorView setTransform:_transform];
-						 self.indicatorView.alpha = 0;
-					 } 
-					completion :^(BOOL finished){	
-                        [self.indicatorView removeFromSuperview];
-                        RELEASE(_indicatorView);
-					}];
+    [BIndicator fadeOutWithDelay:t];
 }
 - (void)fadeOut{
     [self fadeOutAfterDelay:0];

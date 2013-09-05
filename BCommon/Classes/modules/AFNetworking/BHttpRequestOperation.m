@@ -33,6 +33,13 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
         RELEASE(_receiveBlock);
     [super dealloc];
 }
+- (NSString *)responseString{
+    NSString *s = [super responseString];
+    if (!s && [self responseData]) {
+        s = AUTORELEASE([[NSString alloc] initWithData:[self responseData] encoding:NSUTF8StringEncoding]);
+    }
+    return s;
+}
 + (BOOL)canProcessRequest:(NSURLRequest *)urlRequest{
     return YES;
 }
@@ -47,7 +54,7 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
     //DLOG(@"cache file:%@",cacheFilePath);
     RELEASE(_cacheFilePath);
     _cacheFilePath = [cacheFilePath retain];
-    NSString *tmpFilePath = [cacheFilePath stringByAppendingPathExtension:@"download"];
+    NSString *tmpFilePath = [[NSString stringWithFormat:@"%@.%d",cacheFilePath,(int)(arc4random()*999999)] stringByAppendingPathExtension:@"download"];
     [self setTmpFilePath:tmpFilePath];
 }
 - (BHttpRequestCache *)requestCache{
@@ -60,6 +67,9 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
     NSData *data = [super responseData];
     if (!data && [self.cacheFilePath sizeOfFile] > 0) {
         data = [NSData dataWithContentsOfFile:self.cacheFilePath];
+        if (!data && [self.tmpFilePath fileExists]) {
+            data = [NSData dataWithContentsOfFile:self.tmpFilePath];
+        }
     }
     return data;
 }
@@ -95,8 +105,12 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection{
     [self.outputStream close];
     if (self.cacheFilePath) {
+        DLOG(@"renameto");
         [self.cacheFilePath deleteFile];
-        [self.tmpFilePath renameToPath:self.cacheFilePath];
+        BOOL flag = [self.tmpFilePath renameToPath:self.cacheFilePath];
+        if (![self.cacheFilePath fileExists]) {
+            DLOG(@"cache file:%d", flag);
+        }
     }
     [super connectionDidFinishLoading:connection];
 }

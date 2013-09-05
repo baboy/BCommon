@@ -13,24 +13,47 @@
 #define gTableViewSelectedBgColor [UIColor colorWithWhite:0.8 alpha:1]
 #define gLineTopColor [UIColor colorWithWhite:0.8 alpha:1]
 #define gLineBottomColor [UIColor colorWithWhite:1.0 alpha:1]
-#define gTableTitleFont     [UIFont boldSystemFontOfSize:16]
-#define gTableContentFont     [UIFont boldSystemFontOfSize:18]
-#define gTableTitleColor    [UIColor colorWithWhite:0 alpha:1]
-#define gTableTagFont     [UIFont systemFontOfSize:12]
-#define gTableNoteFont     [UIFont systemFontOfSize:12]
-#define gTableTagColor    [UIColor colorWithWhite:0.4 alpha:1]
-#define gTableDescFont     [UIFont systemFontOfSize:14]
-#define gTableDescColor    [UIColor colorWithWhite:0.6 alpha:1]
 
 /*section*/
 #define gTableSectionTitleFont  [UIFont systemFontOfSize:14]
 #define gTableSectionTitleColor [UIColor colorWithWhite:0 alpha:1]
 #define gTableSectionBgColor    [UIColor colorWithWhite:0.75 alpha:1]
-#define gNavTitleColor          [Theme colorForKey:@"navigationbar-title-color"]
-#define gNavTitleFont           [Theme fontForKey:@"navigationbar-title-font"]
-#define gNavBackground          [Theme imageForKey:@"navigationbar-background"]
 
-#define gViewBgColor            [UIColor colorWithWhite:0.9 alpha:1]
+// in theme config file
+//导航栏
+#define gNavBarTitleColor          [Theme colorForKey:@"navigationbar-title-color"]
+#define gNavBarTitleFont           [Theme fontForKey:@"navigationbar-title-font"]
+#define gNavBarTitleShadowColor          [Theme colorForKey:@"navigationbar-title-shadow-color"]
+#define gNavBarBackgroundImage  [Theme imageForKey:@"navigationbar-background"]
+#define gViewBackgroundColor    [Theme colorForKey:@"view-background-color"]
+
+// table
+#define gTableCellTitleFont     [Theme fontForKey:@"table-cell-title-font"]
+#define gTableCellTitleColor    [Theme colorForKey:@"table-cell-title-color"]
+
+#define gTableCellDescFont     [Theme fontForKey:@"table-cell-desc-font"]
+#define gTableCellDescColor    [Theme colorForKey:@"table-cell-desc-color"]
+
+
+#define gTableCellContentFont     [Theme fontForKey:@"table-cell-content-font"]
+#define gTableCellContentColor    [Theme colorForKey:@"table-cell-content-color"]
+
+#define gTableCellTagFont     [UIFont systemFontOfSize:12]
+#define gTableCellNoteFont     [UIFont systemFontOfSize:12]
+#define gTableCellTagColor    [UIColor colorWithWhite:0.4 alpha:1]
+
+
+
+#define gButtonTitleFont            [Theme fontForKey:@"button-title-font"]
+#define gButtonTitleColor           [Theme colorForKey:@"button-title-color"]
+#define gButtonTitleShadowColor     [UIColor colorWithWhite:0 alpha:0.5]
+
+
+#define gNavBarBackButton       [Theme navBarButtonForKey:@"navigationbar-back-button"]
+
+#define gPlayerPlayButton       [Theme buttonForKey:@"icon-play"]
+
+
 #define gThumbnailColor         [UIColor colorWithWhite:1.0 alpha:1]
 
 #define gNoteFont               [UIFont systemFontOfSize:12.0]
@@ -78,4 +101,13 @@
 + (UIColor *) colorForKey:(NSString *)key;
 + (UIFont *)  fontForKey:(NSString *)key;
 + (UIImage *) imageForKey:(NSString *)key;
++ (UIBarButtonItem *) navBarButtonForKey:(NSString *)key;
++ (UIBarButtonItem *) navBarButtonForKey:(NSString *)key withTarget:(id)target action:(SEL)action;
++ (UIButton *) buttonForKey:(NSString *)key;
++ (UIButton *) buttonForKey:(NSString *)key withTarget:(id)target action:(SEL)action;
++ (UIButton *) buttonWithTitle:(NSString *)title background:(NSString *)imageName  target:(id)target action:(SEL)action;
+
+
++ (UIButton *) buttonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action;
++ (UIBarButtonItem *) navButtonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action;
 @end

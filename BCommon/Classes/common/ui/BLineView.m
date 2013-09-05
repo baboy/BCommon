@@ -29,6 +29,7 @@
     if (self) {
         self.lineWidth = 0.5;
         [self setup];
+        [self setColors:lines];
     }
     return self;
 }

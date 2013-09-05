@@ -11,7 +11,6 @@
 @interface XUIImageView()
 @property (nonatomic, assign) id target;
 @property (nonatomic, assign) SEL action;
-@property (nonatomic, retain) BHttpRequestOperation *operation;
 @end
 
 @implementation XUIImageView
@@ -29,22 +28,10 @@
     }
 }
 - (void)setImageURL:(NSURL *)url{
-    if (self.operation) {
-        [self.operation cancel];
-    }
-    BHttpClient *client = [BHttpClient defaultClient];
-    NSURLRequest *request = [client requestWithGetURL:url parameters:nil];
-    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
-                          success:^(BHttpRequestOperation *operation, id data) {
-                              NSString *fp = operation.cacheFilePath;
-                              [self setImageAndNotify:[UIImage imageWithContentsOfFile:fp]];
-                          }
-                          failure:^(BHttpRequestOperation *request, NSError *error) {
-                              
-                          }];
-    [operation setRequestCache:[BHttpRequestCache fileCache]];
-    [client enqueueHTTPRequestOperation:operation];
-    [self setOperation:operation];
+    [super setImageURL:url withImageLoadedCallback:^(NSURL *imageURL, NSString *filePath, NSError *error) {
+        if (filePath)
+            [self setImageAndNotify:[UIImage imageWithContentsOfFile:filePath]];
+    }];
 }
 - (void)setImageURLString:(NSString *)urlString{
     if ([urlString isURL]) {
@@ -63,17 +50,7 @@
     UITapGestureRecognizer *tap = [[[UITapGestureRecognizer alloc] initWithTarget:target action:@selector(tapEvent:)] autorelease];
     [self addGestureRecognizer:tap];
 }
-+ (NSString *)cachePathForURL:(NSURL *)url{
-    return [BHttpRequestCache cachePathForURL:url];
-}
-+ (NSData *)cacheDataForURL:(NSURL *)url{
-    return [BHttpRequestCache cacheDataForURL:url];
-}
 - (void)dealloc{
-    if (self.operation) {
-        [self.operation cancel];
-    }
-    RELEASE(_operation);
     [super dealloc];
 }
 @end

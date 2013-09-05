@@ -11,8 +11,8 @@
 @implementation BDropTitleView
 - (id)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        [self.titleLabel setFont:gNavTitleFont];
-        [self.titleLabel setTextColor:gNavTitleColor];
+        [self.titleLabel setFont:gNavBarTitleFont];
+        [self.titleLabel setTextColor:gNavBarTitleColor];
         [self setTitleEdgeInsets:UIEdgeInsetsMake(-1,0, 0, 0)];
         //UIImage *arrow = [UIImage imageNamed:@"arrow_down"];
         //[self setImage:arrow forState:UIControlStateNormal];
@@ -28,7 +28,7 @@
     [self setTitle:title forState:UIControlStateNormal];
     [self setTitle:title forState:UIControlStateHighlighted];
     //UIImage *arrow = [self imageForState:UIControlStateNormal];
-    //CGSize tsize = [title sizeWithFont:gNavTitleFont];
+    //CGSize tsize = [title sizeWithFont:gNavBarTitleFont];
     //[self setImageEdgeInsets:UIEdgeInsetsMake(self.bounds.size.height-arrow.size.height-1, (tsize.width)/2+arrow.size.width+5, 0, 0)];
 }
 - (void)drawRect:(CGRect)rect{

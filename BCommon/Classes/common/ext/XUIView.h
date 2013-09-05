@@ -27,3 +27,6 @@ enum {
 - (void)setPannelStyleDefault;
 - (void)setBackgroundImage:(UIImage *)backgroundImage;
 @end
+
+@interface UIView(x)
+@end

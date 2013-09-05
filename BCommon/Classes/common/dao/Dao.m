@@ -21,6 +21,7 @@ static  FMDatabase *__db__ = nil;
         RELEASE(__db__);
         __db__ = [[FMDatabase databaseWithPath:getFilePath(@"db.sqlite", nil, nil)] retain] ;
         [__db__ open];
+        DLOG(@"sqlite lib:%@", getFilePath(@"db.sqlite", nil, nil));
     }
 	return __db__;
 }
@@ -29,7 +30,7 @@ static  FMDatabase *__db__ = nil;
     ret = [self.db executeUpdate:sql withArgumentsInArray:params];
     if (!ret) {
         NSString *errMsg = [self.db lastErrorMessage];
-        NSLog(@"errMsg:%@",errMsg);
+        DLOG(@"errMsg:%@",errMsg);
     }
 	return ret;
 }
@@ -42,7 +43,7 @@ static  FMDatabase *__db__ = nil;
         int n = [arr count];
         int i = 0;
         for ( NSString *sql in arr ) {
-            //NSLog(@"sql:%@",sql);
+            //DLOG(@"sql:%@",sql);
             i += [self executeSql:sql params:nil]?1:0;
         }
         ret = i == n;

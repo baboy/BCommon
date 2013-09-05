@@ -7,6 +7,7 @@
 //
 
 #import "BHttpClient.h"
+#define REQUEST_TIME_INTERVAL 30
 @interface BHttpClient(x)
 - (NSMutableDictionary *)defaultHeaders;
 @end
@@ -74,6 +75,7 @@
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [request setHTTPMethod:method];
     [request setAllHTTPHeaderFields:self.defaultHeaders];
+    request.timeoutInterval = REQUEST_TIME_INTERVAL;
     
     if (parameters) {
         if ([method isEqualToString:@"GET"] || [method isEqualToString:@"HEAD"] || [method isEqualToString:@"DELETE"]) {
@@ -102,7 +104,7 @@
             }
             
             if (error) {
-                NSLog(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
+                DLOG(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
             }
         }
     }
@@ -113,6 +115,7 @@
 - (NSMutableURLRequest *)requestWithPostURL:(NSURL *)url parameters:(NSDictionary *)parameters
 {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.timeoutInterval = REQUEST_TIME_INTERVAL;
     [request setHTTPMethod:@"POST"];
     [request setAllHTTPHeaderFields:self.defaultHeaders];
 	
@@ -136,7 +139,7 @@
         }
         
         if (error) {
-            NSLog(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
+            DLOG(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
         }
     }
     
@@ -148,6 +151,7 @@
         url = [NSURL URLWithString:urlString];
     }
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    request.timeoutInterval = REQUEST_TIME_INTERVAL;
     [request setHTTPMethod:@"GET"];
     [request setAllHTTPHeaderFields:self.defaultHeaders];
     

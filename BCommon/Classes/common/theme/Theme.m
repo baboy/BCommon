@@ -27,7 +27,10 @@
 
 + (UIColor *)colorForKey:(NSString *)key{
 	NSString *v = [DBCache valueForKey:key domain:@"Theme"];
-	if (v) {
+    if (!v) {
+        v = [DBCache valueForKey:[NSString stringWithFormat:@"%@-color", key] domain:@"Theme"];
+    }
+	if ([v length] > 0) {
 		NSArray *arr = [v split:@","];
         if ([arr count]==1 && (v.length>=6)) {
             return [UIColor colorFromString:v];
@@ -47,7 +50,10 @@
 //形如 16,1代表 16号粗体 16或者16,0 代表16号标准字体
 + (UIFont *)fontForKey:(NSString *)key{
 	NSString *v = [DBCache valueForKey:key domain:@"Theme"];
-	if (v) {
+    if (!v) {
+        v = [DBCache valueForKey:[NSString stringWithFormat:@"%@-font", key] domain:@"Theme"];
+    }
+	if ([v length] > 0) {
 		NSArray *arr = [v split:@","];
 		int n = [arr count];
 		float fsize;
@@ -79,5 +85,50 @@
         return image;
     }
     return nil;
+}
+
++ (UIBarButtonItem *) navBarButtonForKey:(NSString *)key withTarget:(id)target action:(SEL)action{
+    
+	NSString *v = [DBCache valueForKey:key domain:@"Theme"];
+    if (!v) {
+        v = key;
+    }
+    return createBarImageButtonItem(v, target, action);
+}
++ (UIBarButtonItem *) navBarButtonForKey:(NSString *)key{
+    return [Theme navBarButtonForKey:key withTarget:nil action:nil];
+}
++ (UIButton *) buttonForKey:(NSString *)key withTarget:(id)target action:(SEL)action{
+    NSString *v = [DBCache valueForKey:key domain:@"Theme"];
+    if (!v) {
+        v = key;
+    }
+    UIButton *btn = createImgButton(CGRectZero, v, target, action);
+    
+    return btn;
+}
++ (UIButton *) buttonForKey:(NSString *)key{
+    return [Theme buttonForKey:key withTarget:nil action:nil];
+}
+
++ (UIButton *) buttonWithTitle:(NSString *)title background:(NSString *)imageName  target:(id)target action:(SEL)action{
+    return createButton(CGRectZero, title, imageName, target, action);
+}
+
++ (UIButton *) buttonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action{
+    UIFont *titleFont = [Theme fontForKey:[NSString stringWithFormat:@"button-%@-title-font", style]];
+    UIColor *titleColor = [Theme colorForKey:[NSString stringWithFormat:@"button-%@-title-color", style]];
+    UIColor *backgroundColor = [Theme colorForKey:[NSString stringWithFormat:@"button-%@-background-color", style]];
+    UIButton *btn = createButton(frame, title, backgroundColor, target, action);
+    if (titleFont)
+        btn.titleLabel.font = titleFont;
+    if (titleColor)
+        [btn setTitleColor:titleColor forState:UIControlStateNormal];
+    return btn;
+}
++ (UIBarButtonItem *) navButtonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action{
+    UIButton *btn = [self buttonForStyle:style withTitle:title frame:frame target:target action:action];
+    UIBarButtonItem *barBtn = AUTORELEASE([[UIBarButtonItem alloc] initWithCustomView:btn]);
+    return barBtn;
 }
 @end

@@ -115,7 +115,52 @@ NSString * getChineseCalendar(NSDate * date){
     [localCal release];  
     
     return chineseCal_str;  
-}  
+}
+
+BOOL isSetAlarm(NSString *key, NSString *value){
+    for(UILocalNotification *noti in [[UIApplication sharedApplication] scheduledLocalNotifications]){
+        NSString *v = [noti.userInfo objectForKey:key];
+        if( (value && [[v description] isEqualToString:value]) || (!value && v) ){
+            return YES;
+        }
+    }
+    return NO;
+}
+BOOL setAlarm(NSString *key, id userInfo, NSString *msg, NSString *action, NSTimeInterval t){
+    if ( t <= 0 ) {
+        id notiNeedCancel = nil;
+        for(UILocalNotification *noti in [[UIApplication sharedApplication] scheduledLocalNotifications]){
+            if([noti.userInfo valueForKey:key] ){
+                notiNeedCancel = noti;
+                break;
+            }
+        }
+        if (notiNeedCancel)
+            [[UIApplication sharedApplication] cancelLocalNotification:notiNeedCancel];
+        return YES;
+    }
+    // add
+    UILocalNotification *notification = AUTORELEASE( [[UILocalNotification alloc] init] );
+    if (notification!=nil){
+        
+        NSDate *now=[NSDate date];
+        notification.fireDate = [now dateByAddingTimeInterval:(t - [now timeIntervalSince1970])];
+        notification.timeZone=[NSTimeZone defaultTimeZone];
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        
+        notification.alertBody = msg;
+        notification.alertAction = action;
+        notification.userInfo = @{key:(userInfo?:@{})};
+        
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        
+    }
+    return YES;
+}
+
+
+
+
 @implementation Utils
 + (NSString *)getFilePath:(NSString *)fn{
 	NSString *documentDirectory = [DOMAIN_DIRS objectAtIndex:0];
@@ -236,7 +281,7 @@ NSString * getChineseCalendar(NSDate * date){
 	return nil;
 }
 + (NSString *) getCacheFile:(NSString *)key{
-	//NSLog(@"util getCacheFile:%@",key);
+	//DLOG(@"util getCacheFile:%@",key);
 	NSString *documentsDirectory = [DOMAIN_DIRS objectAtIndex:0];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSString *dir = [documentsDirectory stringByAppendingPathComponent:WEB_CACHE_DIR];
@@ -247,7 +292,7 @@ NSString * getChineseCalendar(NSDate * date){
 	return nil;
 }
 + (BOOL) removeCacheFile:(NSString *)key{
-	//NSLog(@"util getCacheFile:%@",key);	
+	//DLOG(@"util getCacheFile:%@",key);	
 	NSString *documentsDirectory = [DOMAIN_DIRS objectAtIndex:0];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSString *dir = [documentsDirectory stringByAppendingPathComponent:WEB_CACHE_DIR];
@@ -429,7 +474,7 @@ NSString * getChineseCalendar(NSDate * date){
 		NSMutableDictionary *params = [NSMutableDictionary dictionary];
 		NSString *query = [url substringFromIndex:(i+1)];
 		int k = [query indexOf:@"#"];
-		//NSLog(@"k:%@,%d",query,k);
+		//DLOG(@"k:%@,%d",query,k);
 		if (k>=0) {
 			query = [query substringToIndex:k];
 		}

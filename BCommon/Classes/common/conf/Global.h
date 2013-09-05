@@ -9,17 +9,22 @@
 #import <Foundation/Foundation.h>
 
 #define gConf			@"http://m.tvie.com.cn/mcms/api2/config.php"
+#define LT_DEPRECATED() __OSX_AVAILABLE_BUT_DEPRECATED(__MAC_NA, __MAC_NA, __IPHONE_5_0, __IPHONE_6_0)
 
 #define APP                 [UIApplication sharedApplication]
 #define APPDelegate         [[UIApplication sharedApplication] delegate]
 #define APPRootController  (id)[(id)[[UIApplication sharedApplication] delegate] rootViewController]
 #define AppKeyWindow        [[UIApplication sharedApplication] keyWindow]
+
+
+#define REQUEST_BATCH_NUM   10
+
 #define AppModNews          @"news"
-#define AppModVod           @"video"
+#define AppModVod           @"vod"
 #define AppModLive          @"live"
 #define AppModReport        @"report"
 ///////
-#define DLOG(...)  NSLog(@"[DEBUG] %@",[NSString stringWithFormat:__VA_ARGS__]);
+#define DLOG(...)  NSLog(@"[DEBUG][%s] - [line:%d] %@",__func__, __LINE__, [NSString stringWithFormat:__VA_ARGS__]);
 
 #define DISPATCH_RELEASE(__OBJ__)   if(__OBJ__) { dispatch_release(__OBJ__); __OBJ__ = NULL; }
 #define RELEASE(__POINTER)  [__POINTER release]; __POINTER = nil;
@@ -54,9 +59,6 @@
 //全局配置文件
 
 
-#define gButtonFont                 [UIFont boldSystemFontOfSize:16.0]
-#define gButtonTitleShadowColor     [UIColor colorWithWhite:0 alpha:0.5]
-#define gButtonTitleColor           [UIColor colorWithWhite:1 alpha:1]
 
 #define gImageSet                   [NSSet setWithObjects:@"gif", @"jpg", @"jpeg", @"bmp", @"png", nil]
 
@@ -73,22 +75,23 @@
 
 #define AppLink  @"http://www.tvie.com.cn"
 
-//定义appkey & appsecret
-#define SinaWeiboCallback       @"http://m.tvie.com.cn/mcms/api2/mod/sns/callback.php"
-#define SinaWeiboAppKey         @"3462974483"
-#define SinaWeiboAppSecret      @"a122cf4a45dc4e1e1fbd3da3d822ac49"
-#define QQWeiboAppKey           @"801261473"
-#define QQWeiboAppSecret        @"f65e9368eb3038f255eac21efce99980"
-#define RenrenWeiboAppId        @"217106"
-#define RenrenWeiboAppKey       @"2bfa00bfed014943acdfc26a5af1332c"
-#define RenrenWeiboAppSecret    @"4571a4799f634b2798e9a5e310ae0710"
-
 #define DeviceID                [OpenUDID value]
 #define DeviceToken             [DBCache valueForKey:@"deviceToken"]
 
 //notify
 #define NotifyLogout    @"NotifyUserLogout"
 #define NotifyLogin    @"NotifyUserLogin"
+
+#define SystemVolumeChangeNotify @"AVSystemController_SystemVolumeDidChangeNotification"
+
+#define SystemAudioVolumeNotifyParameter @"AVSystemController_AudioVolumeNotificationParameter"
+
+// AppDelegate notify
+#define NotificationAppWillResignActive     @"AppWillResignActive"
+#define NotificationAppDidEnterBackground   @"AppDidEnterBackground"
+#define NotificationAppWillEnterBackground  @"AppWillEnterBackground"
+#define NotificationAppDidBecomeActive      @"AppDidBecomeActive"
+
 @interface G : NSObject {
 
 }

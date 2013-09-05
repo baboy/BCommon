@@ -28,6 +28,31 @@
 	NSString *s = [df stringFromDate:self];
 	return s;
 }
+- (NSString *)formatToHumanLang{
+    int t = (int)[[NSDate date] timeIntervalSinceDate:self];
+    t = MAX(t, 0);
+    if (t < 10) {
+        return NSLocalizedString(@"刚刚", nil);
+    }
+    if (t < 60) {
+        return [NSString stringWithFormat:NSLocalizedString(@"%d秒前", nil), t];
+    }
+    if (t < HourSec) {
+        t = t/60;
+        return [NSString stringWithFormat:NSLocalizedString(@"%d分钟前", nil), t];
+    }
+    if (t < DaySec) {
+        t = t/HourSec;
+        return [NSString stringWithFormat:NSLocalizedString(@"%d小时前", nil), t];
+    }
+    /*
+    if (t < (DaySec * 30)) {
+        t = t/DaySec;
+        return [NSString stringWithFormat:NSLocalizedString(@"%d天前", nil), t];
+    }
+     */
+    return [self format:NSLocalizedString(@"yyyy-MM-dd HH:mm", nil)];
+}
 - (NSString *)GMTFormat{
     NSDateFormatter *gmtFormatter = AUTORELEASE([[NSDateFormatter alloc] init]);
     [gmtFormatter setLocale:AUTORELEASE([[NSLocale alloc] initWithLocaleIdentifier:@"en_US"])];

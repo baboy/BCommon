@@ -57,7 +57,7 @@
 
 // Called by URL loading system in response to normal finish, error or abort. Cleans up in each case.
 - (void)stopLoading{
-    //NSLog(@"stopLoading...:%d",[[cacheRequest responseData] length]);
+    //DLOG(@"stopLoading...:%d",[[cacheRequest responseData] length]);
     if (self.cacheOperation) {
         [self.cacheOperation cancel];
     }

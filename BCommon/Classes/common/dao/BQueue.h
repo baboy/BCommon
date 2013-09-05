@@ -46,9 +46,13 @@
 + (BOOL) addForQueue:(NSString *)qid withData:(NSString *)data;
 
 + (BQueueItem *) getOneItemByQueue:(NSString *)qid;
++ (BQueueItem *) getOneItemByQueue:(NSString *)qid key:(NSString *)key;
 + (NSArray *) getAllItemsByQueue:(NSString *)qid;
++ (NSArray *) getAllItemsByQueue:(NSString *)qid itemClass:(Class)clazz;
+
 + (BOOL) removeById:(int) ID;
 + (BOOL) removeByQueue:(NSString *)qid;
++ (BOOL) removeByQueue:(NSString *)qid key:(NSString *)key;
 + (BOOL) removeByField:(NSString *)field value:(NSString *)val;
 + (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2;
 @end
@@ -63,16 +67,14 @@
 
 @interface BQueue (BQueueDeprecated)
 
-+ (BOOL) addDomain:(NSString *)domain queue:(NSString *)qid datas:(NSString *)data, ...;
-+ (BOOL) addDomain:(NSString *)domain queue:(NSString *)qid data:(NSString *)data;
-+ (BOOL) addQueue:(NSString *)qid data:(NSString *)data;
-+ (BQueueItem *) getOneItemByDomain:(NSString *)domain;
-+ (BQueueItem *) getOneItemByDomain:(NSString *)domain queue:(NSString *)qid;
-+ (NSArray *) getAllItemsByDomain:(NSString *)domain;
-+ (NSArray *) getAllItemsByDomain:(NSString *)domain queue:(NSString *)qid;
-+ (NSArray *) getAllItemsByQueue:(NSString *)qid;
-+ (BOOL) removeByDomain:(NSString *)domain;
-+ (BOOL) removeByDomain:(NSString *)domain queue:(NSString *)qid;
-+ (BOOL) removeByQueue:(NSString *)qid;
-+ (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2;
++ (BOOL) addDomain:(NSString *)domain queue:(NSString *)qid datas:(NSString *)data, ... LT_DEPRECATED();
++ (BOOL) addDomain:(NSString *)domain queue:(NSString *)qid data:(NSString *)data LT_DEPRECATED();
++ (BOOL) addQueue:(NSString *)qid data:(NSString *)data LT_DEPRECATED();
++ (BQueueItem *) getOneItemByDomain:(NSString *)domain LT_DEPRECATED();
++ (BQueueItem *) getOneItemByDomain:(NSString *)domain queue:(NSString *)qid LT_DEPRECATED();
++ (NSArray *) getAllItemsByDomain:(NSString *)domain LT_DEPRECATED();
++ (NSArray *) getAllItemsByDomain:(NSString *)domain queue:(NSString *)qid LT_DEPRECATED();
++ (BOOL) removeByDomain:(NSString *)domain LT_DEPRECATED();
++ (BOOL) removeByDomain:(NSString *)domain queue:(NSString *)qid LT_DEPRECATED();
++ (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2 LT_DEPRECATED();
 @end

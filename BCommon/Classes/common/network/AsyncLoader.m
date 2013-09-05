@@ -23,7 +23,7 @@
 
 }
 + (BHttpRequestOperation *)loadData:(NSString *)url param:(NSDictionary*)param cached:(BOOL)cached success:(void (^)(NSData *data))success failure:(void (^)(NSError *error))failure;{
-    NSLog(@"url:%@",url);
+    DLOG(@"url:%@",url);
     
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:url] parameters:param];

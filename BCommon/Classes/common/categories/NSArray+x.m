@@ -22,7 +22,7 @@
     NSError *err = nil;
     NSData *data = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&err];
     if (err) {
-        NSLog(@"[NSString] jsonObject error:%@",err);
+        DLOG(@"[NSString] jsonObject error:%@",err);
     }
     return data;
 }
@@ -30,7 +30,7 @@
     NSError *err = nil;
     NSData *data = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&err];
     if (err) {
-        NSLog(@"[NSString] jsonObject error:%@",err);
+        DLOG(@"[NSString] jsonObject error:%@",err);
     }
     NSString *s = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     return s;

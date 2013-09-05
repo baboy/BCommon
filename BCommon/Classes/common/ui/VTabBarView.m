@@ -10,6 +10,8 @@
 
 #define VTabBarIndicatorWidth 15
 #define VTabBarIndicatorHeight 20
+#define VTabBarMinHeight 26
+
 @interface VTabBarView()
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) NSMutableArray *btns;
@@ -23,15 +25,19 @@
 - (void)setup{
     _itemBorderWidth = 1;
     _separatorHeight= 2;
+    _itemHeight = VTabBarMinHeight;
     CGRect r = CGRectInset(self.bounds, 0, 0);
     _scrollView = [[UIScrollView alloc] initWithFrame:r];
     _scrollView.delegate = self;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
-    _scrollView.backgroundColor = [UIColor redColor];
+    _scrollView.backgroundColor = [UIColor clearColor];
     [self addSubview:_scrollView];
     _selectedIndex = 0;
+    
+    self.separatorTopColor = gLineTopColor;
+    self.separatorBottomColor = gLineBottomColor;
 }
 - (id)initWithFrame:(CGRect)frame{
 	self = [super initWithFrame:frame];
@@ -49,7 +55,7 @@
     float height = self.itemHeight;
     if (self.itemHeight <= 0) {
         float avgHeight = (self.scrollView.bounds.size.height - self.separatorHeight*(n-1))/n;
-        height = avgHeight>26?avgHeight:26;
+        height = MAX(avgHeight, VTabBarMinHeight);
     }
     return height;
 }
@@ -59,6 +65,10 @@
     if (self.items && flag) {
         [self setItems:self.items];
     }
+}
+- (void)setSeparatorColor:(UIColor *)separatorColor{
+    [self setSeparatorTopColor:separatorColor];
+    [self setSeparatorBottomColor:separatorColor];
 }
 - (void)clear{
     [self.scrollView.subviews makeObjectsPerformSelector:@selector( removeFromSuperview)];
@@ -96,7 +106,9 @@
             
         rect.origin.y += rect.size.height+self.spacing/2;
 		if (self.separatorHeight) {
-			BLineView *sep = [[BLineView alloc] initWithFrame:CGRectMake(0, rect.origin.y, rect.size.width,_separatorHeight) lines:[NSArray arrayWithObjects:gLineTopColor, gLineBottomColor, nil]];
+            NSArray *sepratorColors = @[self.separatorTopColor, self.separatorBottomColor];
+            
+			BLineView *sep = [[BLineView alloc] initWithFrame:CGRectMake(0, rect.origin.y, rect.size.width,_separatorHeight) lines:sepratorColors];
 			[self.scrollView addSubview:sep];
 			rect.origin.y += sep.bounds.size.height+_spacing/2;
 			[sep release];
@@ -113,6 +125,7 @@
 }
 - (void) createIndicator{
 	float w = VTabBarIndicatorWidth,h = VTabBarIndicatorHeight;
+    //创建上面箭头
 	CGRect r = CGRectMake((self.bounds.size.width-w)/2, 0, w, h);
 	self.topIndicator = [[[UIButton alloc] initWithFrame:r] autorelease];
 	[self.topIndicator setTag:1];
@@ -120,6 +133,7 @@
 	[self.topIndicator setImage:[UIImage imageNamed:@"arrow_up.png"] forState:UIControlStateNormal];
 	[self addSubview:self.topIndicator];
 	
+    //创建下边箭头
 	r.origin.y = self.bounds.size.height - h;
 	self.bottomIndicator = [[[UIButton alloc] initWithFrame:r] autorelease];
 	[self.bottomIndicator setTag:-1];
@@ -186,11 +200,9 @@
 - (void)tapIndicator:(UIButton *)button{
 	int i = [button tag];
 	CGPoint p = _scrollView.contentOffset;
-	float ow = _scrollView.contentSize.width - _scrollView.bounds.size.width;
-	float x = p.x - i*64;
-	x = MAX(0,x);
-	x = MIN(x,ow);
-	p.x = x;
+	float oh = _scrollView.contentSize.height - _scrollView.bounds.size.height;
+	float y = p.y - i*MIN(64, [self buttonHeight]);
+	p.y = MIN(MAX(0,y), oh);
 	[_scrollView setContentOffset:p animated:YES];
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -214,6 +226,10 @@
     RELEASE(_selectedTitleColor);
     RELEASE(_unSelectedTitleColor);
     RELEASE(_selectedImage);
+    
+    RELEASE(_separatorTopColor);
+    RELEASE(_separatorColor);
+    RELEASE(_separatorBottomColor);
 	[super dealloc];
 }
 @end

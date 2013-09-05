@@ -142,7 +142,7 @@
 	[self syncPageTitle];
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
-	NSLog(@"webViewDidFinishLoad");
+	DLOG(@"webViewDidFinishLoad");
     [self freshUI];
 	[self syncPageTitle];
 }

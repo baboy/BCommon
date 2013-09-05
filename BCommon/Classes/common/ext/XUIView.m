@@ -19,6 +19,7 @@
     if (self) {
         // Initialization code
         self.backgroundColor = [UIColor clearColor];
+        [self setExclusiveTouch:YES];
     }
     return self;
 }
@@ -82,4 +83,8 @@
 - (void)drawRect:(CGRect)rect{
     [self.backgroundImage drawInRect:rect];
 }
+@end
+
+@implementation UIView(x)
+
 @end

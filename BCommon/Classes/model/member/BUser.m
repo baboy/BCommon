@@ -14,6 +14,7 @@ static id _current_user = nil;
 - (void)dealloc{
     RELEASE(_uid);
     RELEASE(_username);
+    RELEASE(_nickname);
     RELEASE(_password);
     RELEASE(_email);
     RELEASE(_ukey);
@@ -34,6 +35,7 @@ static id _current_user = nil;
         [self setUid:nullToNil([dict valueForKey:@"uid"])];
         [self setEmail:nullToNil([dict valueForKey:@"email"])];
         [self setUsername:nullToNil([dict valueForKey:@"username"])];
+        [self setNickname:nullToNil([dict valueForKey:@"nickname"])];
         [self setUkey:nullToNil([dict valueForKey:@"ukey"])];
         [self setName:nullToNil([dict valueForKey:@"name"])];
         [self setPassword:nullToNil([dict valueForKey:@"password"])];
@@ -86,12 +88,16 @@ static id _current_user = nil;
 - (BOOL)isLogin{
     return USER?YES:NO;
 }
-+ (BUser *)user{
++ (id)user{
     @synchronized(self){
         if (!_current_user) {
             NSDictionary *json = [[DBCache valueForKey:@"USER"] json];
             if (json){
-                _current_user = [[[self class] alloc] initWithDictionary:json];
+                NSString *uc = [DBCache valueForKey:@"USER_CLASS"];
+                if (!uc)
+                    uc = NSStringFromClass([self class]);
+                Class userClass = NSClassFromString(uc);
+                _current_user = [[userClass alloc] initWithDictionary:json];
             }
         }
     }
@@ -99,11 +105,17 @@ static id _current_user = nil;
 }
 + (BOOL)loginWithUser:(BUser *)user{
     if (user) {
-        DLOG(@"dict:%@", [[user dict] jsonString]);
-        [DBCache setValue:[[user dict] jsonString] forKey:@"USER"];
-        RELEASE(_current_user);
-        [[NSNotificationCenter defaultCenter] postNotificationName:NotifyLogin object:nil];
-        return YES;
+        NSString *data = [[user dict] jsonString];
+        DLOG(@"%@", data);
+        if (data) {
+            [DBCache setValue:data forKey:@"USER"];
+            [DBCache setValue:NSStringFromClass([user class]) forKey:@"USER_CLASS"];
+            RELEASE(_current_user);
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotifyLogin object:nil];
+            return YES;
+        }else{
+            DLOG(@"error");
+        }
     }
     return NO;
 }

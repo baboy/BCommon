@@ -43,6 +43,8 @@
     _scrollView.backgroundColor = [UIColor clearColor];
     [self addSubview:_scrollView];
     _selectedIndex = 0;
+    self.separatorLeftColor = gLineTopColor;
+    self.separatorRightColor = gLineBottomColor;
 }
 - (id)initWithFrame:(CGRect)frame{
 	self = [super initWithFrame:frame];
@@ -61,6 +63,27 @@
     if (self.items && flag) {
         [self setItems:self.items];
     }
+}
+- (void)setSeparatorColor:(UIColor *)separatorColor{
+    [self setSeparatorLeftColor:separatorColor];
+    [self setSeparatorRightColor:separatorColor];
+}
+- (void)setSelectedImage:(id)selectedImage{
+    if ([selectedImage isKindOfClass:[UIColor class]]) {
+        selectedImage = [UIImage imageWithColor:selectedImage size:CGSizeMake(5, 5)];
+        selectedImage = [selectedImage resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+    }
+    RELEASE(_selectedImage);
+    _selectedImage = [selectedImage retain];
+    
+}
+- (void)setUnSelectedImage:(id)unSelectedImage{
+    if ([unSelectedImage isKindOfClass:[UIColor class]]) {
+        unSelectedImage = [UIImage imageWithColor:unSelectedImage size:CGSizeMake(5, 5)];
+        unSelectedImage = [unSelectedImage resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+    }
+    RELEASE(_unSelectedImage);
+    _unSelectedImage = [unSelectedImage retain];
 }
 - (void)clear{
     [self.scrollView.subviews makeObjectsPerformSelector:@selector( removeFromSuperview)];
@@ -102,6 +125,8 @@
 		rect.origin.x += rect.size.width+_spacing/2;
 		if (i != (n-1) && _separatorWidth) {
 			VSeparator *sep = [[VSeparator alloc] initWithFrame:CGRectMake(rect.origin.x, rect.origin.y, self.separatorWidth, rect.size.height)];
+            [sep setLeftLineColor:self.separatorLeftColor];
+            [sep setRightLineColor:self.separatorRightColor];
 			[self.scrollView addSubview:sep];
 			rect.origin.x += sep.bounds.size.width;
 			[sep release];
@@ -138,30 +163,15 @@
 	
 }
 - (void) tapItem:(UIButton *)button{
-	int i = [button tag];
-	[self selectAtIndex:i];
-	NSDictionary *item = [self.items objectAtIndex:i];    
-    //DLOG(@"[HTabBarView] didSelectItem:%@", item);
+    [self tappedAtIndex:[button tag]];
+}
+- (void) tappedAtIndex:(int)i{
+    [self selectAtIndex:i];
+	NSDictionary *item = [self.items objectAtIndex:i];
     if (self.delegate && [self.delegate respondsToSelector:@selector(tabBar:didSelectItem:)]) {
         [self.delegate tabBar:self didSelectItem:item];
     }
 }
-/*
-- (void) drawRect:(CGRect)rect{
-    float lineWidth = 0.5;
-	CGContextRef ctx = UIGraphicsGetCurrentContext();
-	CGContextSetLineWidth(ctx, lineWidth);
-	CGContextMoveToPoint(ctx, rect.origin.x,rect.origin.y+rect.size.height-2*lineWidth);
-	CGContextAddLineToPoint(ctx, rect.size.width,rect.origin.y+rect.size.height-2*lineWidth);
-	CGContextSetStrokeColorWithColor(ctx, gLineBottomColor.CGColor);
-	CGContextDrawPath(ctx, kCGPathStroke);
-	CGContextMoveToPoint(ctx, rect.origin.x,rect.origin.y+rect.size.height-lineWidth);
-	CGContextAddLineToPoint(ctx, rect.size.width,rect.origin.y+rect.size.height-lineWidth);
-	
-	CGContextSetStrokeColorWithColor(ctx, gLineTopColor.CGColor);
-	CGContextDrawPath(ctx, kCGPathStroke);	
-}
- */
 - (void) selectAtIndex:(int)i{
 	if (!_btns || i<0 || i >= [_btns count]) {
 		return;
@@ -174,7 +184,7 @@
         [preBtn setBackgroundImage:self.unSelectedImage forState:UIControlStateNormal];
 	}
 	UIButton *curBtn = [_btns objectAtIndex:i];
-    [curBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [curBtn setTitleColor:self.selectedTitleColor forState:UIControlStateNormal];
     [curBtn setBackgroundImage:self.selectedImage forState:UIControlStateNormal];
 	_selectedIndex = i;
 }
@@ -223,6 +233,10 @@
     RELEASE(_selectedTitleColor);
     RELEASE(_unSelectedTitleColor);
     RELEASE(_selectedImage);
+    
+    RELEASE(_separatorColor);
+    RELEASE(_separatorLeftColor);
+    RELEASE(_separatorRightColor);
 	[super dealloc];
 }
 @end

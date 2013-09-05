@@ -14,6 +14,7 @@
 #import "BQueue.h"
 #import "Utils.h"
 #import "UIUtils.h"
+#import "XUIView.h"
 #import "XUIViewController.h"
 #import "XUIImageView.h"
 #import "BLineView.h"
@@ -59,6 +60,7 @@
 #import "XUILabel.h"
 #import "BImageView.h"
 #import "BUser.h"
+#import "UIImageView+cache.h"
 
 //
 #import "Base64.h"

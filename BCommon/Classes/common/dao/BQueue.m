@@ -84,7 +84,10 @@
     }
     FMDatabase *db = [self db];
 	BOOL ret =[db executeUpdate:@"INSERT INTO queue (qid, key, data, data2, data3, data4, data5, data6) VALUES (?,?,?,?,?,?,?,?)",qid, key?:[NSNull null], data, [datas objectAtIndex:0], [datas objectAtIndex:1], [datas objectAtIndex:2], [datas objectAtIndex:3], [datas objectAtIndex:4]];
-    DLOG(@"[BQueue] add queue<%@,%@> state<%d>", qid, key, ret);
+    DLOG(@"<%@,%@> state<%d>", qid, key, ret);
+    if (!ret) {
+        DLOG(@"error:%@",[[self db] lastErrorMessage]);
+    }
 	[self close:db];
 	return ret;
 }
@@ -105,13 +108,27 @@
     [self close:db];
 	return ret;
 }
++ (BQueueItem *) getOneItemByQueue:(NSString *)qid key:(NSString *)key{
+    BQueueItem *ret = nil;
+    FMDatabase *db = [self db];
+	FMResultSet *rs = [db executeQuery:@"SELECT * FROM queue WHERE qid=? AND key=? LIMIT 0,1",qid,key];
+    if ([rs next]) {
+        ret = [[[BQueueItem alloc] initWithDictionary:[rs resultDict]] autorelease];
+    }
+    [self close:db];
+	return ret;
+}
 + (NSArray *) getAllItemsByQueue:(NSString *)qid{
+    return [self getAllItemsByQueue:qid itemClass:[BQueueItem class]];
+}
++ (NSArray *) getAllItemsByQueue:(NSString *)qid itemClass:(Class)clazz{
     NSMutableArray *ret = nil;
     FMDatabase *db = [self db];
 	FMResultSet *rs = [db executeQuery:@"SELECT * FROM queue WHERE qid=? ORDER BY id ASC", qid];
     ret = [NSMutableArray array];
     while ([rs next]) {
-        BQueueItem *qData = [[[BQueueItem alloc] initWithDictionary:[rs resultDict]] autorelease];
+        BQueueItem *qItem = AUTORELEASE([[BQueueItem alloc] initWithDictionary:[rs resultDict]]);
+        id qData = clazz ? AUTORELEASE([[clazz alloc] initWithDictionary:[qItem jsonData]]) : qItem;
         [ret addObject:qData];
     }
 	[self close:db];
@@ -121,6 +138,14 @@
     BOOL ret = NO;
     FMDatabase *db = [self db] ;
     ret = [db executeUpdate:@"DELETE FROM queue WHERE id=?",[NSNumber numberWithInt:ID]];
+	[self close:db];
+	return ret;
+}
+
++ (BOOL) removeByQueue:(NSString *)qid key:(NSString *)key{
+    BOOL ret = NO;
+    FMDatabase *db = [self db] ;
+    ret = [db executeUpdate:@"DELETE FROM queue WHERE qid=? AND key=?", qid, key];
 	[self close:db];
 	return ret;
 }
@@ -234,10 +259,6 @@
 	[self close:db];
 	return ret;
 }
-
-+ (NSArray *) getAllItemsByQueue:(NSString *)qid{
-	return [self getAllItemsByDomain:@"G" queue:qid];
-}
 + (BOOL) removeByDomain:(NSString *)domain{
     BOOL ret = NO;
     FMDatabase *db = [self db];
@@ -253,9 +274,6 @@
 	
 	[self close:db];
 	return ret;
-}
-+ (BOOL) removeByQueue:(NSString *)qid{
-    return [self removeByDomain:@"G" queue:qid];
 }
 + (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2{
     

@@ -25,18 +25,21 @@
     
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:imageURL parameters:nil];
-    BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
-                                                                 success:^(BHttpRequestOperation *operation, id data) {
-                                                                     NSDictionary *userInfo = [operation userInfo];
-                                                                     id object = userInfo?[userInfo valueForKey:@"object"]:nil;
-                                                                     NSString *fp = operation.cacheFilePath;
-                                                                     if (self == object) {
-                                                                         UIControlState state = [[userInfo valueForKey:@"state"] intValue];
-                                                                         [self setImage:[UIImage imageWithContentsOfFile:fp] forState:state];                                                                     }
-                                                                 }
-                                                                 failure:^(BHttpRequestOperation *request, NSError *error) {
-                                                                     DLOG(@"[UIButton] setImageURL error:%@", error);
-                                                                 }];
+    BHttpRequestOperation *operation =
+    [client dataRequestWithURLRequest:request
+                              success:^(BHttpRequestOperation *operation, id data) {
+                                  NSDictionary *userInfo = [operation userInfo];
+                                  id object = userInfo?[userInfo valueForKey:@"object"]:nil;
+                                  NSString *fp = operation.cacheFilePath;
+                                  if (self == object) {
+                                      UIControlState state = [[userInfo valueForKey:@"state"] intValue];
+                                      UIImage *image = [UIImage imageWithContentsOfFile:fp];
+                                      if (image)
+                                          [self setImage:image forState:state];                                                                     }
+                              }
+                              failure:^(BHttpRequestOperation *request, NSError *error) {
+                                  DLOG(@"[UIButton] setImageURL error:%@", error);
+                              }];
     id userInfo = @{@"object":self, @"state":[NSNumber numberWithInt:state]};
     [operation setUserInfo:userInfo];
     [operation setRequestCache:[BHttpRequestCache fileCache]];

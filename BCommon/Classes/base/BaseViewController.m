@@ -27,7 +27,7 @@
             viewController = [nav.viewControllers lastObject];
         }
         
-        viewController.navigationItem.leftBarButtonItem = createBarButtonItem(@"Back",  viewController, @selector(popViewControllerAnimated:));
+        viewController.navigationItem.leftBarButtonItem = [Theme navBarButtonForKey:@"navigationbar-back-button" withTarget:viewController action:@selector(popViewController:)];
         [self.rootController pushViewController:nav animated:animated];
         
     }

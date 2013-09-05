@@ -13,7 +13,7 @@
     NSError *err = nil;
     id json = [NSJSONSerialization JSONObjectWithData:self options:NSJSONReadingAllowFragments|NSJSONReadingMutableContainers error:&err];
     if (err) {
-        NSLog(@"[NSString] jsonObject error:%@",err);
+        DLOG(@"[NSString] jsonObject error:%@",err);
     }
     return json;
 }

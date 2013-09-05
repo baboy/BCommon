@@ -174,10 +174,9 @@
         [self startLoadMore];
     }
 }
-
 @end
 
-#define DragActiveAreaHeight    65.0f
+#define DragActiveAreaHeight    60.0f
 @implementation DragView
 
 - (void)dealloc {

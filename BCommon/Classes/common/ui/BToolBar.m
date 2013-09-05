@@ -85,7 +85,7 @@
     }
     layer.startPoint = CGPointZero;
     layer.endPoint = CGPointMake(0, 1);
-    NSLog(@"initLayer:%@",layer);
+    DLOG(@"initLayer:%@",layer);
 }
 - (void)setStyle:(BToolBarStyle)style{
     _style = style;

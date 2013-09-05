@@ -20,9 +20,14 @@
 @property (nonatomic, assign) int selectedIndex;
 @property (nonatomic, retain) UIColor *selectedTitleColor;
 @property (nonatomic, retain) UIColor *unSelectedTitleColor;
-@property (nonatomic, retain) UIImage *unSelectedImage;
-@property (nonatomic, retain) UIImage *selectedImage;
+@property (nonatomic, retain) id unSelectedImage;
+@property (nonatomic, retain) id selectedImage;
 
+@property (nonatomic, retain) UIColor *separatorColor;
+@property (nonatomic, retain) UIColor *separatorLeftColor;
+@property (nonatomic, retain) UIColor *separatorRightColor;
+
+- (void) tappedAtIndex:(int)i;
 - (void) selectAtIndex:(int)i;
 - (void) selectWithValue:(NSString *)v;
 @end

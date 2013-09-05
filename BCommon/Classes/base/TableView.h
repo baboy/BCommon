@@ -17,7 +17,7 @@ typedef NSInteger TableViewCellStyle;
 
 enum{
     SeparatorLineStyleNone,
-	SeparatorLineStyleTop = 1 << 0,
+	SeparatorLineStyleTop = 0 << 1,
 	SeparatorLineStyleBottom = 1 << 1
 };
 typedef NSInteger SeparatorLineStyle;
@@ -30,15 +30,19 @@ typedef NSInteger SeparatorLineStyle;
 - (void)setTopLineColor:(UIColor *)topLineColor bottomLineColor:(UIColor *)bottomLineColor;
 @end
 
-@interface TableViewSection : TableViewCellBackground{
-    UIView *_bg;
-}
+@interface TableViewSectionView : TableViewCellBackground
+
+@property (nonatomic, retain) UIImage *backgroundImage;
 @property (nonatomic, readonly) UILabel *titleLabel;
 @property (nonatomic, readonly) UILabel *rightLabel;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, retain) NSString *rightTitle;
 @property (nonatomic, retain) UIView *rightView;
-- (void)setBackgroundImage:(UIImage *)img;
+@property (nonatomic, retain) UIImage *leftImage;
+@property (nonatomic, retain) UIImage *rightImage;
+@property (nonatomic, assign) id object;
+
+- (void)addTarget:(id)target action:(SEL)action;
 
 @end
 

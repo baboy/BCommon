@@ -20,6 +20,9 @@
 @property (nonatomic, retain) UIColor *unSelectedTitleColor;
 @property (nonatomic, retain) UIImage *selectedImage;
 @property (nonatomic, retain) UIImage *unSelectedImage;
+@property (nonatomic, retain) UIColor *separatorColor;
+@property (nonatomic, retain) UIColor *separatorTopColor;
+@property (nonatomic, retain) UIColor *separatorBottomColor;
 
 - (void) selectAtIndex:(int)i;
 - (void) selectWithValue:(NSString *)v;

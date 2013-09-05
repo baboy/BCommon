@@ -89,7 +89,7 @@
 }
 /*
 - (void)drawRect:(CGRect)rect {  
-    NSLog(@"draw rect");
+    DLOG(@"draw rect");
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     if (self.barStyle == UIBarStyleDefault || self.barStyle == UIBarStyleBlackTranslucent) {
         [self drawCustomBackgroundInRect:rect content:ctx];

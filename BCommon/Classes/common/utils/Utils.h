@@ -20,13 +20,19 @@
 extern NSString * getImageCacheDir();
 extern NSString * getFilePath(NSString *fn, NSString *ext, NSString *dir);
 extern NSString * getBundleFile(NSString *fn);
-extern NSString * getBundleFileFromBundle(NSString *fn, NSString *fileType, NSString *bundleName, NSString *inDir);
+extern NSString * getBundleFileFromBundle(NSString *fn,
+                                          NSString *fileType,
+                                          NSString *bundleName,
+                                          NSString *inDir);
 extern NSString * getTempFilePath(NSString *fn);
 extern id nullToNil(id obj);
 extern id nilToNull(id obj);
 extern BOOL strIsNil(NSString *s);
 extern BOOL isURL(NSString *s);
 extern NSString * getChineseCalendar(NSDate * date);
+
+extern BOOL isSetAlarm(NSString *key, NSString *value);
+extern BOOL setAlarm(NSString *key, id userInfo, NSString *msg, NSString *action, NSTimeInterval t);
 
 @interface Utils : NSObject {
 

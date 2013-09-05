@@ -14,7 +14,7 @@ typedef enum {
     BImageTitleStyleBelow
 } BImageTitleStyle;
 
-@interface BImageView : UIView {
+@interface BImageView : XUIView {
 	NSString *		_imageLocalPath;
 	id				_target;
 	SEL				_action;

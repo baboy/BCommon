@@ -101,11 +101,11 @@
 	[_imgView setImage:[UIImage imageWithContentsOfFile:fp]];
 }
 - (void) setImageURL:(NSString *)imgUrl{
-    imgUrl = [imgUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	if ( !_imageURL && [_imageURL isEqualToString:imgUrl] ) {
+    NSString *url = [imgUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	if ( !_imageURL && [_imageURL isEqualToString:url] ) {
 		return;
 	}
-	if (![imgUrl isURL]) {
+	if (![url isURL]) {
 		[self setImageLocalPath:imgUrl];
 		return;
 	}
