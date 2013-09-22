@@ -18,6 +18,41 @@
 @property (nonatomic, assign) float spacing;
 @property (nonatomic, assign) float separatorWidth;
 @property (nonatomic, assign) int selectedIndex;
+@property (nonatomic, retain) UIFont *titleFont;
+@property (nonatomic, retain) UIColor *selectedTitleColor;
+@property (nonatomic, retain) UIColor *unSelectedTitleColor;
+@property (nonatomic, retain) id unSelectedImage;
+@property (nonatomic, retain) id selectedImage;
+
+@property (nonatomic, retain) UIColor *separatorColor;
+@property (nonatomic, retain) UIColor *separatorLeftColor;
+@property (nonatomic, retain) UIColor *separatorRightColor;
+@property (nonatomic, assign) BOOL  alignLeft;
+
+- (void) tappedAtIndex:(int)i;
+- (void) selectAtIndex:(int)i;
+- (void) selectWithValue:(NSString *)v;
+- (NSDictionary *)selectValue;
+@end
+
+@protocol HTabBarViewDelegate<NSObject>
+- (void)tabBar:(HTabBarView *)tabBar didSelectItem:(NSDictionary *)info;
+@end
+
+@protocol HTabBarGroupViewDelegate;
+
+
+@interface HTabBarGroupView : UIView
+@property (nonatomic, assign)id<HTabBarGroupViewDelegate>delegate;
+@property (nonatomic, retain) NSArray *items;
+@property (nonatomic, assign) float itemWidth;
+@property (nonatomic, assign) float itemBorderWidth;
+@property (nonatomic, assign) float spacing;
+@property (nonatomic, assign) float titleWidth;
+@property (nonatomic, retain) UIFont *titleFont;
+@property (nonatomic, retain) UIFont *titleColor;
+@property (nonatomic, assign) float separatorWidth;
+@property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, retain) UIColor *selectedTitleColor;
 @property (nonatomic, retain) UIColor *unSelectedTitleColor;
 @property (nonatomic, retain) id unSelectedImage;
@@ -27,11 +62,11 @@
 @property (nonatomic, retain) UIColor *separatorLeftColor;
 @property (nonatomic, retain) UIColor *separatorRightColor;
 
-- (void) tappedAtIndex:(int)i;
-- (void) selectAtIndex:(int)i;
-- (void) selectWithValue:(NSString *)v;
+- (void) tappedAtIndexPath:(NSIndexPath*)indexPath;
+- (void) selectAtIndexPath:(NSIndexPath*)indexPath;
+- (NSDictionary *)selectValue;
 @end
 
-@protocol HTabBarViewDelegate<NSObject>
-- (void)tabBar:(HTabBarView *)tabBar didSelectItem:(NSDictionary *)info;
+@protocol HTabBarGroupViewDelegate<NSObject>
+- (void)tabBar:(HTabBarGroupView *)groupView didSelectItem:(NSDictionary *)info;
 @end

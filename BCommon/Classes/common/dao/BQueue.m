@@ -134,6 +134,12 @@
 	[self close:db];
 	return ret;
 }
++ (BOOL) setStatus:(int) status forId:(int)ID{
+    [self setField:DBQFieldStatus
+             value:[NSString stringWithFormat:@"%d", status]
+          forField:DBQFieldID
+             value:[NSString stringWithFormat:@"%d", ID]];
+}
 + (BOOL) removeById:(int) ID{
     BOOL ret = NO;
     FMDatabase *db = [self db] ;

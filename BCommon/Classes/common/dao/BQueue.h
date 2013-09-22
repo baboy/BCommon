@@ -50,6 +50,7 @@
 + (NSArray *) getAllItemsByQueue:(NSString *)qid;
 + (NSArray *) getAllItemsByQueue:(NSString *)qid itemClass:(Class)clazz;
 
++ (BOOL) setStatus:(int) status forId:(int)ID;
 + (BOOL) removeById:(int) ID;
 + (BOOL) removeByQueue:(NSString *)qid;
 + (BOOL) removeByQueue:(NSString *)qid key:(NSString *)key;

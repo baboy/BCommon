@@ -11,4 +11,6 @@
 }
 + (int)	status;
 + (BOOL) isAvailable;
++ (BOOL) isConnectWifi;
++ (BOOL) isConnect3G;
 @end

@@ -10,6 +10,8 @@
 
 #define HTabBarIndicatorWidth 15
 #define HTabBarIndicatorHeight 20
+#define HTabBarGroupViewMinHeight   24
+
 
 @interface VSeparator : UIView{
 	UIColor * _leftLineColor;
@@ -32,7 +34,7 @@
 
 @implementation HTabBarView
 - (void)setup{
-    
+    self.titleFont = [UIFont systemFontOfSize:14];
     _itemBorderWidth = 1;
     _separatorWidth = 2;
     CGRect r = CGRectInset(self.bounds, 0, 0);
@@ -90,7 +92,15 @@
     [self.leftIndicator removeFromSuperview];
     [self.rightIndicator removeFromSuperview];
 }
-- (float)buttonWidth{
+- (float)totalWidth{
+    float w = 0;
+    for (NSDictionary *item in self.items) {
+		NSString *name = [item valueForKey:@"name"];
+        w += [name sizeWithFont:self.titleFont].width + 6 + self.spacing;
+    }
+    return w;
+}
+- (float)buttonAvgWidth{
 	int n = [_items count];
     float width = self.itemWidth;
     if (self.itemWidth <= 0) {
@@ -104,13 +114,18 @@
     [self clear];
     
 	int n = [_items count];
-    
+    BOOL flag = [self totalWidth] > self.scrollView.frame.size.width;
 	self.btns = [NSMutableArray arrayWithCapacity:n];
-	CGRect rect = CGRectInset(CGRectMake(0, 0, [self buttonWidth], self.bounds.size.height),0,0);
+	CGRect rect = CGRectInset(CGRectMake(0, 0, [self buttonAvgWidth], self.bounds.size.height),0,0);
 	for ( int i=0; i<n; i++) {
 		NSDictionary *item = [_items objectAtIndex:i];
 		NSString *name = [item valueForKey:@"name"];
-        name = name?name:[item valueForKey:@"title"];
+        name = name?:[item valueForKey:@"title"];
+        rect.size.width = [self buttonAvgWidth];
+        if (flag || self.alignLeft) {
+            rect.size.width = [name sizeWithFont:self.titleFont].width+10;
+        }
+        
 		UIButton *btn = [[UIButton alloc] initWithFrame:rect];
 		[btn addTarget:self action:@selector(tapItem:) forControlEvents:UIControlEventTouchUpInside];
 		[btn setTag:i];
@@ -122,8 +137,8 @@
 		[self.scrollView addSubview:btn];
 		[self.btns addObject:btn];
 		[btn release];
-		rect.origin.x += rect.size.width+_spacing/2;
-		if (i != (n-1) && _separatorWidth) {
+		rect.origin.x += rect.size.width+self.spacing/2;
+		if (i != (n-1) && self.separatorWidth) {
 			VSeparator *sep = [[VSeparator alloc] initWithFrame:CGRectMake(rect.origin.x, rect.origin.y, self.separatorWidth, rect.size.height)];
             [sep setLeftLineColor:self.separatorLeftColor];
             [sep setRightLineColor:self.separatorRightColor];
@@ -202,6 +217,10 @@
 		}
 	}
 }
+
+- (NSDictionary *)selectValue{
+    return [self.items objectAtIndex:self.selectedIndex];
+}
 - (void)tapIndicator:(UIButton *)button{
 	int i = [button tag];
 	CGPoint p = _scrollView.contentOffset;
@@ -270,6 +289,119 @@
 	RELEASE(_leftLineColor);
 	RELEASE(_rightLineColor);
 	[super dealloc];
+}
+@end
+@interface HTabBarGroupView()
+@property (nonatomic, retain) UIView *container;
+@property (nonatomic, retain) NSArray *bars;
+@end
+@implementation HTabBarGroupView
+
+- (void) dealloc{
+    RELEASE(_unSelectedImage);
+	RELEASE(_container);
+	RELEASE(_selectedIndexPath);
+	RELEASE(_items);
+    RELEASE(_selectedTitleColor);
+    RELEASE(_unSelectedTitleColor);
+    RELEASE(_selectedImage);
+    
+    RELEASE(_separatorColor);
+    RELEASE(_separatorLeftColor);
+    RELEASE(_separatorRightColor);
+    
+    RELEASE(_titleFont);
+    RELEASE(_titleColor);
+    RELEASE(_bars);
+	[super dealloc];
+}
+- (void)setup{
+    self.titleWidth = 44;
+    self.titleFont = [UIFont systemFontOfSize:14];
+    _container = [[UIView alloc] initWithFrame:self.bounds];
+    _container.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addSubview:_container];
+}
+- (id)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
+        [self setup];
+    }
+    return self;
+}
+- (void)awakeFromNib{
+    [self setup];
+}
+- (void)clear{
+    [self.container.subviews makeObjectsPerformSelector:@selector( removeFromSuperview)];
+}
+- (void)setItems:(NSArray *)items{
+    RELEASE(_items);
+    _items = [items retain];
+    [self clear];
+    
+    float w = self.bounds.size.width, h = self.bounds.size.height;
+	int numOfRows = [items count];
+    float itemHeight = h/numOfRows;
+    if ( itemHeight < HTabBarGroupViewMinHeight ) {
+        itemHeight = HTabBarGroupViewMinHeight;
+        CGRect frame = self.frame;
+        frame.size.height = itemHeight*numOfRows;
+        self.frame = frame;
+        self.container.frame = self.bounds;
+    }
+    
+    NSMutableArray *bars = [NSMutableArray arrayWithCapacity:numOfRows];
+    //
+    CGRect rowFrame = CGRectMake(0, 0, w, itemHeight);
+    for (int i = 0; i < numOfRows; i++) {
+        NSDictionary *item = [items objectAtIndex:i];
+        NSString *name = [item valueForKey:@"name"];
+        NSString *key = [item valueForKey:@"key"];
+        NSString *val = [item valueForKey:@"value"];
+        NSArray *options = [item valueForKey:@"options"];
+        CGRect barFrame = rowFrame;
+        if (name && [name length] > 0) {
+            float titleWidth = self.titleWidth > 0 ? self.titleWidth: 48;
+            CGRect titleFrame = rowFrame;
+            titleFrame.size.width = titleWidth;
+            UILabel *titleLabel = createLabel(titleFrame, self.titleFont, nil, self.titleColor, nil, CGSizeZero, UITextAlignmentLeft, 1, NSLineBreakByTruncatingTail);
+            titleLabel.text = name;
+            [self.container addSubview:titleLabel];
+            barFrame.origin.x += titleFrame.size.width + 5;
+            barFrame.size.width -= titleFrame.size.width + 5; 
+        }
+        HTabBarView *bar = AUTORELEASE( [[HTabBarView alloc] initWithFrame:barFrame] );
+        bar.delegate = self;
+        bar.alignLeft = YES;
+        bar.itemWidth = self.itemWidth;
+        bar.itemBorderWidth = self.itemBorderWidth;
+        bar.selectedImage = self.selectedImage;
+        bar.separatorWidth = self.separatorWidth;
+        bar.separatorColor = self.separatorColor;
+        bar.separatorLeftColor = self.separatorLeftColor;
+        bar.separatorRightColor = self.separatorRightColor;
+        bar.selectedTitleColor = self.selectedTitleColor;
+        bar.unSelectedTitleColor = self.unSelectedTitleColor;
+        bar.items = options;
+        bar.key = key;
+        
+        [self.container addSubview:bar];
+        rowFrame.origin.y += rowFrame.size.height;
+        [bars addObject:bar];
+    }
+    self.bars = bars;
+}
+- (void)tabBar:(HTabBarView *)tabBar didSelectItem:(NSDictionary *)info{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(tabBar:didSelectItem:)]) {
+        [self.delegate tabBar:self didSelectItem:[self selectValue]];
+    }
+}
+- (NSDictionary *)selectValue{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithCapacity:3];
+    for (HTabBarView *bar in self.bars) {
+        [params setValue:[bar.selectValue valueForKey:@"value"] forKey:bar.key];
+    }
+    return params;
 }
 @end
 

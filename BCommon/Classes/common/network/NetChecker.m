@@ -25,4 +25,10 @@
 + (BOOL) isAvailable{
 	return [self status] != NotReachable;
 }
++ (BOOL) isConnectWifi{
+    return ([self status] & ReachableViaWiFi) ? YES : NO;
+}
++ (BOOL) isConnect3G{
+    return ([self status] & ReachableViaWWAN) ? YES : NO;
+}
 @end
