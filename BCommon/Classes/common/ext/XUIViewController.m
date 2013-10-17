@@ -174,7 +174,7 @@
         rootController = rootController.modalViewController;
     }
     if ([rootController isKindOfClass:[UINavigationController class]]) {
-        rootController = [(UINavigationController*)rootController viewControllers];
+        //rootController = [(UINavigationController*)rootController viewControllers];
     }
     if (!self.navigationController) {
         

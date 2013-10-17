@@ -126,7 +126,7 @@
             rect.size.width = [name sizeWithFont:self.titleFont].width+10;
         }
         
-		UIButton *btn = [[UIButton alloc] initWithFrame:rect];
+		UIButton *btn = [[UIButton alloc] initWithFrame:CGRectInset(rect, 0, 2)];
 		[btn addTarget:self action:@selector(tapItem:) forControlEvents:UIControlEventTouchUpInside];
 		[btn setTag:i];
         btn.backgroundColor = [UIColor clearColor];

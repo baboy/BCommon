@@ -50,7 +50,7 @@
 @property (nonatomic, assign) float spacing;
 @property (nonatomic, assign) float titleWidth;
 @property (nonatomic, retain) UIFont *titleFont;
-@property (nonatomic, retain) UIFont *titleColor;
+@property (nonatomic, retain) UIColor *titleColor;
 @property (nonatomic, assign) float separatorWidth;
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, retain) UIColor *selectedTitleColor;

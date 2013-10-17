@@ -7,4 +7,4 @@
 //
 
 #import "BApi.h"
-NSString *ApiDomain = @"http://m.tvie.com.cn/mcms/api2";
+NSString *ApiDomain = @"http://m.tvie.com.cn/mcms/xchannel";

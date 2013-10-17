@@ -30,6 +30,7 @@
         [_topLine setColors:[NSArray arrayWithObjects:gLineTopColor,gLineBottomColor,nil]];
         //[self addSubview:_topLine];
     }
+    self.backgroundColor = [UIColor clearColor];
     [self setScrollsToTop:YES];
 }
 - (id) initWithFrame:(CGRect)frame style:(UITableViewStyle)style{
