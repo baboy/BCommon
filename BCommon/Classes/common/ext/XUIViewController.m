@@ -16,7 +16,12 @@
 
 @implementation XUINavigationController
 - (void)setNavigationBarBackgroundImage:(UIImage *)backgroundImage{
-    if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+    if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarPosition:barMetrics:)]) {
+        
+        backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsMake(backgroundImage.size.height/2, backgroundImage.size.width/2, backgroundImage.size.height/2, backgroundImage.size.width/2)];
+        [self.navigationBar setBackgroundImage:backgroundImage forBarPosition:UIBarPositionTopAttached barMetrics:UIBarMetricsDefault];
+    }
+    else if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
         UIImage *navigationBarBackground = backgroundImage;
         if (navigationBarBackground)
             [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
@@ -36,9 +41,7 @@
 }
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        if ([self respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
-            [self setNavigationBarBackgroundImage:gNavBarBackgroundImage];
-        }
+        [self setNavigationBarBackgroundImage:gNavBarBackgroundImage];
     }
     return self;
 }
@@ -89,6 +92,7 @@
 }
 - (void) awake{
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
 	_frame = self.view.bounds;
     if (self.navigationController) {
        // _frame.size.height -= self.navigationController.navigationBar.bounds.size.height;
