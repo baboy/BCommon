@@ -22,6 +22,7 @@
 #import "TableView.h"
 #import "TableCell.h"
 #import "BImageView.h"
+#import "NetChecker.h"
 
 
 #import "BaseViewController.h"

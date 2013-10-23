@@ -53,6 +53,9 @@
     [self setImageURL:imageURL placeholderImage:placeholderImage withImageLoadedCallback:nil];
 }
 
+- (void)setImageURL:(NSURL *)imageURL withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback{
+    [self setImageURL:imageURL placeholderImage:nil withImageLoadedCallback:callback];
+}
 
 + (NSString *)cachePathForURL:(NSURL *)imageURL{
     return [BHttpRequestCache cachePathForURL:imageURL];

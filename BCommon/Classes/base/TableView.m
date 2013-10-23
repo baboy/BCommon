@@ -17,8 +17,6 @@
 @implementation TableView
 
 - (void)setup{
-    self.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.backgroundColor = [UIColor clearColor];
     if (self.style != UITableViewStyleGrouped) {
         if (_topLine && [_topLine superview]) {
             [_topLine removeFromSuperview];
@@ -36,6 +34,8 @@
 - (id) initWithFrame:(CGRect)frame style:(UITableViewStyle)style{
 	self = [super initWithFrame:frame style:style];
 	if (self) {
+        self.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.backgroundColor = [UIColor clearColor];
         [self setup];
     }
 	return self;
@@ -43,6 +43,8 @@
 - (id) initWithFrame:(CGRect)frame{
 	self = [super initWithFrame:frame style:UITableViewStylePlain];
 	if (self) {
+        self.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.backgroundColor = [UIColor clearColor];
         [self setup];
 		
 	}
