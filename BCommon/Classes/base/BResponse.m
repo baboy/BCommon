@@ -49,7 +49,7 @@ NSString *HttpRequestDomain = @"X-Channel request error";
     return error;
 }
 - (id)data{
-    return [self.dict valueForKey:@"data"];
+    return [self.dict valueForKey:@"data"] ;
 }
 - (void)dealloc{
     RELEASE(_dict);

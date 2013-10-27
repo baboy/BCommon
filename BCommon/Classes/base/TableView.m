@@ -36,6 +36,8 @@
 	if (self) {
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.backgroundColor = [UIColor clearColor];
+        self.delegate = self;
+        self.dataSource = self;
         [self setup];
     }
 	return self;
@@ -45,6 +47,8 @@
 	if (self) {
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         self.backgroundColor = [UIColor clearColor];
+        self.delegate = self;
+        self.dataSource = self;
         [self setup];
 		
 	}
@@ -333,7 +337,6 @@
         [self addSubview:_rightLabel];
         
         self.backgroundColor = gTableSectionBgColor;
-        
         UITapGestureRecognizer *tap = AUTORELEASE([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEvent:)]);
         [self addGestureRecognizer:tap];
         
@@ -440,6 +443,7 @@
     self.separatorLineStyle = SeparatorLineStyleBottom;
     self.topLineColor = gLineTopColor;
     self.bottomLineColor = gLineBottomColor;
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 - (id)initWithFrame:(CGRect)frame{
 	
@@ -463,6 +467,10 @@
 	[super setFrame:frame];
 	[self setNeedsDisplay];
 }
+- (void)willMoveToSuperview:(UIView *)newSuperview{
+    [super willMoveToSuperview: newSuperview];
+    [self setNeedsDisplay];
+}
 - (void)drawLine:(CGPoint)p1 toPoint:(CGPoint)p2 color:(UIColor *)color inContext:(CGContextRef)ctx{
 	CGContextMoveToPoint(ctx, p1.x,p1.y);
 	CGContextAddLineToPoint(ctx, p2.x,p2.y);	
@@ -477,6 +485,7 @@
     [self setNeedsDisplay];
 }
 - (void)setBackgroundImage:(UIImage *)backgroundImage{
+    self.backgroundColor = [UIColor clearColor];
     RELEASE(_backgroundImage);
     _backgroundImage = [backgroundImage retain];
     [self setNeedsDisplay];

@@ -35,7 +35,7 @@
 @property (nonatomic, retain) NSDictionary *metadata;
 - (id)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dict;
-- (BOOL)isLogin;
++ (BOOL)isLogin;
 //当前登录用户
 + (id) user;
 //用该用户信息登录

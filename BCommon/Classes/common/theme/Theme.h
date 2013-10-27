@@ -95,7 +95,10 @@
 
 #define defNavBgColor           [UIColor colorFromString:@"#1ba1e2"]
 
-
+#define ThemeSingleLineColor [Theme colorForKey:@"single-line-color"]
+#define ThemeTabBarSelectTitleColor [Theme colorForKey:@"tabbar-select-title-color"]
+#define ThemeTabBarUnSelectTitleColor [Theme colorForKey:@"tabbar-unselect-title-color"]
+#define ThemeSectionViewBackground [Theme imageForKey:@"table-section-background"]
 @interface Theme : NSObject
 + (void)setup:(NSString *)theme;
 + (UIColor *) colorForKey:(NSString *)key;

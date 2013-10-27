@@ -85,7 +85,7 @@ static id _current_user = nil;
     
     return dict;
 }
-- (BOOL)isLogin{
++ (BOOL)isLogin{
     return USER?YES:NO;
 }
 + (id)user{

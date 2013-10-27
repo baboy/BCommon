@@ -103,4 +103,14 @@
     [self.pushViewController.view removeFromSuperview];
     self.pushViewController = nil;
 }
+- (void)slidingViewController:(id)slidingView didSlideToController:(UIViewController *)controller{
+    if (controller) {
+        [controller viewWillAppear:YES];
+    }
+}
+- (void)slidingViewController:(id)slidingView willSlideToController:(UIViewController *)controller{
+    if (controller) {
+        [controller viewDidAppear:YES];
+    }
+}
 @end

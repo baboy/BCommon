@@ -9,7 +9,7 @@
 #import "UIUtils.h"
 #import "BCommon.h"
 
-UIView * loadViewFromNib(Class nibClass,id owner){    
+id loadViewFromNib(Class nibClass,id owner){
     NSArray *objectsInNib = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass(nibClass)
                                                           owner:owner
                                                         options:nil];

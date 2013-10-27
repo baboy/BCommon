@@ -52,6 +52,7 @@
 @property (nonatomic, retain) UIFont *titleFont;
 @property (nonatomic, retain) UIColor *titleColor;
 @property (nonatomic, assign) float separatorWidth;
+@property (nonatomic, retain) UIColor *vSeparatorColor;
 @property (nonatomic, retain) NSIndexPath *selectedIndexPath;
 @property (nonatomic, retain) UIColor *selectedTitleColor;
 @property (nonatomic, retain) UIColor *unSelectedTitleColor;
@@ -62,8 +63,6 @@
 @property (nonatomic, retain) UIColor *separatorLeftColor;
 @property (nonatomic, retain) UIColor *separatorRightColor;
 
-- (void) tappedAtIndexPath:(NSIndexPath*)indexPath;
-- (void) selectAtIndexPath:(NSIndexPath*)indexPath;
 - (NSDictionary *)selectValue;
 @end
 

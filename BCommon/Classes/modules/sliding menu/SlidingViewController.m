@@ -202,7 +202,7 @@ typedef UInt32 SlidingViewOrientation;
     }
     
     int i = [self.viewControllers indexOfObject:[self.slidingController navigationController]];
-    if (i>=1 && self.viewControllers) {
+    if (i>=1 && i <= [self.viewControllers count] && self.viewControllers) {
         DebugLog(@"i:%d, %@",i, self.viewControllers);
         return [self.viewControllers objectAtIndex:(i-1)];
     }
@@ -214,11 +214,17 @@ typedef UInt32 SlidingViewOrientation;
         id c = [[self.viewControllers objectAtIndex:i] topViewController];
         UIView *view = [self containerForView:c];
         CGFloat x = view.frame.origin.x;
+        //向左滑动 显示最上面的
         if ( (x >= 0  && x < view.bounds.size.width ) && orientation == SlidingViewToLeftSide) {
-            return controller;
+            controller = c;
+            break;
         }
-        if (x == 0 && orientation == SlidingViewToRightSide) {
-            return controller;
+        //向右滑动，获取倒数第二个
+        if (x >= 0 && orientation == SlidingViewToRightSide) {
+            if (i>0) {
+                controller = [[self.viewControllers objectAtIndex:(i-1)] topViewController];
+            }
+            break;
         }
     }
     return controller;

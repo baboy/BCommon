@@ -17,7 +17,7 @@ typedef NSInteger TableViewCellStyle;
 
 enum{
     SeparatorLineStyleNone,
-	SeparatorLineStyleTop = 0 << 1,
+	SeparatorLineStyleTop = 1 << 0,
 	SeparatorLineStyleBottom = 1 << 1
 };
 typedef NSInteger SeparatorLineStyle;
@@ -72,7 +72,7 @@ typedef NSInteger SeparatorLineStyle;
 - (void)tableView:(id)tableView cacheImagePath:(NSString *)imagePath forIndexPath:(NSIndexPath *)indexPath;
 @end
 
-@interface TableView : UITableView <UIScrollViewDelegate>
+@interface TableView : UITableView <UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, retain) NSOperationQueue *queue;
 @property (nonatomic, retain) BLineView *topLine;
 @property (nonatomic, assign) BOOL useCache;

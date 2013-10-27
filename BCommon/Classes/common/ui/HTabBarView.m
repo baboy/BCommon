@@ -126,7 +126,7 @@
             rect.size.width = [name sizeWithFont:self.titleFont].width+10;
         }
         
-		UIButton *btn = [[UIButton alloc] initWithFrame:CGRectInset(rect, 0, 2)];
+		UIButton *btn = [[UIButton alloc] initWithFrame:CGRectInset(rect, 0, 3)];
 		[btn addTarget:self action:@selector(tapItem:) forControlEvents:UIControlEventTouchUpInside];
 		[btn setTag:i];
         btn.backgroundColor = [UIColor clearColor];
@@ -291,7 +291,7 @@
 	[super dealloc];
 }
 @end
-@interface HTabBarGroupView()
+@interface HTabBarGroupView()<HTabBarViewDelegate>
 @property (nonatomic, retain) UIView *container;
 @property (nonatomic, retain) NSArray *bars;
 @end
@@ -307,6 +307,7 @@
     RELEASE(_selectedImage);
     
     RELEASE(_separatorColor);
+    RELEASE(_vSeparatorColor);
     RELEASE(_separatorLeftColor);
     RELEASE(_separatorRightColor);
     
@@ -384,6 +385,14 @@
         bar.unSelectedTitleColor = self.unSelectedTitleColor;
         bar.items = options;
         bar.key = key;
+        if ( i > 0 && self.vSeparatorColor) {
+            CGRect lineRect = rowFrame;
+            lineRect.origin.y --;
+            lineRect.size.height = 1;
+            UIView *line = [[[UIView alloc] initWithFrame:lineRect] autorelease];
+            [line setBackgroundColor:self.vSeparatorColor];
+            [self.container addSubview:line];
+        }
         
         [self.container addSubview:bar];
         rowFrame.origin.y += rowFrame.size.height;

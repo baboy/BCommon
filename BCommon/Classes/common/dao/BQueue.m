@@ -64,21 +64,23 @@
 @implementation BQueue
 
 + (BOOL) addForQueue:(NSString *)qid withKey:(NSString *)key withDatas:(NSString *)data, ...{
-    if (!data || !qid) {
+    if ((!data && !key) || !qid) {
         return NO;
     }
     NSMutableArray *datas = [NSMutableArray arrayWithCapacity:5];
-    va_list args;
-    va_start(args, data);
-    id arg;
-    
-    while ( (arg = va_arg(args, NSString*) ) != nil) {
-        [datas addObject:arg];
-        if ([datas count]>=5) {
-            break;
+    if (data) {
+        va_list args;
+        va_start(args, data);
+        id arg;
+        
+        while ( (arg = va_arg(args, NSString*) ) != nil) {
+            [datas addObject:arg];
+            if ([datas count]>=5) {
+                break;
+            }
         }
+        va_end(args);
     }
-    va_end(args);
     for (int i=[datas count]; i<5; i++) {
         [datas addObject:[NSNull null]];
     }
@@ -113,13 +115,13 @@
     FMDatabase *db = [self db];
 	FMResultSet *rs = [db executeQuery:@"SELECT * FROM queue WHERE qid=? AND key=? LIMIT 0,1",qid,key];
     if ([rs next]) {
-        ret = [[[BQueueItem alloc] initWithDictionary:[rs resultDict]] autorelease];
+        ret = [[[BQueueItem alloc] initWithDictionary:[rs resultDictionary]] autorelease];
     }
     [self close:db];
 	return ret;
 }
 + (NSArray *) getAllItemsByQueue:(NSString *)qid{
-    return [self getAllItemsByQueue:qid itemClass:[BQueueItem class]];
+    return [self getAllItemsByQueue:qid itemClass:nil];
 }
 + (NSArray *) getAllItemsByQueue:(NSString *)qid itemClass:(Class)clazz{
     NSMutableArray *ret = nil;
@@ -127,7 +129,7 @@
 	FMResultSet *rs = [db executeQuery:@"SELECT * FROM queue WHERE qid=? ORDER BY id ASC", qid];
     ret = [NSMutableArray array];
     while ([rs next]) {
-        BQueueItem *qItem = AUTORELEASE([[BQueueItem alloc] initWithDictionary:[rs resultDict]]);
+        BQueueItem *qItem = AUTORELEASE([[BQueueItem alloc] initWithDictionary:[rs resultDictionary]]);
         id qData = clazz ? AUTORELEASE([[clazz alloc] initWithDictionary:[qItem jsonData]]) : qItem;
         [ret addObject:qData];
     }
