@@ -204,8 +204,11 @@
 }
 - (void)startUpdate{
     if (self.isSupportUpdate) {
-        if (self.contentInset.top != [self.updateView activeHeight]-5) {
-            self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
+        if (self.updateView.state != DragStateLoading) {
+            [UIView animateWithDuration:0.3
+                             animations:^{
+                                 self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);
+                             }];
         }
         [self.updateView setState:DragStateLoading];
         if (self.delegate && [self.delegate respondsToSelector:@selector(update:)]) {

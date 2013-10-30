@@ -38,7 +38,6 @@ extern BOOL setAlarm(NSString *key, id userInfo, NSString *msg, NSString *action
 
 };
 + (NSString *)	getBundleFile:(NSString *)fn;
-+ (UIImage *)	getViewShot:(UIView *)view;
 
 + (NSString *)getFilePath:(NSString *)fn;
 + (NSString *)getFilePath:(NSString *)fn inDir:(NSString *)dir;

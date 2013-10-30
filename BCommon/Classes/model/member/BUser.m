@@ -9,35 +9,20 @@
 #import "BUser.h"
 
 static id _current_user = nil;
-
+@interface BUser()
+@property (nonatomic, retain) NSMutableDictionary *dict;
+@end
 @implementation BUser
 - (void)dealloc{
-    RELEASE(_uid);
-    RELEASE(_username);
-    RELEASE(_nickname);
-    RELEASE(_password);
-    RELEASE(_email);
-    RELEASE(_ukey);
-    RELEASE(_name);
-    RELEASE(_origin);
-    RELEASE(_metadata);
-    RELEASE(_avatar);
-    RELEASE(_mobile);
-    RELEASE(_avatar);
-    RELEASE(_education);
-    RELEASE(_school);
-    RELEASE(_desc);
-    RELEASE(_birthday);
+    RELEASE(_dict);
     [super dealloc];
 }
 - (id)initWithDictionary:(NSDictionary *)dict{
     if ( self = [super init] ) {
+        _dict = [[NSMutableDictionary alloc] initWithDictionary:dict];
         [self setUid:nullToNil([dict valueForKey:@"uid"])];
         [self setEmail:nullToNil([dict valueForKey:@"email"])];
-        [self setUsername:nullToNil([dict valueForKey:@"username"])];
-        [self setNickname:nullToNil([dict valueForKey:@"nickname"])];
         [self setUkey:nullToNil([dict valueForKey:@"ukey"])];
-        [self setName:nullToNil([dict valueForKey:@"name"])];
         [self setPassword:nullToNil([dict valueForKey:@"password"])];
         [self setAvatar:nullToNil([dict valueForKey:@"avatar"])];
         [self setGender:[nullToNil([dict valueForKey:@"gender"]) intValue]];
@@ -63,27 +48,125 @@ static id _current_user = nil;
     }
     return self;
 }
+#pragma username
+- (void)setUsername:(NSString *)username{
+    [self setValue:username forKey:@"username"];
+}
+- (NSString *)username{
+    return [self get:@"username"];
+}
+#pragma ukey
+- (void)setUkey:(NSString *)ukey{
+    [self setValue:ukey forKey:@"ukey"];
+}
+- (NSString *)ukey{
+    return [self get:@"ukey"];
+}
+#pragma nickname
+- (void)setNickname:(NSString *)nickname{
+    [self setValue:nickname forKey:@"nickname"];
+}
+- (NSString *)nickname{
+    return [self get:@"nickname"];
+}
+#pragma name
+- (void)setName:(NSString *)name{
+    [self setValue:name forKey:@"name"];
+}
+- (NSString *)name{
+    return [self get:@"name"];
+}
+#pragma email
+- (void)setEmail:(NSString *)email{
+    [self setValue:email forKey:@"email"];
+
+}
+- (NSString *)email{
+    return [self get:@"email"];
+}
+#pragma uid
+- (void)setUid:(NSString *)uid{
+    [self setValue:uid forKey:@"uid"];
+}
+- (NSString *)uid{
+    return [self get:@"uid"];
+}
+#pragma password
+- (void)setPassword:(NSString *)password{
+    [self setValue:password forKey:@"password"];
+}
+- (NSString *)password{
+    return [self get:@"password"];
+}
+#pragma avatar
+- (void)setAvatar:(NSString *)avatar{
+    [self setValue:avatar forKey:@"avatar"];
+}
+- (NSString *)avatar{
+    return [self get:@"avatar"];
+}
+#pragma metadata
+- (void)setMetadata:(NSDictionary *)metadata{
+    [self setValue:metadata forKey:@"metadata"];
+}
+- (NSDictionary *)metadata{
+    return [self get:@"metadata"];
+}
+#pragma mobile
+- (void)setMobile:(NSString *)mobile{
+    [self setValue:mobile forKey:@"mobile"];
+}
+- (NSString *)mobile{
+    return [self get:@"mobile"];
+}
+#pragma education
+- (void)setEducation:(NSString *)education{
+    [self setValue:education forKey:@"education"];
+}
+- (NSString *)education{
+    return [self get:@"education"];
+}
+#pragma school
+- (void)setSchool:(NSString *)school{
+    [self setValue:school forKey:@"school"];
+}
+- (NSString *)school{
+    return [self get:@"school"];
+}
+#pragma desc
+- (void)setDesc:(NSString *)desc{
+    [self setValue:desc forKey:@"desc"];
+}
+- (NSString *)desc{
+    return [self get:@"desc"];
+}
+#pragma birthday
+- (void)setBirthday:(NSDate *)birthday{
+    [self setValue:birthday forKey:@"birthday"];
+}
+- (NSDate *)birthday{
+    return [self get:@"birthday"];
+}
+#pragma set get
+- (id)get:(NSString *)key{
+    return nullToNil([self.dict valueForKey:key]);
+}
+- (void)setValue:(id)val forKey:(NSString *)key{
+    if (!val) {
+        [_dict removeObjectForKey:key];
+        return;
+    }
+    id oldVal = [[self get:key] description];
+    [self.dict setValue:val forKey:key];
+    if (![[val description] isEqualToString:oldVal]) {
+        [BUser updateProfile:self];
+    }
+}
 - (NSDictionary *)dict{
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    if(self.uid) [dict setValue:self.email forKey:@"uid"];
-    if(self.email) [dict setValue:self.email forKey:@"email"];
-    if(self.username) [dict setValue:self.username forKey:@"username"];
-    if(self.name) [dict setValue:self.name forKey:@"name"];
-    if(self.password) [dict setValue:self.password forKey:@"password"];
-    if(self.ukey) [dict setValue:self.ukey forKey:@"ukey"];
-    if(self.avatar) [dict setValue:self.avatar forKey:@"avatar"];
-    if(self.metadata) [dict setValue:self.metadata forKey:@"metadata"];
-    
-    [dict setValue:[NSNumber numberWithInt:self.gender] forKey:@"gender"];
-    [dict setValue:[NSNumber numberWithInt:self.age] forKey:@"age"];
-    
-    if (self.education) [dict setValue:self.education forKey:@"education"];
-    if (self.school) [dict setValue:self.school forKey:@"school"];
-    if (self.mobile) [dict setValue:self.mobile forKey:@"mobile"];
-    if (self.birthday) [dict setValue:self.birthday forKey:@"birthday"];
-    if (self.desc) [dict setValue:self.desc forKey:@"desc"];
-    
-    return dict;
+    if (!_dict) {
+        _dict = [[NSMutableDictionary dictionaryWithCapacity:3] retain];
+    }
+    return _dict;
 }
 + (BOOL)isLogin{
     return USER?YES:NO;
@@ -102,6 +185,17 @@ static id _current_user = nil;
         }
     }
     return _current_user;
+}
++ (void)updateProfile:(BUser *)user{
+    NSString *data = [[user dict] jsonString];
+    DLOG(@"%@", data);
+    if (data) {
+        [DBCache setValue:data forKey:@"USER"];
+        [DBCache setValue:NSStringFromClass([user class]) forKey:@"USER_CLASS"];
+        RELEASE(_current_user);
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotifyUserProfileUpdated object:nil];
+        return YES;
+    }
 }
 + (BOOL)loginWithUser:(BUser *)user{
     if (user) {

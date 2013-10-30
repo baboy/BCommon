@@ -8,33 +8,33 @@
 
 #import <Foundation/Foundation.h>
 #define Uid         [[BUser user] uid]?:@""
-#define UKEY        @"4Eg17LaBz60DSIEOA0"
-//[[BUser user] ukey]?@""
+#define UKey        [[BUser user] ukey]?:@""
 #define USER        [BUser user]
 
-#define UserParams  [NSMutableDictionary dictionaryWithObjectsAndKeys:UKEY, @"ukey", nil]
+#define UserParams  [NSMutableDictionary dictionaryWithObjectsAndKeys:UKey, @"ukey", nil]
 
 
 @interface BUser : NSObject
-@property (nonatomic, retain) NSString *origin;
-@property (nonatomic, retain) NSString *uid;
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *nickname;
-@property (nonatomic, retain) NSString *password;
-@property (nonatomic, retain) NSString *email;
-@property (nonatomic, retain) NSString *ukey;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *desc;
-@property (nonatomic, retain) NSString *avatar;
+@property (nonatomic, assign) NSString *uid;
+@property (nonatomic, assign) NSString *username;
+@property (nonatomic, assign) NSString *nickname;
+@property (nonatomic, assign) NSString *password;
+@property (nonatomic, assign) NSString *email;
+@property (nonatomic, assign) NSString *ukey;
+@property (nonatomic, assign) NSString *name;
+@property (nonatomic, assign) NSString *desc;
+@property (nonatomic, assign) NSString *avatar;
 @property (nonatomic, assign) NSInteger gender;
-@property (nonatomic, retain) NSString *education;
-@property (nonatomic, retain) NSString *school;
-@property (nonatomic, retain) NSString *mobile;
-@property (nonatomic, retain) NSDate *birthday;
+@property (nonatomic, assign) NSString *education;
+@property (nonatomic, assign) NSString *school;
+@property (nonatomic, assign) NSString *mobile;
+@property (nonatomic, assign) NSDate *birthday;
 @property (nonatomic, assign) NSInteger age;
-@property (nonatomic, retain) NSDictionary *metadata;
+@property (nonatomic, assign) NSDictionary *metadata;
 - (id)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dict;
+- (id)get:(NSString *)key;
+- (void)setValue:(id)val forKey:(NSString *)key;
 + (BOOL)isLogin;
 //当前登录用户
 + (id) user;

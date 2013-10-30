@@ -77,7 +77,6 @@
     }
     RELEASE(_selectedImage);
     _selectedImage = [selectedImage retain];
-    
 }
 - (void)setUnSelectedImage:(id)unSelectedImage{
     if ([unSelectedImage isKindOfClass:[UIColor class]]) {
@@ -108,6 +107,20 @@
     }
     return width;
 }
+- (UIButton *)createButtonWithFrame:(CGRect)frame info:(id)info atIndex:(int)atIndex{
+    
+    UIButton *btn = [[UIButton alloc] initWithFrame:frame];
+    [btn addTarget:self action:@selector(tapItem:) forControlEvents:UIControlEventTouchUpInside];
+    [btn setTag:atIndex];
+    btn.backgroundColor = [UIColor clearColor];
+    [btn setBackgroundImage:self.unSelectedImage forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:14];
+    [btn setTitle:[info valueForKey:@"name"] forState:UIControlStateNormal];
+    [btn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
+    [btn setTitleColor:self.selectedTitleColor forState:UIControlStateSelected];
+    [btn setBackgroundImage:self.selectedImage forState:UIControlStateSelected];
+    return btn;
+}
 - (void) setItems:(NSArray *)items{
 	RELEASE(_items);
 	_items = [items retain];
@@ -125,15 +138,7 @@
         if (flag || self.alignLeft) {
             rect.size.width = [name sizeWithFont:self.titleFont].width+10;
         }
-        
-		UIButton *btn = [[UIButton alloc] initWithFrame:CGRectInset(rect, 0, 3)];
-		[btn addTarget:self action:@selector(tapItem:) forControlEvents:UIControlEventTouchUpInside];
-		[btn setTag:i];
-        btn.backgroundColor = [UIColor clearColor];
-        [btn setBackgroundImage:self.unSelectedImage forState:UIControlStateNormal];
-		btn.titleLabel.font = [UIFont systemFontOfSize:14];
-		[btn setTitle:name forState:UIControlStateNormal];
-        [btn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
+        UIButton *btn = [self createButtonWithFrame:CGRectInset(rect, 0, 3) info:item atIndex:i];
 		[self.scrollView addSubview:btn];
 		[self.btns addObject:btn];
 		[btn release];
@@ -181,6 +186,9 @@
     [self tappedAtIndex:[button tag]];
 }
 - (void) tappedAtIndex:(int)i{
+	if (!_btns || i<0 || i >= [_btns count]) {
+		return;
+	}
     [self selectAtIndex:i];
 	NSDictionary *item = [self.items objectAtIndex:i];
     if (self.delegate && [self.delegate respondsToSelector:@selector(tabBar:didSelectItem:)]) {
@@ -193,14 +201,10 @@
 	}
     UIButton *preBtn = (_selectedIndex>=0 && _selectedIndex < [_btns count])?[_btns objectAtIndex:_selectedIndex]:nil;
 	if (preBtn) {
-        //[preBtn setBackgroundImage:nil forState:UIControlStateNormal];
-        [preBtn setBackgroundColor:[UIColor clearColor]];
-        [preBtn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
-        [preBtn setBackgroundImage:self.unSelectedImage forState:UIControlStateNormal];
+        preBtn.selected = NO;
 	}
 	UIButton *curBtn = [_btns objectAtIndex:i];
-    [curBtn setTitleColor:self.selectedTitleColor forState:UIControlStateNormal];
-    [curBtn setBackgroundImage:self.selectedImage forState:UIControlStateNormal];
+    curBtn.selected = YES;
 	_selectedIndex = i;
 }
 - (void) selectWithValue:(NSString *)v{

@@ -21,7 +21,7 @@
     //DLOG(@"[TableCell] setFrame:%@", NSStringFromCGRect(frame));
 }
 - (void)setDetail:(NSString *)text{
-    [self.detailTextLabel setText:text];
+    [self.self.detailLabel setText:text];
 }
 - (void)setImg:(UIImage *)image{
     [_imgView setImage:image];

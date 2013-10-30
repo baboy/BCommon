@@ -86,5 +86,17 @@
 @end
 
 @implementation UIView(x)
+- (UIImage *)screenshot{
+    CGRect rect = self.bounds;
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO,0);
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    
+    [self.layer renderInContext:currentContext];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return img;
+}
 
 @end

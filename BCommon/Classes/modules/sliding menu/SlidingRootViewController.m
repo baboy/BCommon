@@ -109,8 +109,5 @@
     }
 }
 - (void)slidingViewController:(id)slidingView willSlideToController:(UIViewController *)controller{
-    if (controller) {
-        [controller viewDidAppear:YES];
-    }
 }
 @end

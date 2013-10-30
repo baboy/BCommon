@@ -79,8 +79,9 @@
 #define DeviceToken             [DBCache valueForKey:@"deviceToken"]
 
 //notify
-#define NotifyLogout    @"NotifyUserLogout"
-#define NotifyLogin    @"NotifyUserLogin"
+#define NotifyLogout                @"NotifyUserLogout"
+#define NotifyLogin                 @"NotifyUserLogin"
+#define NotifyUserProfileUpdated    @"NotifyUserProfileUpdated"
 
 #define SystemVolumeChangeNotify @"AVSystemController_SystemVolumeDidChangeNotification"
 

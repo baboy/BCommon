@@ -28,6 +28,7 @@ enum{
 @property (nonatomic, retain) BDropMenu *topDropMenu;
 @property (nonatomic, retain) UILabel *titleLabel;
 
+- (void)setNavigationBarBackgroundImage:(UIImage *)backgroundImage;
 - (void)setTitle:(NSString *)title withImageURL:(NSURL *)imageURL;
 - (void)setDropMenuTitle:(NSString *)title;
 - (void)showDropMenu:(id)sender;

@@ -86,6 +86,20 @@
     }
     return self;
 }
+
+- (void)setNavigationBarBackgroundImage:(UIImage *)backgroundImage{
+    UINavigationBar *navBar = [self.navigationController navigationBar];
+    if ([navBar respondsToSelector:@selector(setBackgroundImage:forBarPosition:barMetrics:)]) {
+        
+        backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsMake(backgroundImage.size.height/2, backgroundImage.size.width/2, backgroundImage.size.height/2, backgroundImage.size.width/2)];
+        [navBar setBackgroundImage:backgroundImage forBarPosition:UIBarPositionTopAttached barMetrics:UIBarMetricsDefault];
+    }
+    else if ([navBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+        UIImage *navigationBarBackground = backgroundImage;
+        if (navigationBarBackground)
+            [navBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
+    }
+}
 - (void)loadView{
     [super loadView];
     [self awake];

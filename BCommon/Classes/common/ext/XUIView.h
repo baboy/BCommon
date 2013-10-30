@@ -29,4 +29,5 @@ enum {
 @end
 
 @interface UIView(x)
+- (UIImage *)screenshot;
 @end

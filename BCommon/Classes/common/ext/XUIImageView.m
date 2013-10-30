@@ -47,7 +47,10 @@
     }
 }
 - (void)addTarget:(id)target action:(SEL)action{
-    UITapGestureRecognizer *tap = [[[UITapGestureRecognizer alloc] initWithTarget:target action:@selector(tapEvent:)] autorelease];
+    self.userInteractionEnabled = YES;
+    self.target = target;
+    self.action = action;
+    UITapGestureRecognizer *tap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEvent:)] autorelease];
     [self addGestureRecognizer:tap];
 }
 - (void)dealloc{

@@ -166,6 +166,11 @@ typedef UInt32 SlidingViewOrientation;
     if (![controller isKindOfClass:[UINavigationController class]]) {
         controller = [controller navigationController];
     }
+    
+    //viewWillDisappear
+    if (controller) {
+        [controller viewWillDisappear:YES];
+    }
     int j = [self.viewControllers indexOfObject:controller];
     for (int i = [self.viewControllers count]-1; i >= 0; i--) {
         if (i >= j) {
@@ -251,6 +256,10 @@ typedef UInt32 SlidingViewOrientation;
         if (self.delegate && [self.delegate respondsToSelector:@selector(slidingNavigationControllerWillBecomeEmpty:)]) {
             [self.delegate slidingViewControllerWillBecomeEmpty:self];
         }
+    }
+    //viewWillAppear
+    if (controller) {
+        [controller viewWillAppear:YES];
     }
     if (self.delegate && [self.delegate respondsToSelector:@selector(slidingViewController:willSlideToController:)]) {
         [self.delegate slidingViewController:self willSlideToController:controller];
