@@ -30,19 +30,20 @@
     if (!v) {
         v = [DBCache valueForKey:[NSString stringWithFormat:@"%@-color", key] domain:@"Theme"];
     }
+    UIColor *color = nil;
 	if ([v length] > 0) {
 		NSArray *arr = [v split:@","];
         if ([arr count]==1 && (v.length>=6)) {
-            return [UIColor colorFromString:v];
+            color = [UIColor colorFromString:v];
+        }else{
+            int n = [arr count];
+            float r,g,b,a;
+            r = n>0?[[arr objectAtIndex:0] floatValue]:0;
+            g = n>1?[[arr objectAtIndex:1] floatValue]:0;
+            b = n>2?[[arr objectAtIndex:2] floatValue]:0;
+            a = n>3?[[arr objectAtIndex:3] floatValue]:1;
+            color = [UIColor colorWithRed:(r>1?(r/255.0):r) green:(g>1?(g/255.0):g) blue:(b>1?(b/255.0):b) alpha:a];
         }
-        
-		int n = [arr count];
-		float r,g,b,a;
-		r = n>0?[[arr objectAtIndex:0] floatValue]:0;
-		g = n>1?[[arr objectAtIndex:1] floatValue]:0;
-		b = n>2?[[arr objectAtIndex:2] floatValue]:0;
-		a = n>3?[[arr objectAtIndex:3] floatValue]:1;
-		UIColor *color = [UIColor colorWithRed:(r>1?(r/255.0):r) green:(g>1?(g/255.0):g) blue:(b>1?(b/255.0):b) alpha:a];
 		return color;
 	}
 	return nil;

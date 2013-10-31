@@ -11,6 +11,7 @@
 static id _current_user = nil;
 @interface BUser()
 @property (nonatomic, retain) NSMutableDictionary *dict;
+@property (nonatomic, assign) BOOL isLogin;
 @end
 @implementation BUser
 - (void)dealloc{
@@ -158,7 +159,7 @@ static id _current_user = nil;
     }
     id oldVal = [[self get:key] description];
     [self.dict setValue:val forKey:key];
-    if (![[val description] isEqualToString:oldVal]) {
+    if (self.isLogin && ![[val description] isEqualToString:oldVal]) {
         [BUser updateProfile:self];
     }
 }
@@ -181,6 +182,7 @@ static id _current_user = nil;
                     uc = NSStringFromClass([self class]);
                 Class userClass = NSClassFromString(uc);
                 _current_user = [[userClass alloc] initWithDictionary:json];
+                [_current_user setIsLogin:YES];
             }
         }
     }
@@ -219,6 +221,8 @@ static id _current_user = nil;
         RELEASE(_current_user);
         [[NSNotificationCenter defaultCenter] postNotificationName:NotifyLogout object:nil];
     }
+}
++ (void)checkLoginWithCallback:(void (^)(BUser* user,NSError *error))callback{
 }
 + (BHttpRequestOperation *)loginWithUserName:(NSString *)uname password:(NSString *)pwd success:(void (^)(BUser *, NSError *))success failure:(void (^)(NSError *))failure{
     
