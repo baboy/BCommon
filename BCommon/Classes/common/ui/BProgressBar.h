@@ -9,10 +9,10 @@
 #import <UIKit/UIKit.h>
 
 
-@interface BProgressBar : UIProgressView 
+@interface BProgressBar : UIView
 
-@property (nonatomic, retain) UIColor *barStartColor;
+@property (nonatomic, retain) UIColor *borderColor;
 @property (nonatomic, retain) UIColor *barColor;
-@property (nonatomic, retain) UIColor *insideBorderColor;
-@property (nonatomic, retain) UIColor *insideBgColor;
+@property (nonatomic, assign) float padding;
+@property (nonatomic, assign) float progress;
 @end

@@ -23,6 +23,7 @@
 #import "TableCell.h"
 #import "BImageView.h"
 #import "NetChecker.h"
+#import "BProgressBar.h"
 
 
 #import "BaseViewController.h"

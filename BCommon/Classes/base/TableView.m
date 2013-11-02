@@ -232,11 +232,13 @@
 }
 - (void)setContentInset:(UIEdgeInsets)contentInset{
     [super setContentInset:contentInset];
+    /*
     if (contentInset.top != 0) {
         CGPoint contentOffset = self.contentOffset;
         contentOffset.y -= contentInset.top;
         [self setContentOffset:contentOffset];
     }
+     */
 }
 - (void)setContentSize:(CGSize)contentSize{
     [super setContentSize:contentSize];
@@ -446,12 +448,12 @@
     self.separatorLineStyle = SeparatorLineStyleBottom;
     self.topLineColor = gLineTopColor;
     self.bottomLineColor = gLineBottomColor;
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 - (id)initWithFrame:(CGRect)frame{
 	
 	if (self = [super initWithFrame:frame]) {
         [self setup];
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self setBackgroundColor:[UIColor clearColor]];
 	}
 	return self;

@@ -13,6 +13,7 @@
 #define ShareLiveContentFormat   [GString stringForKey:@"share-live-content-format"]
 #define ShareRadioContentFormat  [GString stringForKey:@"share-radio-content-format"]
 
+#define NoAvailableConnection NSLocalizedString(@"没有可用的网络连接！", nil)
 @interface GString : NSString
 + (void)setup:(NSString *)string;
 + (NSString *)stringForKey:(id) key;

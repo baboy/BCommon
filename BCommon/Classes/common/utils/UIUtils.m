@@ -222,11 +222,11 @@ UIButton *createImageButton(CGRect frame, NSString *imageName, id target, SEL ac
     return btn;
 }
 UIButton *createButton(CGRect frame, NSString *title, id imgName,id target, SEL action){
-    if (frame.size.width == 0 || frame.size.height == 0) {
+    if ( (frame.size.width == 0 || frame.size.height == 0) && [title length] > 0 ) {
         CGSize size = title ? [title sizeWithFont:gButtonTitleFont] : CGSizeMake(48, 28);
         frame = CGRectMake(0,0, MAX(size.width+20, 44), size.height+10);
     }
-    if ( !title || [title isEqualToString:@""] ) {
+    if ( ( !title || [title isEqualToString:@""] ) && ![imgName isKindOfClass:[UIColor class]] ) {
         UIImage *backgroundImage = [UIImage imageNamed:imgName];
         if (backgroundImage) {
             frame.size = CGSizeMake( backgroundImage.size.width, backgroundImage.size.height);

@@ -34,6 +34,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.bounces = YES;
+        self.alwaysBounceVertical = YES;
     }
     return self;
 }
@@ -91,11 +93,13 @@
 }
 - (void)setContentInset:(UIEdgeInsets)contentInset{
     [super setContentInset:contentInset];
+    
     if (contentInset.top != 0) {
         CGPoint contentOffset = self.contentOffset;
         contentOffset.y -= contentInset.top;
-        [self setContentOffset:contentOffset];
+        [super setContentOffset:contentOffset];
     }
+    
 }
 - (void)updateFinished{
     [self.layer removeAllAnimations];
@@ -112,7 +116,7 @@
 }
 - (void)startUpdate{
     if (self.isSupportUpdate) {
-        [self.layer removeAllAnimations];
+        //[self.layer removeAllAnimations];
         [UIView animateWithDuration:0.2
                          animations:^{
                              self.contentInset = UIEdgeInsetsMake([self.updateView activeHeight]-5, 0.0f, 00.0f, 0.0f);

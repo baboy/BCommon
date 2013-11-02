@@ -119,8 +119,11 @@
 + (UIButton *) buttonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action{
     UIFont *titleFont = [Theme fontForKey:[NSString stringWithFormat:@"button-%@-title-font", style]];
     UIColor *titleColor = [Theme colorForKey:[NSString stringWithFormat:@"button-%@-title-color", style]];
-    UIColor *backgroundColor = [Theme colorForKey:[NSString stringWithFormat:@"button-%@-background-color", style]];
-    UIButton *btn = createButton(frame, title, backgroundColor, target, action);
+    id background = [Theme colorForKey:[NSString stringWithFormat:@"button-%@-background-color", style]];
+    if (!background) {
+        background = [DBCache valueForKey:[NSString stringWithFormat:@"button-%@-background-image", style] domain:@"Theme"];
+    }
+    UIButton *btn = createButton(frame, title, background, target, action);
     if (titleFont)
         btn.titleLabel.font = titleFont;
     if (titleColor)

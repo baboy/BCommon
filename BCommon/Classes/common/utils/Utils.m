@@ -266,7 +266,7 @@ BOOL setAlarm(NSString *key, id userInfo, NSString *msg, NSString *action, NSTim
 	if (d) [str appendFormat:@"%d天",d];
 	if (h) [str appendFormat:@"%d时",h];
 	if (m) [str appendFormat:@"%d分",m];
-	if (s) [str appendFormat:@"%d秒",s];
+	if ([str length]==0 || s) [str appendFormat:@"%d秒",s];
 	return str;
 }
 + (NSData *) getWebCache:(NSString *)key{	

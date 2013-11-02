@@ -43,7 +43,7 @@
 }
 - (void)tapEvent:(UIGestureRecognizer *)r{
     if (self.target && self.action && r.state == UIGestureRecognizerStateEnded) {
-        [self.target performSelector:self.action withObject:self.object];
+        [self.target performSelector:self.action withObject:self];
     }
 }
 - (void)addTarget:(id)target action:(SEL)action{
