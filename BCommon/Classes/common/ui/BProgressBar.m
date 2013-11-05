@@ -18,7 +18,8 @@
     
     self.backgroundColor = [UIColor clearColor];
     //self.borderColor = [UIColor colorWithWhite:0.6 alpha:1.0];
-    self.barColor = self.barColor ?: [UIColor colorWithWhite:0 alpha:1.0];
+    if (!self.barColor)
+        self.barColor = [UIColor colorWithWhite:0 alpha:1.0];
     self.clipsToBounds = YES;
 }
 - (id)initWithFrame:(CGRect)frame {

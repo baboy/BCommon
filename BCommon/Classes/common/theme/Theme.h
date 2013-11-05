@@ -25,7 +25,7 @@
 #define gNavBarTitleFont           [Theme fontForKey:@"navigationbar-title-font"]
 #define gNavBarTitleShadowColor          [Theme colorForKey:@"navigationbar-title-shadow-color"]
 #define gNavBarBackgroundImage  [Theme imageForKey:@"navigationbar-background"]
-#define gViewBackgroundColor    [Theme colorForKey:@"view-background-color"]
+#define ThemeViewBackgroundColor    [Theme colorForKey:@"view-background-color"]
 
 // table
 #define gTableCellTitleFont     [Theme fontForKey:@"table-cell-title-font"]

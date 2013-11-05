@@ -10,7 +10,12 @@
 
 typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
 
+typedef void (^AFURLConnectionOperationProgressBlock)(NSUInteger bytes, long long totalBytes, long long totalBytesExpected);
+
 @interface AFURLConnectionOperation(x)<NSURLConnectionDataDelegate>
+- (long long)totalBytesRead;
+- (void)setTotalBytesRead:(long long)t;
+- (AFURLConnectionOperationProgressBlock)downloadProgress;
 - (NSRecursiveLock *)lock;
 - (void)finish;
 - (void)operationDidStart;
@@ -46,15 +51,19 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
 - (void)setTmpFilePath:(NSString *)tmpFilePath{
     RELEASE(_tmpFilePath);
     _tmpFilePath = [tmpFilePath retain];
-    [tmpFilePath deleteFile];
-    self.outputStream = [NSOutputStream outputStreamToFileAtPath:tmpFilePath append:NO];
+    if (!self.downloadResume)
+        [tmpFilePath deleteFile];
+    self.outputStream = [NSOutputStream outputStreamToFileAtPath:tmpFilePath append:YES];
 }
 
 - (void)setCacheFilePath:(NSString *)cacheFilePath{
     //DLOG(@"cache file:%@",cacheFilePath);
     RELEASE(_cacheFilePath);
     _cacheFilePath = [cacheFilePath retain];
-    NSString *tmpFilePath = [[NSString stringWithFormat:@"%@.%d",cacheFilePath,(int)(arc4random()*999999)] stringByAppendingPathExtension:@"download"];
+    NSString *tmpFilePath = tmpFilePath = [cacheFilePath stringByAppendingPathExtension:@"download"];
+    if (!self.downloadResume) {
+        [[NSString stringWithFormat:@"%@.%d",cacheFilePath,(int)(arc4random()*999999)] stringByAppendingPathExtension:@"download"];
+    }
     [self setTmpFilePath:tmpFilePath];
 }
 - (BHttpRequestCache *)requestCache{
@@ -93,7 +102,19 @@ typedef void (^BHttpRequestOperationReceiveBlock)(NSData *data);
             return;
         };
     }
+    long long downloadSize = [self.tmpFilePath sizeOfFile];
+    if (self.downloadResume) {
+        [(NSMutableURLRequest *)self.request setValue:[NSString stringWithFormat:@"bytes=%lld-", downloadSize] forHTTPHeaderField:@"Range"];
+    }
     [self.lock unlock];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.totalBytesRead += downloadSize;
+        
+        if (self.downloadProgress) {
+            self.downloadProgress(0, self.totalBytesRead, self.response.expectedContentLength);
+        }
+    });
     [super operationDidStart];
 }
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{

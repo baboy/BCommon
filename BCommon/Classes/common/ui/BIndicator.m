@@ -39,7 +39,7 @@ static int IndicatorContentTag = 999;
     if (withIndicator) {
         CGRect r = CGRectMake(rect.origin.x+(rect.size.width-BIndicatorAnimateWidth)/2, rect.origin.y, BIndicatorAnimateWidth, BIndicatorAnimateWidth);
         
-        UIActivityIndicatorView *aiv = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
+        UIActivityIndicatorView *aiv = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
         [aiv setFrame:r];
         [aiv startAnimating];
         [view addSubview:aiv];

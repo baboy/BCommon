@@ -15,5 +15,6 @@
 @property (nonatomic, retain) NSString *cacheFilePath;
 @property (nonatomic, retain) BHttpRequestCache *requestCache;
 @property (nonatomic, readonly) BOOL readFromCache;
+@property (nonatomic, readonly) BOOL downloadResume;
 - (void)setReceiveDataBlock:(void (^)(NSData *data))block;
 @end

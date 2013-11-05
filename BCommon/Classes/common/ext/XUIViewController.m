@@ -174,7 +174,7 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     [self awake];
-    [self.view setBackgroundColor:gViewBackgroundColor];
+    [self.view setBackgroundColor:ThemeViewBackgroundColor];
     if (self.navigationItem && !self.titleLabel) {
         CGRect rect = CGRectInset(self.navigationController.navigationBar.bounds, 60, 0);
         UILabel *titleLabel = createLabel(rect, gNavBarTitleFont, nil, gNavBarTitleColor, nil, CGSizeZero, UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);

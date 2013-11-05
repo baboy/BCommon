@@ -286,7 +286,7 @@ typedef UInt32 SlidingViewOrientation;
             }
         }
         if ([v isKindOfClass:[UIScrollView class]]) {
-            if ([(UIScrollView *)v contentOffset].x > 0 || velocity.x < 0) {
+            if (([(UIScrollView *)v contentOffset].x > 0 && [(UIScrollView *)v isScrollEnabled]) || velocity.x < 0) {
                 return NO;
             }
         }
@@ -324,7 +324,9 @@ typedef UInt32 SlidingViewOrientation;
     if ([view isKindOfClass:[UISlider class]])
         return NO;
     while (view && ![view isKindOfClass:[UIWindow class]]) {
-        if ([view isKindOfClass:[UIScrollView class]] && [view contentOffset].x !=0) {
+        if ([view isKindOfClass:[UIScrollView class]] &&
+            ([view contentOffset].x !=0 &&
+             [(UIScrollView *)view isScrollEnabled])) {
             return NO;
         }
         view = [view superview];
