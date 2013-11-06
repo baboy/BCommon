@@ -72,8 +72,18 @@ static int IndicatorContentTag = 999;
 	return IndicatorView;
 	
 }
++ (UIWindow *)currentWindow{
+    UIWindow *window = nil;
+    for (UIWindow * w in [[UIApplication sharedApplication] windows]) {
+        window = window?:w;
+        if (w.windowLevel > window.windowLevel) {
+            window = w;
+        }
+    }
+    return window;
+}
 +(UIView *)showMessage:(NSString *)msg duration:(float)t{
-    UIView *view = [[UIApplication sharedApplication] keyWindow];
+    UIView *view = [self currentWindow];
     return [BIndicator showMessage:msg duration:t inView:view];
 }
 
@@ -89,7 +99,7 @@ static int IndicatorContentTag = 999;
 }
 
 + (UIView *)showMessage:(NSString *)msg{
-    return [BIndicator showMessage:msg inView:[[UIApplication sharedApplication] keyWindow]];
+    return [BIndicator showMessage:msg inView:[self currentWindow]];
 }
 + (void)fadeOutWithDelay:(float)t{
     if (!IndicatorView && ![IndicatorView superview]) {

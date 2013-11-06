@@ -37,6 +37,7 @@
 #import "MKMapView+x.h"
 #import "BMapLocation.h"
 #import "BMapPlace.h"
+#import "RegexKitLite.h"
 
 //web
 #import "CacheURLProtocol.h"

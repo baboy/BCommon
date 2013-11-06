@@ -154,3 +154,44 @@ typedef void (^AFURLConnectionOperationProgressBlock)(NSUInteger bytes, long lon
     _receiveBlock = [block copy];
 }
 @end
+
+
+@implementation BHttpRequest
+
++ (BHttpRequestOperation *)getWithUrl:(NSString *)url params:(NSDictionary *)params callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback{
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:url] parameters:params];
+    id operation =
+    [client dataRequestWithURLRequest:request
+                              success:^(BHttpRequestOperation *operation, id data) {
+                                  if (callback) {
+                                      callback(operation, data,nil);
+                                  }
+                              }
+                              failure:^(BHttpRequestOperation *operation, NSError *error) {
+                                  if (callback) {
+                                      callback(operation, nil,error);
+                                  }
+                                  
+                              }];
+}
++ (BHttpRequestOperation *)postWithUrl:(NSString *)url params:(NSDictionary *)params callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback{
+    BHttpClient *client = [BHttpClient defaultClient];
+    NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:url] parameters:params];
+    id operation =
+    [client dataRequestWithURLRequest:request
+                              success:^(BHttpRequestOperation *operation, id data) {
+                                  if (callback) {
+                                      callback(operation, data,nil);
+                                  }
+                              }
+                              failure:^(BHttpRequestOperation *operation, NSError *error) {
+                                  if (callback) {
+                                      callback(operation, nil,error);
+                                  }
+                                  
+                              }];
+    [client enqueueHTTPRequestOperation:operation];
+    return operation;
+}
+@end

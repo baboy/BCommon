@@ -82,6 +82,9 @@
 - (BOOL)isEmail{
     return [self isMatchedByRegex:@"^[-_A-Za-z0-9]+[-A-Za-z0-9_\\.]*@[-_A-Za-z0-9]+\\.[-_A-Za-z0-9\\.]+$"];
 }
+- (BOOL)testRegex:(NSString *)re{
+    return [self isMatchedByRegex:re];
+}
 - (BOOL)renameToPath:(NSString *)newPath{
 	NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *err = nil;

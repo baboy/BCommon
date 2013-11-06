@@ -20,6 +20,7 @@
 - (BOOL)isURL;
 - (NSString *)pinyin;
 - (BOOL)isEmail;
+- (BOOL)testRegex:(NSString *)re;
 - (BOOL)renameToPath:(NSString *)newPath;
 - (BOOL)deleteFile;
 - (long long)sizeOfFile;

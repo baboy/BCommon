@@ -18,3 +18,9 @@
 @property (nonatomic, readonly) BOOL downloadResume;
 - (void)setReceiveDataBlock:(void (^)(NSData *data))block;
 @end
+
+@interface BHttpRequest: NSObject
+
++ (BHttpRequestOperation *)getWithUrl:(NSString *)url params:(NSDictionary *)params callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback;
++ (BHttpRequestOperation *)postWithUrl:(NSString *)url params:(NSDictionary *)params callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback;
+@end
