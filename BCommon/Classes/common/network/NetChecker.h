@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@interface NetChecker : NSObject {	
-}
+#define NetworkChangedNotification      @"NetworkChanged"
+@interface NetChecker : NSObject
 + (int)	status;
 + (BOOL) isAvailable;
 + (BOOL) isConnectWifi;

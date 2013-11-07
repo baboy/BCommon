@@ -18,7 +18,7 @@
 - (NSDate *)dateWithFormat:(NSString *)format;
 - (int)compareToVersion:(NSString *)version;
 - (BOOL)isURL;
-- (NSString *)pinyin;
+- (NSString *)shortPinyin;
 - (BOOL)isEmail;
 - (BOOL)testRegex:(NSString *)re;
 - (BOOL)renameToPath:(NSString *)newPath;
@@ -29,4 +29,5 @@
 - (NSError *)removeFile;
 - (int)textCount;
 - (BOOL)fileExists;
+- (NSString *)pinyin;
 @end

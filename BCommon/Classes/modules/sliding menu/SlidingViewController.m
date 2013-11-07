@@ -239,7 +239,7 @@ typedef UInt32 SlidingViewOrientation;
     [UIView animateWithDuration:0.05
                      animations:^{
                          UIView *backView = [self containerForView:[self backController]];
-                         backView.alpha = (0.8+0.2*p.x/backView.bounds.size.width);
+                         //backView.alpha = (0.8+0.2*p.x/backView.bounds.size.width);
                          CGFloat scale = MIN(0.97+0.03*p.x/backView.bounds.size.width, 1.0);
                          CGAffineTransform transform = CGAffineTransformMakeScale(  scale,  scale );
                          backView.transform = transform;

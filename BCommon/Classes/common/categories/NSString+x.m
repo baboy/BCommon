@@ -70,7 +70,7 @@
         return YES;
     return NO;
 }
-- (NSString *)pinyin{
+- (NSString *)shortPinyin{
     int n = [self length];
     NSMutableString *s = [NSMutableString string];
     for (int i=0; i<n; i++) {
@@ -153,5 +153,12 @@
 }
 - (BOOL)fileExists{
     return [[NSFileManager defaultManager] fileExistsAtPath:self];
+}
+- (NSString *)pinyin{
+    NSMutableString *newStr = [NSMutableString stringWithString:self];
+    CFRange range = CFRangeMake(0, newStr.length);
+    CFStringTransform((CFMutableStringRef)newStr, &range, kCFStringTransformMandarinLatin, NO);
+    CFStringTransform((CFMutableStringRef)newStr, &range, kCFStringTransformStripCombiningMarks, NO);
+    return newStr;//获取中文拼音
 }
 @end

@@ -66,10 +66,11 @@
     DLOG(@"didChangeOffset:%f",offset);
     [UIView animateWithDuration:0.02
                      animations:^{
-                         
+                         /*
                          CGFloat alpha = (0.8+0.6*ABS(offset)/self.centerController.view.bounds.size.width);
                          self.leftController.view.alpha = alpha;
                          self.rightController.view.alpha = alpha;
+                          */
                          CGFloat scale = MIN(0.97+0.05*ABS(offset)/self.centerController.view.bounds.size.width, 1.0);
                          CGAffineTransform transform = CGAffineTransformMakeScale(  scale,  scale );
                          self.leftController.view.transform = transform;
@@ -85,10 +86,12 @@
     [UIView animateWithDuration:0.02
                      animations:^{
                          UIView *backView = [self referenceView];
+                         /*
                          CGFloat alpha = (0.8+0.2*p.x/backView.bounds.size.width);
                          self.centerController.view.alpha = alpha;
                          self.leftController.view.alpha = alpha;
                          self.rightController.view.alpha = alpha;
+                          */
                          CGFloat scale = MIN(0.97+0.03*p.x/backView.bounds.size.width, 1.0);
                          CGAffineTransform transform = CGAffineTransformMakeScale(  scale,  scale );
                          self.centerController.view.transform = transform;
