@@ -9,7 +9,7 @@
 #import "UIImageView+cache.h"
 @implementation UIImageView(cache)
 
-- (void)setImageURL:(NSURL *)imageURL placeholderImage:(UIImage *)placeholderImage withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback{
+- (id)setImageURL:(NSURL *)imageURL placeholderImage:(UIImage *)placeholderImage withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback{
     NSString *fp = [UIImageView cachePathForURL:imageURL];
     if (fp) {
         UIImage *img = [UIImage imageWithContentsOfFile:fp];
@@ -18,7 +18,7 @@
             if (callback) {
                 callback(imageURL,fp,nil);
             }
-            return;
+            return nil;
         }
     }
     self.image = placeholderImage;
@@ -45,6 +45,7 @@
     [operation setUserInfo:[NSDictionary dictionaryWithObject:self forKey:@"object"]];
     [operation setRequestCache:[BHttpRequestCache fileCache]];
     [client enqueueHTTPRequestOperation:operation];
+    return operation;
 }
 - (void)setImageURL:(NSURL *)imageURL{
     [self setImageURL:imageURL placeholderImage:nil withImageLoadedCallback:nil];
@@ -53,8 +54,8 @@
     [self setImageURL:imageURL placeholderImage:placeholderImage withImageLoadedCallback:nil];
 }
 
-- (void)setImageURL:(NSURL *)imageURL withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback{
-    [self setImageURL:imageURL placeholderImage:nil withImageLoadedCallback:callback];
+- (id)setImageURL:(NSURL *)imageURL withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback{
+    return [self setImageURL:imageURL placeholderImage:nil withImageLoadedCallback:callback];
 }
 
 + (NSString *)cachePathForURL:(NSURL *)imageURL{

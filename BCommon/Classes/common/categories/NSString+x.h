@@ -30,4 +30,6 @@
 - (int)textCount;
 - (BOOL)fileExists;
 - (NSString *)pinyin;
+- (NSArray *) placeholders;
+- (NSString *) replaceholders:(NSDictionary *)param;
 @end

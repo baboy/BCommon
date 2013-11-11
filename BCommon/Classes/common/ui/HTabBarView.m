@@ -13,10 +13,7 @@
 #define HTabBarGroupViewMinHeight   24
 
 
-@interface VSeparator : UIView{
-	UIColor * _leftLineColor;
-	UIColor * _rightLineColor;
-}
+@interface VSeparator : UIView
 @property (nonatomic, retain) UIColor *leftLineColor;
 @property (nonatomic, retain) UIColor *rightLineColor;
 
@@ -27,7 +24,7 @@
 @property (nonatomic, retain) NSMutableArray *btns;
 @property (nonatomic, retain) UIButton *leftIndicator;
 @property (nonatomic, retain) UIButton *rightIndicator;
-
+@property (nonatomic, retain) UIImageView *selectBackgroundView;
 - (void) createIndicator;
 - (void)tapIndicator:(UIButton *)button;
 @end
@@ -35,8 +32,8 @@
 @implementation HTabBarView
 - (void)setup{
     self.titleFont = [UIFont systemFontOfSize:14];
-    _itemBorderWidth = 1;
-    _separatorWidth = 2;
+    self.itemBorderWidth = 1;
+    self.separatorWidth = 2;
     CGRect r = CGRectInset(self.bounds, 0, 0);
     _scrollView = [[UIScrollView alloc] initWithFrame:r];
     _scrollView.delegate = self;
@@ -44,7 +41,8 @@
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.backgroundColor = [UIColor clearColor];
     [self addSubview:_scrollView];
-    _selectedIndex = 0;
+    
+    self.selectedIndex = 0;
     self.separatorLeftColor = gLineTopColor;
     self.separatorRightColor = gLineBottomColor;
 }
@@ -77,6 +75,7 @@
     }
     RELEASE(_selectedImage);
     _selectedImage = [selectedImage retain];
+    self.selectBackgroundView.image = _selectedImage;
 }
 - (void)setUnSelectedImage:(id)unSelectedImage{
     if ([unSelectedImage isKindOfClass:[UIColor class]]) {
@@ -86,10 +85,20 @@
     RELEASE(_unSelectedImage);
     _unSelectedImage = [unSelectedImage retain];
 }
+- (UIImageView *)selectBackgroundView{
+    if (!_selectBackgroundView) {
+        _selectBackgroundView = [[UIImageView alloc] initWithImage:self.selectedImage];
+        _selectBackgroundView.hidden = YES;
+        [self.scrollView addSubview:_selectBackgroundView];
+        [self.scrollView sendSubviewToBack:_selectBackgroundView];
+    }
+    return _selectBackgroundView;
+}
 - (void)clear{
     [self.scrollView.subviews makeObjectsPerformSelector:@selector( removeFromSuperview)];
     [self.leftIndicator removeFromSuperview];
     [self.rightIndicator removeFromSuperview];
+    self.selectBackgroundView = nil;
 }
 - (float)totalWidth{
     float w = 0;
@@ -118,7 +127,7 @@
     [btn setTitle:[info valueForKey:@"name"] forState:UIControlStateNormal];
     [btn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
     [btn setTitleColor:self.selectedTitleColor forState:UIControlStateSelected];
-    [btn setBackgroundImage:self.selectedImage forState:UIControlStateSelected];
+    //[btn setBackgroundImage:self.selectedImage forState:UIControlStateSelected];
     return btn;
 }
 - (void) setItems:(NSArray *)items{
@@ -168,18 +177,18 @@
 - (void) createIndicator{
 	float w = HTabBarIndicatorWidth,h = HTabBarIndicatorHeight;
 	CGRect r = CGRectMake(0, (self.bounds.size.height-h)/2, w, h);
-	_leftIndicator = [[UIButton alloc] initWithFrame:r];
-	[_leftIndicator setTag:1];
-	[_leftIndicator addTarget:self action:@selector(tapIndicator:) forControlEvents:UIControlEventTouchUpInside];
-	[_leftIndicator setImage:[UIImage imageNamed:@"arrow_left.png"] forState:UIControlStateNormal];
-	[self addSubview:_leftIndicator];
+	self.leftIndicator = AUTORELEASE([[UIButton alloc] initWithFrame:r]);
+	[self.leftIndicator setTag:1];
+	[self.leftIndicator addTarget:self action:@selector(tapIndicator:) forControlEvents:UIControlEventTouchUpInside];
+	[self.leftIndicator setImage:[UIImage imageNamed:@"arrow_left.png"] forState:UIControlStateNormal];
+	[self addSubview:self.leftIndicator];
 	
 	r.origin.x = self.bounds.size.width - w;
-	_rightIndicator = [[UIButton alloc] initWithFrame:r];
-	[_rightIndicator setTag:-1];
-	[_rightIndicator addTarget:self action:@selector(tapIndicator:) forControlEvents:UIControlEventTouchUpInside];
-	[_rightIndicator setImage:[UIImage imageNamed:@"arrow_right.png"] forState:UIControlStateNormal];
-	[self addSubview:_rightIndicator];
+	self.rightIndicator = AUTORELEASE([[UIButton alloc] initWithFrame:r]);
+	[self.rightIndicator setTag:-1];
+	[self.rightIndicator addTarget:self action:@selector(tapIndicator:) forControlEvents:UIControlEventTouchUpInside];
+	[self.rightIndicator setImage:[UIImage imageNamed:@"arrow_right.png"] forState:UIControlStateNormal];
+	[self addSubview:self.rightIndicator];
 	
 }
 - (void) tapItem:(UIButton *)button{
@@ -204,6 +213,11 @@
         preBtn.selected = NO;
 	}
 	UIButton *curBtn = [_btns objectAtIndex:i];
+    [UIView animateWithDuration:0.2
+                     animations:^{
+                         self.selectBackgroundView.hidden = NO;
+                         self.selectBackgroundView.frame = curBtn.frame;
+                     }];
     curBtn.selected = YES;
 	_selectedIndex = i;
 }
@@ -256,7 +270,7 @@
     RELEASE(_selectedTitleColor);
     RELEASE(_unSelectedTitleColor);
     RELEASE(_selectedImage);
-    
+    RELEASE(_selectBackgroundView);
     RELEASE(_separatorColor);
     RELEASE(_separatorLeftColor);
     RELEASE(_separatorRightColor);

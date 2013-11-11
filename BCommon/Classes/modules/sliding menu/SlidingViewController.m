@@ -286,7 +286,7 @@ typedef UInt32 SlidingViewOrientation;
             }
         }
         if ([v isKindOfClass:[UIScrollView class]]) {
-            if (([(UIScrollView *)v contentOffset].x > 0 && [(UIScrollView *)v isScrollEnabled]) || velocity.x < 0) {
+            if (([(UIScrollView *)v contentOffset].x != 0 && [(UIScrollView *)v isScrollEnabled]) || velocity.x < 0) {
                 return NO;
             }
         }
@@ -335,6 +335,7 @@ typedef UInt32 SlidingViewOrientation;
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    DLOG(@"%@,%@", gestureRecognizer, otherGestureRecognizer);
     return YES;
 }
 - (CGFloat)locationOfPanner:(UIPanGestureRecognizer*)panner{

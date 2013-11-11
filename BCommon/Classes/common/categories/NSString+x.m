@@ -161,4 +161,26 @@
     CFStringTransform((CFMutableStringRef)newStr, &range, kCFStringTransformStripCombiningMarks, NO);
     return newStr;//获取中文拼音
 }
+- (NSArray *) placeholders{
+	NSArray *arr = [self arrayOfCaptureComponentsMatchedByRegex:@"\\{([^\\{\\}]+)\\}"];
+	NSMutableArray *list = nil;
+	if ([arr count]>0) {
+		list = [NSMutableArray arrayWithCapacity:[arr count]];
+		for (NSArray *a in arr) {
+			if ([a  count] == 2) {
+				[list addObject:[a objectAtIndex:1]];
+			}
+		}
+	}
+	return list;
+}
+- (NSString *) replaceholders:(NSDictionary *)param{
+	NSArray *arr = [self placeholders];
+    NSString *s = [NSString stringWithString:self];
+	for (NSString *ph in arr) {
+		NSString *v = nullToNil( [param valueForKey:ph] );
+		s = [s stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"{%@}",ph] withString:(v?[v description]:@"")];
+	}
+	return s;
+}
 @end

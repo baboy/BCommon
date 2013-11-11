@@ -11,6 +11,7 @@
 @interface XUIImageView()
 @property (nonatomic, assign) id target;
 @property (nonatomic, assign) SEL action;
+@property (nonatomic, strong) BHttpRequestOperation *operation;
 @end
 
 @implementation XUIImageView
@@ -52,6 +53,14 @@
     self.action = action;
     UITapGestureRecognizer *tap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEvent:)] autorelease];
     [self addGestureRecognizer:tap];
+}
+- (id)setImageURL:(NSURL *)imageURL placeholderImage:(UIImage *)placeholderImage withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback{
+    if (self.operation && ![self.operation isCancelled]) {
+        self.operation.completionBlock = nil;
+        [self.operation cancel];
+    }
+    self.operation = [super setImageURL:imageURL placeholderImage:placeholderImage withImageLoadedCallback:callback];
+    return self.operation;
 }
 - (void)dealloc{
     [super dealloc];

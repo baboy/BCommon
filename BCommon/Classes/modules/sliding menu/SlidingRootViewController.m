@@ -16,6 +16,9 @@
 - (void) addPanners;
 - (UIView*)slidingController;
 - (UIView*)slidingControllerView;
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner;
+- (BOOL)gestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch;
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
 @end
 @interface SlidingRootViewController ()<SlidingViewControllerDelegate>
 @property (nonatomic, retain)  SlidingViewController *pushViewController;
@@ -59,11 +62,61 @@
 - (id)popViewControllerAnimated:(BOOL)animated{
     return [self.pushViewController popViewControllerAnimated:animated];
 }
-
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner{
+    BOOL flag = [super gestureRecognizerShouldBegin:panner];
+    DLOG(@"flag:%d",flag);
+    return flag;
+}
+- (BOOL)gestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    BOOL flag = [super gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
+    DLOG(@"flag:%d",flag);
+    return flag;
+    
+    id view = [touch view];
+    id scrollView = nil;
+    while (view && ![view isKindOfClass:[UIWindow class]]) {
+        if ([view isKindOfClass:[UIScrollView class]] &&
+            ([view contentOffset].x !=0 &&
+             [(UIScrollView *)view isScrollEnabled])) {
+                return NO;
+            }
+        view = [view superview];
+    }
+    return [super gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
+}
+- (UIScrollView *)topScrollView:(UIView *)view{
+    UIScrollView *v = nil;
+    while (view && ![view isKindOfClass:[UIWindow class]]) {
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            v = (UIScrollView *)view;
+        }
+        view = [view superview];
+    }
+    return v;
+}
+- (UIScrollView *)figureScrollView:(UIView *)view{
+    while (view && ![view isKindOfClass:[UIWindow class]]) {
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            return (id)view;
+        }
+        view = [view superview];
+    }
+    return nil;
+}
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    BOOL flag = [super gestureRecognizer:gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGestureRecognizer];
+    UIScrollView *v = [self topScrollView:[otherGestureRecognizer view]];
+    UIScrollView *figureView = [self figureScrollView:[otherGestureRecognizer view]];
+    if (v && figureView && v.contentOffset.x == 0 && figureView.contentOffset.x == 0) {
+        flag = YES;
+    }
+    DLOG(@"flag:%d",flag);
+    return flag;
+}
 #pragma mark - IIViewDeckDelegate
 
 - (void)viewDeckController:(IIViewDeckController*)viewDeckController didChangeOffset:(CGFloat)offset orientation:(IIViewDeckOffsetOrientation)orientation panning:(BOOL)panning{
-    DLOG(@"didChangeOffset:%f",offset);
+    //DLOG(@"didChangeOffset:%f",offset);
     [UIView animateWithDuration:0.02
                      animations:^{
                          /*
@@ -82,7 +135,7 @@
 }
 #pragma mark - slidingNavigationControllerDelegate
 - (void)slidingViewController:(SlidingViewController *)slidingViewController didSlideOffset:(CGPoint)p{
-    DLOG(@"didSlideOffset");
+    //DLOG(@"didSlideOffset");
     [UIView animateWithDuration:0.02
                      animations:^{
                          UIView *backView = [self referenceView];

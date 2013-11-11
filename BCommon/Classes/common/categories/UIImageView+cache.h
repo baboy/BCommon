@@ -11,7 +11,8 @@
 @interface UIImageView(cache)
 - (void)setImageURL:(NSURL *)imageURL;
 - (void)setImageURL:(NSURL *)imageURL placeholderImage:(UIImage *)placeholderImage;
-- (void)setImageURL:(NSURL *)imageURL withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback;
+- (id)setImageURL:(NSURL *)imageURL withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback;
+- (id)setImageURL:(NSURL *)imageURL placeholderImage:(UIImage *)placeholderImage withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback;
 
 + (NSString *)cachePathForURL:(NSURL *)imageURL;
 + (NSData *)cacheDataForURL:(NSURL *)imageURL;
