@@ -21,7 +21,7 @@
 - (void)centerImageAndTitle{
     [self centerImageAndTitle:3.0];
 }
-- (void)setImageURL:(NSURL *)imageURL forState:(UIControlState)state{
+- (void)setImageURL:(NSURL *)imageURL background:(BOOL)flag forState:(UIControlState)state{
     
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:imageURL parameters:nil];
@@ -34,8 +34,14 @@
                                   if (self == object) {
                                       UIControlState state = [[userInfo valueForKey:@"state"] intValue];
                                       UIImage *image = [UIImage imageWithContentsOfFile:fp];
-                                      if (image)
-                                          [self setImage:image forState:state];                                                                     }
+                                      if (image){
+                                          if (flag) {
+                                              [self setBackgroundImage:image forState:state];
+                                          }else{
+                                              [self setImage:image forState:state];
+                                          }
+                                      }
+                                  }
                               }
                               failure:^(BHttpRequestOperation *request, NSError *error) {
                                   DLOG(@"[UIButton] setImageURL error:%@", error);
@@ -44,5 +50,13 @@
     [operation setUserInfo:userInfo];
     [operation setRequestCache:[BHttpRequestCache fileCache]];
     [client enqueueHTTPRequestOperation:operation];
+}
+- (void)setImageURL:(NSURL *)imageURL forState:(UIControlState)state{
+    [self setImageURL:imageURL background:NO forState:state];
+    
+}
+- (void)setBackgroundImageURL:(NSURL *)imageURL forState:(UIControlState)state{
+    [self setImageURL:imageURL background:YES forState:state];
+    
 }
 @end

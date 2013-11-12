@@ -12,4 +12,5 @@
 - (void)centerImageAndTitle:(float)space;
 - (void)centerImageAndTitle;
 - (void)setImageURL:(NSURL *)url forState:(UIControlState)state;
+- (void)setBackgroundImageURL:(NSURL *)imageURL forState:(UIControlState)state;
 @end
