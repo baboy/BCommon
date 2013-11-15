@@ -99,7 +99,7 @@
                          self.leftController.view.alpha = alpha;
                          self.rightController.view.alpha = alpha;
                           */
-                         CGFloat scale = MIN(0.97+0.05*ABS(offset)/self.centerController.view.bounds.size.width, 1.0);
+                         CGFloat scale = MIN(0.9+0.12*ABS(offset)/self.centerController.view.bounds.size.width, 1.0);
                          CGAffineTransform transform = CGAffineTransformMakeScale(  scale,  scale );
                          self.leftController.view.transform = transform;
                          self.rightController.view.transform = transform;

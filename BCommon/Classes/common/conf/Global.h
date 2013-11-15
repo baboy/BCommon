@@ -14,6 +14,7 @@
 #define APP                 [UIApplication sharedApplication]
 #define APPDelegate         [[UIApplication sharedApplication] delegate]
 #define APPRootController  (id)[(id)[[UIApplication sharedApplication] delegate] rootViewController]
+#define APPWindowRootController  (id)[[(id)[[UIApplication sharedApplication] delegate] window] rootViewController]
 #define AppKeyWindow        [[UIApplication sharedApplication] keyWindow]
 
 
