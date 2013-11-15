@@ -7,7 +7,7 @@
 //
 
 #import "SlidingViewController.h"
-
+/*
 #define SlideViewClassFilter    @[@"UISlider", @"UIBarButtonItem"]
 #define DebugLog(...)    DLOG(__VA_ARGS__);
 enum {
@@ -425,3 +425,4 @@ typedef UInt32 SlidingViewOrientation;
     
 }
 @end
+*/

@@ -356,14 +356,14 @@
         CGRect r = self.leftImageView.frame;
         r.origin = CGPointMake( padding, (h-self.leftImageView.bounds.size.height)/2);
         self.leftImageView.frame = r;
-        labelFrame.origin.x += r.size.width+padding;
+        labelFrame.origin.x += r.size.width+padding/2;
         labelFrame.size.width -= r.size.width+padding;
     }
     if (self.rightImageView) {
         CGRect r = self.rightImageView.frame;
         r.origin = CGPointMake( w - padding-r.size.width, (h-self.rightImageView.bounds.size.height)/2);
         self.rightImageView.frame = r;
-        labelFrame.size.width -= r.size.width+padding;
+        labelFrame.size.width -= r.size.width+padding/2;
     }
     self.titleLabel.frame = labelFrame;
     if (self.rightTitle)
@@ -387,7 +387,7 @@
                          _leftImageView.image = leftImage;
                      }
                      completion:^(BOOL finished) {
-                         
+                         [self setNeedsLayout];
                      }];
     [self setNeedsLayout];
 }

@@ -7,10 +7,11 @@
 //
 
 #import "XUIViewController.h"
+/*
 @interface AppNavigitionController : XUINavigationController
 @property (nonatomic, assign) id rootController;
 @end
-
+*/
 @interface BaseViewController : XUIViewController
 @property (nonatomic, assign) BOOL canPullBack;
 @end

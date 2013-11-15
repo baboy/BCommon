@@ -7,7 +7,7 @@
 //
 
 #import "BaseViewController.h"
-
+/*
 @implementation AppNavigitionController
 - (void) pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
     DLOG(@"[AppNavigitionController] viewControllers count :%d", [self.viewControllers count]);
@@ -43,6 +43,7 @@
     return [self.viewControllers lastObject];
 }
 @end
+*/
 
 @interface BaseViewController ()
 

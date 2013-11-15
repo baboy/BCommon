@@ -7,9 +7,9 @@
 //
 
 #import "SlidingRootViewController.h"
-#import "SlidingViewController.h"
 
 @interface IIViewDeckController(x)
+- (NSMutableArray*) panners;
 - (UIView *)referenceView;
 - (CGRect) referenceBounds;
 - (void) addPanner:(UIView *)view;
@@ -20,47 +20,21 @@
 - (BOOL)gestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch;
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
 @end
-@interface SlidingRootViewController ()<SlidingViewControllerDelegate>
-@property (nonatomic, retain)  SlidingViewController *pushViewController;
+@interface SlidingRootViewController ()
 @end
 
 @implementation SlidingRootViewController
 - (void)dealloc{
-    RELEASE(_pushViewController);
     [super dealloc];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];    
     self.centerhiddenInteractivity = IIViewDeckCenterHiddenNotUserInteractiveWithTapToCloseBouncing;
-    
-    
 }
-- (SlidingViewController *)pushViewController{
-    if (!_pushViewController) {
-        CGRect pushViewFrame = self.referenceBounds;
-        pushViewFrame.origin.x = pushViewFrame.size.width;
-        _pushViewController = [[SlidingViewController alloc] init];
-        _pushViewController.delegate = self;
-        _pushViewController.view.backgroundColor = [UIColor clearColor];
-        [_pushViewController.view setFrame:pushViewFrame];
-        [self.referenceView addSubview:_pushViewController.view];
-        [UIView animateWithDuration:0.1
-                         animations:^{
-                             [_pushViewController.view setFrame:self.referenceBounds];
-                         }
-                         completion:^(BOOL finished) {
-                             
-                         }];
-    }
-    return _pushViewController;
-}
-- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated{
-    [self.pushViewController pushViewController:viewController animated:YES];
-}
-
-- (id)popViewControllerAnimated:(BOOL)animated{
-    return [self.pushViewController popViewControllerAnimated:animated];
+- (void)addPanner:(UIView *)view{
+    [super addPanner:view];
+    [[self.panners lastObject] setDelaysTouchesBegan:YES];
 }
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner{
     BOOL flag = [super gestureRecognizerShouldBegin:panner];
@@ -107,7 +81,8 @@
     BOOL flag = [super gestureRecognizer:gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGestureRecognizer];
     UIScrollView *v = [self topScrollView:[otherGestureRecognizer view]];
     UIScrollView *figureView = [self figureScrollView:[otherGestureRecognizer view]];
-    if (v && figureView && v.contentOffset.x == 0 && figureView.contentOffset.x == 0) {
+    if (v && figureView && (v.contentOffset.x == 0 && figureView.contentOffset.x == 0)
+        && !figureView.alwaysBounceHorizontal) {
         flag = YES;
     }
     DLOG(@"flag:%d",flag);
@@ -132,38 +107,5 @@
                      completion:^(BOOL finished) {
                          
                      }];
-}
-#pragma mark - slidingNavigationControllerDelegate
-- (void)slidingViewController:(SlidingViewController *)slidingViewController didSlideOffset:(CGPoint)p{
-    //DLOG(@"didSlideOffset");
-    [UIView animateWithDuration:0.02
-                     animations:^{
-                         UIView *backView = [self referenceView];
-                         /*
-                         CGFloat alpha = (0.8+0.2*p.x/backView.bounds.size.width);
-                         self.centerController.view.alpha = alpha;
-                         self.leftController.view.alpha = alpha;
-                         self.rightController.view.alpha = alpha;
-                          */
-                         CGFloat scale = MIN(0.97+0.03*p.x/backView.bounds.size.width, 1.0);
-                         CGAffineTransform transform = CGAffineTransformMakeScale(  scale,  scale );
-                         self.centerController.view.transform = transform;
-                         self.leftController.view.transform = transform;
-                         self.rightController.view.transform = transform;
-                     }
-                     completion:^(BOOL finished) {
-                         
-                     }];
-}
-- (void)slidingViewControllerDidBecomeEmpty:(id)slidingView{
-    [self.pushViewController.view removeFromSuperview];
-    self.pushViewController = nil;
-}
-- (void)slidingViewController:(id)slidingView didSlideToController:(UIViewController *)controller{
-    if (controller) {
-        [controller viewWillAppear:YES];
-    }
-}
-- (void)slidingViewController:(id)slidingView willSlideToController:(UIViewController *)controller{
 }
 @end

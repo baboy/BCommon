@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+/*
 @protocol SlidingViewControllerDelegate;
 
 @interface SlidingViewController : XUIViewController
@@ -27,3 +27,4 @@
 - (void) slidingViewControllerWillBecomeEmpty:(id)slidingView;
 - (void) slidingViewControllerDidBecomeEmpty:(id)slidingView;
 @end
+*/

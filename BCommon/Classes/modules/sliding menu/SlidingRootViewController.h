@@ -10,6 +10,4 @@
 
 @interface SlidingRootViewController : IIViewDeckController<IIViewDeckControllerDelegate>
 
-- (void)pushViewController:(id)viewController animated:(BOOL)animated;
-- (id)popViewControllerAnimated:(BOOL)animated;
 @end
