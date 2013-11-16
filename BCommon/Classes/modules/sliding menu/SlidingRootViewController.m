@@ -7,10 +7,12 @@
 //
 
 #import "SlidingRootViewController.h"
+#define DebugLog(...)    DLOG(__VA_ARGS__)
 
 @interface IIViewDeckController(x)
 - (NSMutableArray*) panners;
 - (UIView *)referenceView;
+- (UIView *)centerView;
 - (CGRect) referenceBounds;
 - (void) addPanner:(UIView *)view;
 - (void) addPanners;
@@ -34,16 +36,17 @@
 }
 - (void)addPanner:(UIView *)view{
     [super addPanner:view];
-    [[self.panners lastObject] setDelaysTouchesBegan:YES];
+    UIPanGestureRecognizer *pan = [self.panners lastObject];
+    //pan.delaysTouchesBegan = YES;
 }
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner{
     BOOL flag = [super gestureRecognizerShouldBegin:panner];
-    DLOG(@"flag:%d",flag);
+    DebugLog(@"flag:%d",flag);
     return flag;
 }
 - (BOOL)gestureRecognizer:(UIPanGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
     BOOL flag = [super gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
-    DLOG(@"flag:%d",flag);
+    DebugLog(@"flag:%d",flag);
     return flag;
     
     id view = [touch view];
@@ -79,19 +82,29 @@
 }
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     BOOL flag = [super gestureRecognizer:gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGestureRecognizer];
+    if ([APPWindowRootController viewControllers].count > 1) {
+        return flag;
+    }
     UIScrollView *v = [self topScrollView:[otherGestureRecognizer view]];
     UIScrollView *figureView = [self figureScrollView:[otherGestureRecognizer view]];
     if (v && figureView && (v.contentOffset.x == 0 && figureView.contentOffset.x == 0)
         && !figureView.alwaysBounceHorizontal) {
         flag = YES;
+    }else {
+        if( !v && gestureRecognizer.view == [self centerView] ){
+            flag = YES;
+            DebugLog(@"");
+        }else{
+            DebugLog(@"");
+        }
     }
-    DLOG(@"flag:%d",flag);
+    DebugLog(@"flag:%d",flag);
     return flag;
 }
 #pragma mark - IIViewDeckDelegate
 
 - (void)viewDeckController:(IIViewDeckController*)viewDeckController didChangeOffset:(CGFloat)offset orientation:(IIViewDeckOffsetOrientation)orientation panning:(BOOL)panning{
-    //DLOG(@"didChangeOffset:%f",offset);
+    //DebugLog(@"didChangeOffset:%f",offset);
     [UIView animateWithDuration:0.02
                      animations:^{
                          /*
