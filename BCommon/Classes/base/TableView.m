@@ -496,12 +496,15 @@
     [self setNeedsDisplay];
 }
 - (void) drawRect:(CGRect)rect{
-	float lineWidth = 0.5;
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSaveGState(ctx);
     if (self.backgroundImage) {
         [self.backgroundImage drawInRect:rect];
     }
+    if (self.separatorLineStyle == SeparatorLineStyleNone) {
+        return;
+    }
+	float lineWidth = 0.5;
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
 	CGContextSetShouldAntialias(ctx,false);
 	CGContextSetLineWidth(ctx, lineWidth);
 	CGPoint p1,p2;

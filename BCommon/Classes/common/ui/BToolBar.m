@@ -40,10 +40,6 @@
     return self;
 }
 - (void)setLayer{
-    //
-    
-    [self setBackgroundColor:[UIColor blackColor]];
-    return;
     CAGradientLayer *layer = (CAGradientLayer*)[self layer];
     switch (self.style) {
         case BToolBarStyleDefault:

@@ -25,12 +25,18 @@
 @property (nonatomic, retain) UIButton *leftIndicator;
 @property (nonatomic, retain) UIButton *rightIndicator;
 @property (nonatomic, retain) UIImageView *selectBackgroundView;
+@property (nonatomic, retain) UIImageView *backgroundView;
 - (void) createIndicator;
 - (void)tapIndicator:(UIButton *)button;
 @end
 
 @implementation HTabBarView
 - (void)setup{
+    _backgroundView = [[UIImageView alloc] initWithFrame:self.bounds];
+    _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight;
+    _backgroundView.backgroundColor = [UIColor clearColor];
+    [self addSubview:_backgroundView];
+    
     self.titleFont = [UIFont systemFontOfSize:14];
     self.itemBorderWidth = 1;
     self.separatorWidth = 2;
@@ -41,7 +47,7 @@
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.backgroundColor = [UIColor clearColor];
     [self addSubview:_scrollView];
-    
+    self.vPadding = 3.0;
     self.selectedIndex = 0;
     self.separatorLeftColor = gLineTopColor;
     self.separatorRightColor = gLineBottomColor;
@@ -64,30 +70,48 @@
         [self setItems:self.items];
     }
 }
+- (void)setBackgroundImage:(UIImage *)backgroundImage{
+    if (backgroundImage) {
+        backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsMake(backgroundImage.size.height/2, backgroundImage.size.width/2, backgroundImage.size.height/2, backgroundImage.size.width/2)];
+    }
+    RELEASE(_backgroundImage);
+    _backgroundImage = [backgroundImage retain];
+    self.backgroundView.image = _backgroundImage;
+}
 - (void)setSeparatorColor:(UIColor *)separatorColor{
     [self setSeparatorLeftColor:separatorColor];
     [self setSeparatorRightColor:separatorColor];
 }
-- (void)setSelectedImage:(id)selectedImage{
-    if ([selectedImage isKindOfClass:[UIColor class]]) {
-        selectedImage = [UIImage imageWithColor:selectedImage size:CGSizeMake(5, 5)];
-        selectedImage = [selectedImage resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
+- (void)setSelectedBackgroundImage:(id)selectedBackgroundImage{
+    if ([selectedBackgroundImage isKindOfClass:[UIColor class]]) {
+        selectedBackgroundImage = [UIImage imageWithColor:selectedBackgroundImage size:CGSizeMake(5, 5)];
     }
-    RELEASE(_selectedImage);
-    _selectedImage = [selectedImage retain];
-    self.selectBackgroundView.image = _selectedImage;
+    float w = [selectedBackgroundImage size].width;
+    float h = [selectedBackgroundImage size].height;
+    selectedBackgroundImage = [selectedBackgroundImage resizableImageWithCapInsets:UIEdgeInsetsMake(h/2, w/2, h/2, w/2)];
+    RELEASE(_selectedBackgroundImage);
+    _selectedBackgroundImage = [selectedBackgroundImage retain];
+    self.selectBackgroundView.image = selectedBackgroundImage;
+}
+- (void)setUnSelectedBackgroundImage:(id)unSelectedBackgroundImage{
+    if ([unSelectedBackgroundImage isKindOfClass:[UIColor class]]) {
+        unSelectedBackgroundImage = [UIImage imageWithColor:unSelectedBackgroundImage size:CGSizeMake(5, 5)];
+    }
+    float w = [unSelectedBackgroundImage size].width;
+    float h = [unSelectedBackgroundImage size].height;
+    unSelectedBackgroundImage = [unSelectedBackgroundImage resizableImageWithCapInsets:UIEdgeInsetsMake(h/2, w/2, h/2, w/2)];
+    RELEASE(_unSelectedBackgroundImage);
+    _unSelectedBackgroundImage = [unSelectedBackgroundImage retain];
+}
+- (void)setSelectedImage:(id)selectedImage{
+    [self setSelectedBackgroundImage:selectedImage];;
 }
 - (void)setUnSelectedImage:(id)unSelectedImage{
-    if ([unSelectedImage isKindOfClass:[UIColor class]]) {
-        unSelectedImage = [UIImage imageWithColor:unSelectedImage size:CGSizeMake(5, 5)];
-        unSelectedImage = [unSelectedImage resizableImageWithCapInsets:UIEdgeInsetsMake(2, 2, 2, 2)];
-    }
-    RELEASE(_unSelectedImage);
-    _unSelectedImage = [unSelectedImage retain];
+    [self setUnSelectedBackgroundImage:unSelectedImage];
 }
 - (UIImageView *)selectBackgroundView{
     if (!_selectBackgroundView) {
-        _selectBackgroundView = [[UIImageView alloc] initWithImage:self.selectedImage];
+        _selectBackgroundView = [[UIImageView alloc] initWithImage:self.selectedBackgroundImage];
         _selectBackgroundView.hidden = YES;
         [self.scrollView addSubview:_selectBackgroundView];
         [self.scrollView sendSubviewToBack:_selectBackgroundView];
@@ -122,12 +146,12 @@
     [btn addTarget:self action:@selector(tapItem:) forControlEvents:UIControlEventTouchUpInside];
     [btn setTag:atIndex];
     btn.backgroundColor = [UIColor clearColor];
-    [btn setBackgroundImage:self.unSelectedImage forState:UIControlStateNormal];
+    //[btn setBackgroundImage:self.unSelectedBackgroundImage forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:14];
     [btn setTitle:[info valueForKey:@"name"] forState:UIControlStateNormal];
     [btn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
     [btn setTitleColor:self.selectedTitleColor forState:UIControlStateSelected];
-    //[btn setBackgroundImage:self.selectedImage forState:UIControlStateSelected];
+    //[btn setBackgroundImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(1, 1)] forState:UIControlStateSelected];
     return btn;
 }
 - (void) setItems:(NSArray *)items{
@@ -147,7 +171,7 @@
         if (flag || self.alignLeft) {
             rect.size.width = [name sizeWithFont:self.titleFont].width+10;
         }
-        UIButton *btn = [self createButtonWithFrame:CGRectInset(rect, 0, 3) info:item atIndex:i];
+        UIButton *btn = [self createButtonWithFrame:CGRectInset(rect, 0, self.vPadding) info:item atIndex:i];
 		[self.scrollView addSubview:btn];
 		[self.btns addObject:btn];
 		[btn release];
@@ -216,7 +240,7 @@
     [UIView animateWithDuration:0.2
                      animations:^{
                          self.selectBackgroundView.hidden = NO;
-                         self.selectBackgroundView.frame = curBtn.frame;
+                         self.selectBackgroundView.frame = CGRectInset(curBtn.frame, 0, -self.vPadding);
                      }];
     curBtn.selected = YES;
 	_selectedIndex = i;
@@ -260,7 +284,6 @@
 	_rightIndicator.alpha = 0.4 + (1-p)*0.6;
 }
 - (void) dealloc{
-    RELEASE(_unSelectedImage);
 	RELEASE(_btns);
 	RELEASE(_scrollView);
 	RELEASE(_key);
@@ -269,11 +292,15 @@
 	RELEASE(_rightIndicator);
     RELEASE(_selectedTitleColor);
     RELEASE(_unSelectedTitleColor);
+    RELEASE(_selectedBackgroundImage);
+    RELEASE(_unSelectedBackgroundImage);
     RELEASE(_selectedImage);
+    RELEASE(_unSelectedImage);
     RELEASE(_selectBackgroundView);
     RELEASE(_separatorColor);
     RELEASE(_separatorLeftColor);
     RELEASE(_separatorRightColor);
+    RELEASE(_backgroundImage);
 	[super dealloc];
 }
 @end
@@ -394,7 +421,7 @@
         bar.alignLeft = YES;
         bar.itemWidth = self.itemWidth;
         bar.itemBorderWidth = self.itemBorderWidth;
-        bar.selectedImage = self.selectedImage;
+        bar.selectedBackgroundImage = self.selectedImage;
         bar.separatorWidth = self.separatorWidth;
         bar.separatorColor = self.separatorColor;
         bar.separatorLeftColor = self.separatorLeftColor;

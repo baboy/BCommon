@@ -17,24 +17,17 @@
 @interface BDropMenu()
 @property (nonatomic, retain) UIScrollView *contentView;
 @property (nonatomic, retain) BDropMenuBackground *bgView;
+@property (nonatomic, assign) BOOL isRetain;
 @end
 
 @implementation BDropMenu
-@synthesize items = _items;
-@synthesize delegate = _delegate;
-@synthesize anchor = _anchor;
-@synthesize filterItem = _filterItem;
-@synthesize itemHeight = _itemHeight;
-@synthesize contentView = _contentView;
-@synthesize bgView = _bgView;
-@synthesize offset;
-@synthesize menuWidth;
 - (void)dealloc{
     RELEASE(_bgView);
     RELEASE(_filterItem);
     RELEASE(_items);
     RELEASE(_contentView);
     RELEASE(_anchor);
+    RELEASE(_object);
     [super dealloc];
 }
 - (id)init{
@@ -56,8 +49,14 @@
         [_bgView.layer setShadowRadius:1.0];
         [_bgView.layer setShadowOpacity:1.0];
         [_bgView.layer setShadowOffset:CGSizeMake(0, 1)];
+        
+        self.isRetain = NO;
     }
     return self;
+}
+- (void)addTarget:(id)target action:(SEL)action{
+    self.target = target;
+    self.action = action;
 }
 - (float)heightForContentView{
     float h = 0;
@@ -67,6 +66,9 @@
             break;
         }
         id item = [self.items objectAtIndex:i];
+        if ([item isKindOfClass:[NSDictionary class]]) {
+            item = [[[BDropMenuItem alloc] initWithDictionary:item] autorelease];
+        }
         if (item == self.filterItem) {
             continue;
         }
@@ -79,7 +81,7 @@
     }
     return h;
 }
-- (void)reDraw{
+- (void)relayout{
     int n = [self.items count];
     if (!n || (n==1 && [self.items containsObject:self.filterItem])) {
         [self setHidden:YES];
@@ -149,36 +151,49 @@
     [self.contentView setContentSize:CGSizeMake(0, rect.origin.y - DropMenuVerticalPadding)];
 }
 - (void)setItems:(NSArray *)items{
+    NSMutableArray *arr = [NSMutableArray array];
+    for (int i = 0, n = [items count]; i < n; i++) {
+        id item = [items objectAtIndex:i];
+        if ([item isKindOfClass:[NSDictionary class]]) {
+            item = [[BDropMenuItem alloc] initWithDictionary:item];
+        }
+        [arr addObject:item];
+    }
     RELEASE(_items);
-    _items = [items retain];
-    [self reDraw];
+    _items = [arr retain];
+    [self relayout];
     [self setup];
     
 }
 - (void)setFilterItem:(id)filterItem{
     RELEASE(_filterItem);
     _filterItem = [filterItem retain];
-    [self reDraw];
+    [self relayout];
     [self setup];
 }
 - (void)selectItem:(id)btn{
     int i = [btn tag];
     id item = [self.items objectAtIndex:i];
+    DLOG(@"%@",self.delegate);
     if (self.delegate && [self.delegate respondsToSelector:@selector(dropMenu:didSelectItem:)]) {
         [self.delegate dropMenu:self didSelectItem:item];
     }
-    if (self.superview) {
-        [self setHidden:YES];
-        [self removeFromSuperview];
+    if (self.target && self.action) {
+        [self.target performSelector:self.action withObject:self withObject:item];
     }
+    [self hide];
 }
 - (void)show{
+    if (!self.isRetain) {
+        self.isRetain = YES;
+        [self retain];
+    }
     if ([self.items count] && ([self.items count] > 2 || ![self.items containsObject:self.filterItem])) {
         UIWindow *window = [[UIApplication sharedApplication] keyWindow];
         if (!self.superview) {
             [window addSubview:self];
         }
-        [self reDraw];
+        [self relayout];
         [self setHidden:NO];
     }
 }
@@ -193,6 +208,10 @@
     if([self superview]){
         [self setHidden:YES];
         [self removeFromSuperview];
+    }
+    if (self.isRetain) {
+        self.isRetain = NO;
+        [self release];
     }
 }
 - (BOOL)isShow{
@@ -268,6 +287,9 @@
 - (void)setValue:(NSString *)value{
     RELEASE(_value);
     _value = [value isKindOfClass:[NSString class]]?[value retain]:[[value description] retain];
+}
+- (id)get:(NSString *)key{
+    return [self.dict valueForKey:key];
 }
 - (void)dealloc{
     RELEASE(_name);

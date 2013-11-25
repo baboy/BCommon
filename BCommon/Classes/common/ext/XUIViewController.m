@@ -10,6 +10,22 @@
 #import "UINavigationBar+x.h"
 #import "BCommon.h"
 
+@implementation UINavigationController(x)
+- (void)setNavigationBarBackgroundImage:(UIImage *)backgroundImage{
+    if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarPosition:barMetrics:)]) {
+        
+        backgroundImage = [backgroundImage resizableImageWithCapInsets:UIEdgeInsetsMake(backgroundImage.size.height/2, backgroundImage.size.width/2, backgroundImage.size.height/2, backgroundImage.size.width/2)];
+        [self.navigationBar setBackgroundImage:backgroundImage forBarPosition:UIBarPositionTopAttached barMetrics:UIBarMetricsDefault];
+    }
+    else if ([self.navigationBar respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) {
+        UIImage *navigationBarBackground = backgroundImage;
+        if (navigationBarBackground)
+            [self.navigationBar setBackgroundImage:navigationBarBackground forBarMetrics:UIBarMetricsDefault];
+    }
+    self.navigationBar.titleTextAttributes = [NSDictionary dictionaryWithObject:gNavBarTitleColor forKey:UITextAttributeTextColor];
+}
+
+@end
 @implementation UIViewController (itv)
 
 @end
@@ -70,6 +86,7 @@
 @property (nonatomic, retain) NSMutableDictionary *requestPool;
 @property (nonatomic, retain) NSString *navTitle;
 @end
+
 
 @implementation XUIViewController
 

@@ -23,11 +23,15 @@
 @property (nonatomic, retain) UIColor *unSelectedTitleColor;
 @property (nonatomic, retain) id unSelectedImage;
 @property (nonatomic, retain) id selectedImage;
+@property (nonatomic, retain) id unSelectedBackgroundImage;
+@property (nonatomic, retain) id selectedBackgroundImage;
 
 @property (nonatomic, retain) UIColor *separatorColor;
 @property (nonatomic, retain) UIColor *separatorLeftColor;
 @property (nonatomic, retain) UIColor *separatorRightColor;
 @property (nonatomic, assign) BOOL  alignLeft;
+@property (nonatomic, assign) BOOL  vPadding;
+@property (nonatomic, retain) UIImage *backgroundImage;
 
 - (void) tappedAtIndex:(int)i;
 - (void) selectAtIndex:(int)i;

@@ -178,6 +178,42 @@
         [self startLoadMore];
     }
 }
+#pragma panner delegate
+- (BOOL)topViewShouldBeginGuesture:(UIPanGestureRecognizer *)panner{
+    UIView *v = self.superview;
+    while (![v isKindOfClass:[UIWindow class]]) {
+        for (UIPanGestureRecognizer *panner in v.gestureRecognizers) {
+            if ([panner isKindOfClass:[UIPanGestureRecognizer class]]) {
+                id delegate = panner.delegate;
+                if (delegate && [delegate respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
+                    BOOL flag = [delegate gestureRecognizerShouldBegin:panner];
+                    if (flag) {
+                        return flag;
+                    }
+                }
+            }
+        }
+        v = v.superview;
+    }
+    return NO;
+}
+-(BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer{
+    if (![gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        return [super gestureRecognizerShouldBegin:gestureRecognizer];
+    }
+    
+    BOOL topViewShouldBegin = [self topViewShouldBeginGuesture:gestureRecognizer];
+    BOOL flag = YES;
+    if (topViewShouldBegin) {
+        CGPoint velocity = [gestureRecognizer velocityInView:self];
+        if ( (self.contentOffset.x ==0 && velocity.x >= 0) ||
+            ((self.contentOffset.x+self.bounds.size.width) == self.contentSize.width && velocity.x<=0)) {
+            flag = !topViewShouldBegin;
+        }
+    }
+    //DLOG(@"flag:%@",flag);
+    return flag;
+}
 @end
 
 #define DragActiveAreaHeight    60.0f

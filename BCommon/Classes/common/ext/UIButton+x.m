@@ -23,6 +23,11 @@
 }
 - (void)setImageURL:(NSURL *)imageURL background:(BOOL)flag forState:(UIControlState)state{
     
+    if ( [imageURL isFileURL] ) {
+        UIImage *image = [UIImage imageWithContentsOfFile:[imageURL path]];
+        [self setBackgroundImage:image forState:state];
+        return;
+    }
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:imageURL parameters:nil];
     BHttpRequestOperation *operation =

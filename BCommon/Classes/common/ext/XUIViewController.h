@@ -15,6 +15,9 @@ enum{
     AlertViewTagAlert,
     AlertViewTagError,
 };
+@interface UINavigationController(x)
+- (void)setNavigationBarBackgroundImage:(UIImage *)backgroundImage;
+@end
 @interface UIViewController (itv)
 
 @end
