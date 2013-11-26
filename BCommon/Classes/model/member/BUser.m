@@ -196,7 +196,7 @@ static id _current_user = nil;
         [DBCache setValue:NSStringFromClass([user class]) forKey:@"USER_CLASS"];
         RELEASE(_current_user);
         [[NSNotificationCenter defaultCenter] postNotificationName:NotifyUserProfileUpdated object:nil];
-        return YES;
+        return;
     }
 }
 + (BOOL)loginWithUser:(BUser *)user{
@@ -204,12 +204,10 @@ static id _current_user = nil;
         NSString *data = [[user dict] jsonString];
         DLOG(@"%@", data);
         if (data) {
-            id oldUser = [self user];
             [DBCache setValue:data forKey:@"USER"];
             [DBCache setValue:NSStringFromClass([user class]) forKey:@"USER_CLASS"];
             RELEASE(_current_user);
             [[NSNotificationCenter defaultCenter] postNotificationName:NotifyLogin object:nil];
-            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
             return YES;
         }else{
             DLOG(@"error");

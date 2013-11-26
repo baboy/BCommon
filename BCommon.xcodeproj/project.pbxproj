@@ -70,7 +70,7 @@
 		83278DA117B48C7E00437F80 /* BHttpRequestCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D5A17B48C7E00437F80 /* BHttpRequestCache.m */; };
 		83278DA217B48C7E00437F80 /* BHttpRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D5C17B48C7E00437F80 /* BHttpRequestOperation.m */; };
 		83278DA317B48C7E00437F80 /* SlidingRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D5F17B48C7E00437F80 /* SlidingRootViewController.m */; };
-		83278DA417B48C7E00437F80 /* SlidingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D6117B48C7E00437F80 /* SlidingViewController.m */; };
+		83278DA417B48C7E00437F80 /* SlidingNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D6117B48C7E00437F80 /* SlidingNavigationController.m */; };
 		837A595A17BDD22300EF4EA9 /* Dao.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A595917BDD22300EF4EA9 /* Dao.m */; };
 		83851CCA169D884200451E23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC9169D884200451E23 /* Foundation.framework */; };
 		83851CD9169D884200451E23 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CD8169D884200451E23 /* SenTestingKit.framework */; };
@@ -235,8 +235,8 @@
 		83278D5C17B48C7E00437F80 /* BHttpRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BHttpRequestOperation.m; sourceTree = "<group>"; };
 		83278D5E17B48C7E00437F80 /* SlidingRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlidingRootViewController.h; sourceTree = "<group>"; };
 		83278D5F17B48C7E00437F80 /* SlidingRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidingRootViewController.m; sourceTree = "<group>"; };
-		83278D6017B48C7E00437F80 /* SlidingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlidingViewController.h; sourceTree = "<group>"; };
-		83278D6117B48C7E00437F80 /* SlidingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidingViewController.m; sourceTree = "<group>"; };
+		83278D6017B48C7E00437F80 /* SlidingNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlidingNavigationController.h; sourceTree = "<group>"; };
+		83278D6117B48C7E00437F80 /* SlidingNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlidingNavigationController.m; sourceTree = "<group>"; };
 		837A595817BDD22300EF4EA9 /* Dao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dao.h; sourceTree = "<group>"; };
 		837A595917BDD22300EF4EA9 /* Dao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dao.m; sourceTree = "<group>"; };
 		837A595B17BDD3DC00EF4EA9 /* db.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = db.plist; sourceTree = "<group>"; };
@@ -542,8 +542,8 @@
 			children = (
 				83278D5E17B48C7E00437F80 /* SlidingRootViewController.h */,
 				83278D5F17B48C7E00437F80 /* SlidingRootViewController.m */,
-				83278D6017B48C7E00437F80 /* SlidingViewController.h */,
-				83278D6117B48C7E00437F80 /* SlidingViewController.m */,
+				83278D6017B48C7E00437F80 /* SlidingNavigationController.h */,
+				83278D6117B48C7E00437F80 /* SlidingNavigationController.m */,
 			);
 			path = "sliding menu";
 			sourceTree = "<group>";
@@ -803,7 +803,7 @@
 				83278DA117B48C7E00437F80 /* BHttpRequestCache.m in Sources */,
 				83278DA217B48C7E00437F80 /* BHttpRequestOperation.m in Sources */,
 				83278DA317B48C7E00437F80 /* SlidingRootViewController.m in Sources */,
-				83278DA417B48C7E00437F80 /* SlidingViewController.m in Sources */,
+				83278DA417B48C7E00437F80 /* SlidingNavigationController.m in Sources */,
 				837A595A17BDD22300EF4EA9 /* Dao.m in Sources */,
 				83AD4D5417BDD60B000260A0 /* GString.m in Sources */,
 				83AD4D5517BDD60B000260A0 /* Theme.m in Sources */,
