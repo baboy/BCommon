@@ -60,6 +60,9 @@ static int IndicatorContentTag = 999;
     IndicatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     view.center = CGPointMake(IndicatorView.bounds.size.width/2, IndicatorView.bounds.size.height*0.4);
     view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+    if (container == [self currentWindow]) {
+        IndicatorView.transform = [[self currentWindow] rootViewController].view.transform;
+    }
     [IndicatorView addSubview:view];
     [container addSubview:IndicatorView];
     [container bringSubviewToFront:IndicatorView];

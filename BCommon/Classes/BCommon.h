@@ -28,6 +28,7 @@
 
 #import "BaseViewController.h"
 #import "BaseTableViewController.h"
+#import "SlidingNavigationController.h";
 
 
 //map

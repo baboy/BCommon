@@ -91,7 +91,6 @@
 @implementation XUIViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil{
-    nibBundleOrNil = nibBundleOrNil?nibBundleOrNil:[NSBundle mainBundle];
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.requestPool = [NSMutableDictionary dictionary];
     }
@@ -146,7 +145,12 @@
     }
     [self setTitle:title];
 }
-
+- (void)setTitleLabel:(UILabel *)titleLabel{
+    RELEASE(_titleLabel);
+    _titleLabel = [titleLabel retain];
+    self.navigationItem.titleView = titleLabel;
+    titleLabel.text = self.navTitle;
+}
 - (void)setTitle:(NSString *)title withImageURL:(NSURL *)imageURL{
     float iconWidth = 32, gap = 5;
     float w = iconWidth, x = 0;

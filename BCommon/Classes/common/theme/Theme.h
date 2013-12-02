@@ -112,6 +112,7 @@
 + (UIButton *) buttonForKey:(NSString *)key withTarget:(id)target action:(SEL)action;
 + (UIButton *) buttonWithTitle:(NSString *)title background:(NSString *)imageName  target:(id)target action:(SEL)action;
 
++ (UILabel *) labelForStyle:(NSString *)style;
 
 + (UIButton *) buttonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action;
 + (UIBarButtonItem *) navButtonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action;

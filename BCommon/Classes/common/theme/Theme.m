@@ -116,6 +116,16 @@
     return createButton(CGRectZero, title, imageName, target, action);
 }
 
++ (UILabel *) labelForStyle:(NSString *)style{
+    return createLabel(CGRectZero,
+                [self fontForKey:[NSString stringWithFormat:@"%@-title-font",style]],
+                 nil,
+                 [self colorForKey:[NSString stringWithFormat:@"%@-title-color",style]],
+                [self colorForKey:[NSString stringWithFormat:@"%@-title-shadow-font",style]],
+                 CGSizeMake(0, 1),
+                 UITextAlignmentCenter,
+                 1, UILineBreakModeTailTruncation);
+}
 + (UIButton *) buttonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action{
     UIFont *titleFont = [Theme fontForKey:[NSString stringWithFormat:@"button-%@-title-font", style]];
     UIColor *titleColor = [Theme colorForKey:[NSString stringWithFormat:@"button-%@-title-color", style]];

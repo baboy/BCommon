@@ -16,13 +16,13 @@
 
 @interface BDropMenu()
 @property (nonatomic, retain) UIScrollView *contentView;
-@property (nonatomic, retain) BDropMenuBackground *bgView;
+@property (nonatomic, retain) BDropMenuBackground *backgroundView;
 @property (nonatomic, assign) BOOL isRetain;
 @end
 
 @implementation BDropMenu
 - (void)dealloc{
-    RELEASE(_bgView);
+    RELEASE(_backgroundView);
     RELEASE(_filterItem);
     RELEASE(_items);
     RELEASE(_contentView);
@@ -33,22 +33,22 @@
 - (id)init{
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     if (self = [super initWithFrame:window.bounds]) {     
-        _bgView = [[BDropMenuBackground alloc] initWithFrame:CGRectZero];
-        [self addSubview:_bgView];
+        _backgroundView = [[BDropMenuBackground alloc] initWithFrame:CGRectZero];
+        [self addSubview:_backgroundView];
         _contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
         [_contentView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
         [_contentView setAlwaysBounceVertical:YES];
         [_contentView setBounces:YES];
-        [_bgView addSubview:_contentView];
+        [_backgroundView addSubview:_contentView];
         
         self.backgroundColor = [UIColor clearColor];
         self.itemHeight = 32;
         self.menuWidth = 100;
         
-        [_bgView.layer setShadowColor:[UIColor colorWithWhite:0 alpha:0.9].CGColor];
-        [_bgView.layer setShadowRadius:1.0];
-        [_bgView.layer setShadowOpacity:1.0];
-        [_bgView.layer setShadowOffset:CGSizeMake(0, 1)];
+        [_backgroundView.layer setShadowColor:[UIColor colorWithWhite:0 alpha:0.9].CGColor];
+        [_backgroundView.layer setShadowRadius:1.0];
+        [_backgroundView.layer setShadowOpacity:1.0];
+        [_backgroundView.layer setShadowOffset:CGSizeMake(0, 1)];
         
         self.isRetain = NO;
     }
@@ -58,6 +58,10 @@
     self.target = target;
     self.action = action;
 }
+/**
+ *  计算contentView 高度
+ *
+ */
 - (float)heightForContentView{
     float h = 0;
     int n = [self.items count];
@@ -81,7 +85,11 @@
     }
     return h;
 }
-- (void)relayout{
+/**
+ *  调整界面 先把背景 backgroundView  以及contentView frame 调整好
+ *
+ */
+- (void)relayoutBackground{
     int n = [self.items count];
     if (!n || (n==1 && [self.items containsObject:self.filterItem])) {
         [self setHidden:YES];
@@ -104,14 +112,18 @@
     }
     float h = [self heightForContentView]+topPadding+2*DropMenuVerticalPadding;
     
-    [self.bgView setAnchorPoint:CGPointMake(p.x - x, 0)];
-    [self.bgView setFrame:CGRectMake(x, y, self.menuWidth, h)];
+    [self.backgroundView setAnchorPoint:CGPointMake(p.x - x, 0)];
+    [self.backgroundView setFrame:CGRectMake(x, y, self.menuWidth, h)];
     
-    CGRect rect = CGRectInset(self.bgView.bounds,DropMenuVerticalPadding, DropMenuVerticalPadding);
+    CGRect rect = CGRectInset(self.backgroundView.bounds,DropMenuVerticalPadding, DropMenuVerticalPadding);
     rect.origin.y += topPadding;
     rect.size.height -= topPadding;
     [self.contentView setFrame:rect];
 }
+/**
+ *  创建界面 每一个条目
+ *
+ */
 - (void)setup{
     int n = [self.items count];
     [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -161,14 +173,13 @@
     }
     RELEASE(_items);
     _items = [arr retain];
-    [self relayout];
+    [self relayoutBackground];
     [self setup];
-    
 }
 - (void)setFilterItem:(id)filterItem{
     RELEASE(_filterItem);
     _filterItem = [filterItem retain];
-    [self relayout];
+    [self relayoutBackground];
     [self setup];
 }
 - (void)selectItem:(id)btn{
@@ -193,7 +204,7 @@
         if (!self.superview) {
             [window addSubview:self];
         }
-        [self relayout];
+        [self relayoutBackground];
         [self setHidden:NO];
     }
 }

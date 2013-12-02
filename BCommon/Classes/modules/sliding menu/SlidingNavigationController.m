@@ -146,6 +146,7 @@
 {
     [super viewDidLoad];
     self.delegate = self;
+    self.navigationBar.hidden = YES;
     // add guesture
     
     UIPanGestureRecognizer *pan =
@@ -306,9 +307,9 @@
 {
     if ( self.viewControllers.count <= 1 )
         return;
-    
-    CGPoint touchPoint = [recoginzer locationInView:
-                          [[UIApplication sharedApplication] keyWindow]];
+    UIView *refrenceView = [[UIApplication sharedApplication] keyWindow];
+    refrenceView = self.view;
+    CGPoint touchPoint = [recoginzer locationInView:refrenceView];
     if (recoginzer.state == UIGestureRecognizerStateBegan) {
         
         self.draging = YES;
