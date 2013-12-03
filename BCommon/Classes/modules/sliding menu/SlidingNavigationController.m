@@ -274,6 +274,14 @@
 -(void)popViewController:(id)sender{
     [self popViewControllerAnimated:YES];
 }
+- (BOOL)canDrag{
+    AppNavigitionInternalController *ic = [self.viewControllers lastObject];
+    id vc = [[ic appNavigitionController] topViewController];
+    if (vc && [vc respondsToSelector:@selector(canDrag)]) {
+        return [vc canDrag];
+    }
+    return YES;
+}
 /**
  * p为navigation view 的坐标
  * 根据p 设置背景坐标
@@ -350,7 +358,9 @@
 }
 #pragma panner delegate
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
-    
+    if (![self canDrag]) {
+        return NO;
+    }
     if ( self.viewControllers.count <= 1 )
         return NO;
     DLOG(@"flag:%d",YES);
