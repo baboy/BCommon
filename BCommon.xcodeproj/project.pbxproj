@@ -72,6 +72,7 @@
 		83278DA317B48C7E00437F80 /* SlidingRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D5F17B48C7E00437F80 /* SlidingRootViewController.m */; };
 		83278DA417B48C7E00437F80 /* SlidingNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83278D6117B48C7E00437F80 /* SlidingNavigationController.m */; };
 		837A595A17BDD22300EF4EA9 /* Dao.m in Sources */ = {isa = PBXBuildFile; fileRef = 837A595917BDD22300EF4EA9 /* Dao.m */; };
+		83838BF5184D732F007D995D /* UIPopoverCustomBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = 83838BF4184D732F007D995D /* UIPopoverCustomBackgroundView.m */; };
 		83851CCA169D884200451E23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC9169D884200451E23 /* Foundation.framework */; };
 		83851CD9169D884200451E23 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CD8169D884200451E23 /* SenTestingKit.framework */; };
 		83851CDC169D884200451E23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83851CC9169D884200451E23 /* Foundation.framework */; };
@@ -240,6 +241,8 @@
 		837A595817BDD22300EF4EA9 /* Dao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dao.h; sourceTree = "<group>"; };
 		837A595917BDD22300EF4EA9 /* Dao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dao.m; sourceTree = "<group>"; };
 		837A595B17BDD3DC00EF4EA9 /* db.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = db.plist; sourceTree = "<group>"; };
+		83838BF3184D732F007D995D /* UIPopoverCustomBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPopoverCustomBackgroundView.h; sourceTree = "<group>"; };
+		83838BF4184D732F007D995D /* UIPopoverCustomBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPopoverCustomBackgroundView.m; sourceTree = "<group>"; };
 		83851CC6169D884200451E23 /* libBCommon.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBCommon.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		83851CC9169D884200451E23 /* Foundation.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83851CCD169D884200451E23 /* BCommon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BCommon-Prefix.pch"; sourceTree = "<group>"; };
@@ -388,6 +391,8 @@
 		83278D0217B48C7E00437F80 /* ext */ = {
 			isa = PBXGroup;
 			children = (
+				83838BF3184D732F007D995D /* UIPopoverCustomBackgroundView.h */,
+				83838BF4184D732F007D995D /* UIPopoverCustomBackgroundView.m */,
 				83278D0317B48C7E00437F80 /* BEnumerator.h */,
 				83278D0417B48C7E00437F80 /* BEnumerator.m */,
 				83278D0517B48C7E00437F80 /* TabBarMoreViewController.h */,
@@ -801,6 +806,7 @@
 				83278D9F17B48C7E00437F80 /* BUser.m in Sources */,
 				83278DA017B48C7E00437F80 /* BHttpClient.m in Sources */,
 				83278DA117B48C7E00437F80 /* BHttpRequestCache.m in Sources */,
+				83838BF5184D732F007D995D /* UIPopoverCustomBackgroundView.m in Sources */,
 				83278DA217B48C7E00437F80 /* BHttpRequestOperation.m in Sources */,
 				83278DA317B48C7E00437F80 /* SlidingRootViewController.m in Sources */,
 				83278DA417B48C7E00437F80 /* SlidingNavigationController.m in Sources */,
