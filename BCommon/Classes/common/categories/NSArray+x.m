@@ -80,7 +80,12 @@
         }else if( [v isKindOfClass:[NSDictionary class]] || [v isKindOfClass:[NSArray class]]){
             id dv = [v json];
             if (dv) {
-                [json addObject:v];
+                [json addObject:dv];
+            }
+        }else if([v respondsToSelector:@selector(dict)]){
+            id dv = [v performSelector:@selector(dict) withObject:nil];
+            if (dv) {
+                [json addObject:dv];
             }
         }
     }

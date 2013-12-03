@@ -14,6 +14,7 @@
 - (id)initWithArray:(NSArray *)array;
 - (id)nextObject;
 - (id)firstObject;
+- (BOOL) hasNext;
 @end
 
 @interface NSArray(BEnumerator)

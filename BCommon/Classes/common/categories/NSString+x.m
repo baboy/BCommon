@@ -183,4 +183,94 @@
 	}
 	return s;
 }
+- (NSDictionary *) parseURLStringWithParam:(NSDictionary *)param{
+    NSString *url = self;
+	NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:3];
+	[ret setValue:url forKey:URLParseKeyString];
+	NSString *path = url;
+	
+	int i = [url indexOf:@"?"];
+	if ( i>0 && i<[url length] ) {
+		path = [url substringToIndex:i];
+		NSMutableDictionary *params = [NSMutableDictionary dictionary];
+		NSString *query = [url substringFromIndex:(i+1)];
+		int k = [query indexOf:@"#"];
+		if (k>=0) {
+			query = [query substringToIndex:k];
+		}
+		
+		NSArray *arr = [query componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"&"]];
+		int n = [arr count];
+		for (int j = 0; j<n; j++) {
+			NSString *q = (NSString *)[arr objectAtIndex:j];
+			NSArray *_a = [q split:@"="];
+			if ([_a count]) {
+				NSString *_k = [_a objectAtIndex:0];
+				NSString *_v = [_a count]>1?[_a objectAtIndex:1]:@"";
+				if (param && [_v length]>0) {
+					NSArray *_arr = [_v arrayOfCaptureComponentsMatchedByRegex:PH_REGEXP];
+					if (_arr && [_arr count]>0 && [[_arr objectAtIndex:0] count]==2) {
+						NSString *_k2 = [[_arr objectAtIndex:0] objectAtIndex:1];
+						if ([param valueForKey:_k2]) {
+							_v = [param valueForKey:_k2];
+						}
+					}
+				}
+				[params setValue:_v forKey:_k];
+			}
+		}
+		[ret setValue:params forKey:URLParseKeyParam];
+	}
+	i = [path indexOf:@"#"];
+	if(i>=0 && i<[path length]){
+		path = [path substringToIndex:i];
+	}
+	
+	i = [path lastIndexOf:@"/"];
+	NSString *page = @"";
+	if ( i>6 && i<[path length] ) {
+		page = [path substringFromIndex:(i+1)];
+		path = [path substringToIndex:i];
+	}
+	[ret setValue:page forKey:URLParseKeyPage];
+	[ret setValue:path forKey:URLParseKeyPath];
+	[ret setValue:[NSString stringWithFormat:@"%@/%@",path,page] forKey:URLParseKeyUrl];
+	return ret;
+}
+- (NSString *)	URLStringWithParam:(NSDictionary *)param{
+    NSString *url = self;
+	NSMutableDictionary *phParam = [NSMutableDictionary dictionaryWithDictionary:param];
+    NSString *newUrl = url;
+	if (param) {
+		NSArray *arr = [url placeholders];
+		if (arr) {
+			for (NSString *k in arr) {
+				NSString *v = [[phParam valueForKey:k] description];
+				if (v) {
+					[phParam removeObjectForKey:k];
+				}else {
+					v = @"";
+				}
+				newUrl = [newUrl stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"{%@}",k] withString:v];
+			}
+		}
+	}//end if(param);
+	
+	NSDictionary *d = [newUrl parseURLStringWithParam:nil];
+	NSString *path = [d valueForKey:URLParseKeyPath];
+	NSString *page = [d valueForKey:URLParseKeyPage];
+	newUrl = [page length]>0?[NSString stringWithFormat:@"%@/%@",path,page]:path;
+	NSMutableDictionary *p = [NSMutableDictionary dictionaryWithDictionary:[d valueForKey:URLParseKeyParam]];
+	for (NSString *k in [phParam allKeys]) {
+		[p setValue:[phParam valueForKey:k] forKey:k];
+	}
+    
+	if (p) {
+		NSString *requestString = [p serialize];
+		if (requestString && [requestString length]>0) {
+			newUrl = [NSString stringWithFormat:([url indexOf:@"?"]>=0?@"%@&%@":@"%@?%@"),newUrl,requestString];
+		}
+	}
+	return [newUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+}
 @end

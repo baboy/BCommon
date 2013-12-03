@@ -9,6 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonDigest.h>
 
+#define URLParseKeyString	@"URLParseKeyString"
+#define	URLParseKeyPath		@"URLParseKeyPath"
+#define URLParseKeyPage		@"URLParseKeyPage"
+#define URLParseKeyParam	@"URLParseKeyParam"
+#define URLParseKeyUrl		@"URLParseKeyUrl"
+#define PH_REGEXP		@"\\{([^\\{\\}]+)\\}"
+
 @interface NSString(x) 
 - (NSString *) md5;
 - (NSInteger) lastIndexOf:(NSString *)sep;
@@ -32,4 +39,6 @@
 - (NSString *)pinyin;
 - (NSArray *) placeholders;
 - (NSString *) replaceholders:(NSDictionary *)param;
+- (NSDictionary *) parseURLStringWithParam:(NSDictionary *)param;
+- (NSString *)	URLStringWithParam:(NSDictionary *)param;
 @end

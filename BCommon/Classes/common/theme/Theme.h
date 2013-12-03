@@ -101,6 +101,7 @@
 #define ThemeTabBarBackground [Theme imageForKey:@"tabbar-background"]
 #define ThemeTabBarSelectedBackground [Theme imageForKey:@"tabbar-background-selected"]
 #define ThemeSectionViewBackground [Theme imageForKey:@"table-section-background"]
+#define ThemeSectionViewTitleColor [Theme colorForKey:@"table-section-title-color"]
 @interface Theme : NSObject
 + (void)setup:(NSString *)theme;
 + (UIColor *) colorForKey:(NSString *)key;

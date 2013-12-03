@@ -183,6 +183,21 @@
     return [self updateField:field value:val forField:DBQFieldID value:[NSNumber numberWithInt:ID]];
 }
 
++ (BOOL) updateField:(NSString *)field value:(NSString *)val forQueue:(NSString *)qid key:(NSString *)key{
+    
+    BOOL ret = NO;
+    FMDatabase *db = [self db] ;
+    NSString *sql = @"UPDATE queue set %@=? WHERE qid=? AND key=?";
+    sql = [NSString stringWithFormat:sql,field];
+    ret = [db executeUpdate:sql,val,qid,key];
+	[self close:db];
+	return ret;
+}
+
++ (BOOL) updateData:(NSString *)val forQueue:(NSString *)qid key:(NSString *)key{
+    
+    return [self updateField:DBQFieldData value:val forQueue:qid key:key];
+}
 @end
 
 @implementation BQueue(BQueueDeprecated)
@@ -261,7 +276,7 @@
 	FMResultSet *rs = [db executeQuery:@"SELECT * FROM queue WHERE domain=?",domain];
     ret = [NSMutableArray array];
     while ([rs next]) {
-        BQueueItem *qData = [[[BQueueItem alloc] initWithDictionary:[rs resultDict]] autorelease];
+        BQueueItem *qData = [[[BQueueItem alloc] initWithDictionary:[rs resultDictionary]] autorelease];
         [ret addObject:qData];
     }
 	[self close:db];

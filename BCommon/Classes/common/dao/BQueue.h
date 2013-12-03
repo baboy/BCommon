@@ -55,7 +55,11 @@
 + (BOOL) removeByQueue:(NSString *)qid;
 + (BOOL) removeByQueue:(NSString *)qid key:(NSString *)key;
 + (BOOL) removeByField:(NSString *)field value:(NSString *)val;
-+ (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2;
+
++ (BOOL) updateField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2;
++ (BOOL) updateField:(NSString *)field value:(NSString *)val forId:(int)ID;
++ (BOOL) updateField:(NSString *)field value:(NSString *)val forQueue:(NSString *)qid key:(NSString *)key;
++ (BOOL) updateData:(NSString *)val forQueue:(NSString *)qid key:(NSString *)key;
 @end
 
 @interface BQueueItem(BQueueItemDeprecated)

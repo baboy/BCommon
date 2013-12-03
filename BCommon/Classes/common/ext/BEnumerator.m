@@ -50,6 +50,14 @@
 - (id)nextObject{
     return [self objectInArrayAtIndex:self.pos+1];
 }
+- (BOOL) hasNext{
+    int n = self.array.count;
+    int i = self.pos+1;
+    if ( i >= n || n==0) {
+        return NO;
+    }
+    return YES;
+}
 - (int)count{
     return [self.array count];
 }

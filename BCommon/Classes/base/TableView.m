@@ -341,7 +341,7 @@
         [self addSubview:_titleLabel];
         [self addSubview:_rightLabel];
         
-        self.backgroundColor = gTableSectionBgColor;
+        //self.backgroundColor = gTableSectionBgColor;
         UITapGestureRecognizer *tap = AUTORELEASE([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapEvent:)]);
         [self addGestureRecognizer:tap];
         

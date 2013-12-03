@@ -32,7 +32,7 @@
 - (NSMutableDictionary *)json{
     NSMutableDictionary *json = [NSMutableDictionary dictionary];
     for (NSString *key in [self allKeys]) {
-        if (![key isKindOfClass:[NSString class]]) {
+        if (![key isKindOfClass:[NSString class]] || ([key hasPrefix:@"__"] && [key hasSuffix:@"__"])) {
             continue;
         }
         id v = [self valueForKey:key];
@@ -42,6 +42,11 @@
             [json setValue:v forKey:key];
         }else if( [v isKindOfClass:[NSDictionary class]] || [v isKindOfClass:[NSArray class]]){
             id dv = [v json];
+            if (dv) {
+                [json setValue:dv forKey:key];
+            }
+        }else if([v respondsToSelector:@selector(dict)]){
+            id dv = [v performSelector:@selector(dict) withObject:nil];
             if (dv) {
                 [json setValue:dv forKey:key];
             }
@@ -59,4 +64,38 @@
     NSString *s = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
     return s;
 }
+
+- (NSString *)	serialize{
+	NSMutableString *s = [NSMutableString stringWithCapacity:10];
+	NSArray *keys = [self allKeys];
+	int n = [keys count];
+	NSString *sep = @"&";
+	for (int i=0; i<n; i++) {
+		NSString *k = [keys objectAtIndex:i];
+		id v = [self valueForKey:k];
+		if (i>0)
+			[s appendString:sep];
+		if ([v isKindOfClass:[NSArray class]]) {
+			int n2 = [v count];
+			for (int j=0; j<n2; j++) {
+				if (j>0)
+					[s appendString:sep];
+				if ((NSNull *)v != [NSNull null]) {
+					[s appendFormat:@"%@=%@",k,[[v objectAtIndex:j] description]];
+				}else {
+					[s appendString:k];
+				}
+			}
+		}else {
+			if ((NSNull *)v != [NSNull null]) {
+				[s appendFormat:@"%@=%@",k,[v description]];
+			}else {
+				[s appendString:k];
+			}
+            
+		}
+	}
+	return s;
+}
+
 @end

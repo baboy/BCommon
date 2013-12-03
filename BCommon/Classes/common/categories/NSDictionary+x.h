@@ -13,4 +13,5 @@
 - (NSData *)jsonData;
 - (NSString *)jsonString;
 - (NSMutableDictionary *)json;
+- (NSString *)	serialize;
 @end
