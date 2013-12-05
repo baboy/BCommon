@@ -136,7 +136,7 @@
 	int n = [_items count];
     float width = self.itemWidth;
     if (self.itemWidth <= 0) {
-        width = n>6?46:((self.scrollView.bounds.size.width-self.separatorWidth*(n-1))/n);
+        width = n>6?46:((self.scrollView.bounds.size.width-(self.separatorWidth+self.spacing)*(n-1))/n);
     }
     return width;
 }

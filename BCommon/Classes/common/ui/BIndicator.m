@@ -61,7 +61,10 @@ static int IndicatorContentTag = 999;
     view.center = CGPointMake(IndicatorView.bounds.size.width/2, IndicatorView.bounds.size.height*0.4);
     view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     if (container == [self currentWindow]) {
-        IndicatorView.transform = [[self currentWindow] rootViewController].view.transform;
+        id rootControllr = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+        if (rootControllr) {
+            IndicatorView.transform = [rootControllr view].transform;
+        }
     }
     [IndicatorView addSubview:view];
     [container addSubview:IndicatorView];
@@ -91,11 +94,8 @@ static int IndicatorContentTag = 999;
 }
 
 + (UIView *)showMessage:(NSString *)msg inView:(UIView *)view{
-    UIView *v = [[[UIView alloc] initWithFrame:view.bounds] autorelease];
-    [self createIndicator:YES message:msg inView:v];
-	[view addSubview:v];
-    IndicatorView = [v retain];
-    return v;
+    [self createIndicator:YES message:msg inView:view];
+    return IndicatorView;
 }
 + (UIView *)showMessageAndFadeOut:(NSString *)msg{
     return [self showMessage:msg duration:1.0];

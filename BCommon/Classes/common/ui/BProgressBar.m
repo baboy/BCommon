@@ -17,9 +17,11 @@
 - (void)setup{
     
     self.backgroundColor = [UIColor clearColor];
-    //self.borderColor = [UIColor colorWithWhite:0.6 alpha:1.0];
-    if (!self.barColor)
-        self.barColor = [UIColor colorWithWhite:0 alpha:1.0];
+    if (!self.barColor && [self respondsToSelector:@selector(tintColor)]){
+        self.barColor = self.tintColor;
+    }else if(!self.barColor){
+        self.barColor = [UIColor colorWithWhite:0.6 alpha:1.0];
+    }
     self.clipsToBounds = YES;
 }
 - (id)initWithFrame:(CGRect)frame {
@@ -66,6 +68,7 @@
     [self.barColor set];
     CGRect barFrame = CGRectInset(rect, self.padding, self.padding);
     barFrame.size.width *= self.progress;
+    barFrame.size.width = MAX(barFrame.size.width, 3);
 	CGContextFillRect(ctx, barFrame);
 }
 

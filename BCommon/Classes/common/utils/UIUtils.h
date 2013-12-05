@@ -34,7 +34,15 @@ extern UIButton * createPlayButton(CGRect rect,id target,SEL action);
 extern CGSize CGSizeScale(CGSize size,float scale);
 UIImage *createButtonCircleBg(CGSize size,float rad,UIColor *borderColor,UIColor *color1,UIColor *color2,UIColor *color3,UIColor *color4);
 
+enum  {
+    UIButtonTextAlignmentStyleHorizontal,
+    UIButtonTextAlignmentStyleVertical
+};
+typedef NSInteger UIButtonTextAlignmentStyle;
 
 @interface XUIButton:UIButton
 @property (nonatomic, retain) id object;
+@property (nonatomic, assign) UIButtonTextAlignmentStyle textAlignStyle;
+@end
+@interface VerticalButton : XUIButton
 @end

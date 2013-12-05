@@ -40,6 +40,9 @@ void setButtonImage(UIButton *button,NSString *imageName, NSString *imageName2, 
     }
     
     if (isBackground) {
+        image = image?[image resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height/2, image.size.width/2, image.size.height/2, image.size.width/2)]:nil;
+        image2 = image?[image2 resizableImageWithCapInsets:UIEdgeInsetsMake(image2.size.height/2, image2.size.width/2, image2.size.height/2, image2.size.width/2)]:nil;
+        selectImage = selectImage?[selectImage resizableImageWithCapInsets:UIEdgeInsetsMake(selectImage.size.height/2, selectImage.size.width/2, selectImage.size.height/2, selectImage.size.width/2)]:nil;
         [button setBackgroundImage:image forState:UIControlStateNormal];
         [button setBackgroundImage:image2 forState:UIControlStateHighlighted];
         [button setBackgroundImage:selectImage forState:UIControlStateSelected];
@@ -297,5 +300,66 @@ UIImage *createButtonCircleBg(CGSize size,float rad,UIColor *borderColor,UIColor
     RELEASE(_object);
     [super dealloc];
 }
+- (void)awakeFromNib{
+    [super awakeFromNib];
+    UIImage *backgroundImage = [self backgroundImageForState:UIControlStateNormal];
+    if (backgroundImage) {
+        [self setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+    }
+}
+- (void)setBackgroundImage:(UIImage *)image forState:(UIControlState)state{
+    image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height/2, image.size.width/2, image.size.height/2, image.size.width/2)];
+    [super setBackgroundImage:image forState:state];
+}
+- (void)relayout{
+    if (self.textAlignStyle == UIButtonTextAlignmentStyleHorizontal) {
+        return;
+    }
+    UIImage *image = self.currentImage;
+    float imageWidth = image.size.width;
+    float imageHeight = image.size.height;
+    
+    float labelWidth = self.titleLabel.bounds.size.width;
+    float labelHeight = self.titleLabel.bounds.size.height;
+    
+    self.imageEdgeInsets = UIEdgeInsetsMake(-labelHeight/2,labelWidth/2,labelHeight/2,-labelWidth/2);
+    CGSize titleSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font];
+    CGRect labelFrame = self.titleLabel.frame;
+    labelFrame.size = titleSize;
+    self.titleLabel.frame = labelFrame;
+    CGFloat offsetX = (titleSize.width-labelWidth)/2;
+    self.titleEdgeInsets = UIEdgeInsetsMake(imageHeight/2,-imageWidth/2-offsetX,-imageHeight/2,imageWidth/2+offsetX);
+}
+- (void)setTitle:(NSString *)title forState:(UIControlState)state{
+    [super setTitle:title forState:state];
+    [self relayout];
+}
+- (void)setImage:(UIImage *)image forState:(UIControlState)state{
+    [super setImage:image forState:state];
+    [self relayout];
+}
+- (void)setFrame:(CGRect)frame{
+    [super setFrame:frame];
+    [self relayout];
+}
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    [self relayout];
+}
+@end
+
+@implementation VerticalButton
+
+- (void)awakeFromNib{
+    [super awakeFromNib];
+    self.textAlignStyle = UIButtonTextAlignmentStyleVertical;
+}
+- (id)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
+        self.textAlignStyle = UIButtonTextAlignmentStyleVertical;
+    }
+    return self;
+}
+
 @end
 
