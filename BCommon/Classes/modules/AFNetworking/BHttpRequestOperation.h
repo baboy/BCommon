@@ -21,6 +21,6 @@
 
 @interface BHttpRequest: NSObject
 
-+ (BHttpRequestOperation *)getWithUrl:(NSString *)url params:(NSDictionary *)params callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback;
-+ (BHttpRequestOperation *)postWithUrl:(NSString *)url params:(NSDictionary *)params callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback;
++ (BHttpRequestOperation *)queryWithUrl:(NSString *)url params:(NSDictionary *)params  cache:(BHttpRequestCache*)cache callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback;
++ (BHttpRequestOperation *)postWithUrl:(NSString *)url params:(NSDictionary *)params  cache:(BHttpRequestCache*)cache callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback;
 @end

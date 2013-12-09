@@ -94,6 +94,15 @@
     }
     return flag;
 }
+- (BOOL)copyToPath:(NSString *)newPath{
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *err = nil;
+	BOOL flag = [fileManager copyItemAtPath:self toPath:newPath error:&err];
+    if (!flag || err) {
+        DLOG(@"error:%@",err);
+    }
+    return flag;
+}
 - (BOOL)deleteFile{
 	NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *err = nil;

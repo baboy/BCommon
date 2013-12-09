@@ -22,10 +22,29 @@
     [self centerImageAndTitle:3.0];
 }
 - (void)setImageURL:(NSURL *)imageURL background:(BOOL)flag forState:(UIControlState)state{
-    
+    if (!imageURL) {
+        if (flag) {
+            [self setBackgroundImage:nil forState:state];
+        }else{
+            [self setImage:nil forState:state];
+        }
+        return;
+    }
+    UIImage *image = nil;
     if ( [imageURL isFileURL] ) {
-        UIImage *image = [UIImage imageWithContentsOfFile:[imageURL path]];
-        [self setBackgroundImage:image forState:state];
+        image = [UIImage imageWithContentsOfFile:[imageURL path]];
+    }else{
+        NSString *fp = [UIImageView cachePathForURL:imageURL];
+        if (fp) {
+            image = [UIImage imageWithContentsOfFile:fp];
+        }
+    }
+    if (image) {
+        if (flag) {
+            [self setBackgroundImage:image forState:state];
+        }else{
+            [self setImage:image forState:state];
+        }
         return;
     }
     BHttpClient *client = [BHttpClient defaultClient];
@@ -59,6 +78,16 @@
 - (void)setImageURL:(NSURL *)imageURL forState:(UIControlState)state{
     [self setImageURL:imageURL background:NO forState:state];
     
+}
+- (void)setImageURLString:(NSString *)url forState:(UIControlState)state{
+    if (!url) {
+        [self setImage:nil forState:state];
+        return;
+    }
+    NSURL *imageURL = isURL(url) ?
+                    [NSURL URLWithString:url] :
+                    [NSURL fileURLWithPath:url];
+    [self setImageURL:imageURL forState:UIControlStateNormal];
 }
 - (void)setBackgroundImageURL:(NSURL *)imageURL forState:(UIControlState)state{
     [self setImageURL:imageURL background:YES forState:state];

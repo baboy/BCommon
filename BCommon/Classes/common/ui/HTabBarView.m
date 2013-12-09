@@ -67,7 +67,8 @@
     BOOL flag = frame.size.width!= self.frame.size.width || frame.size.height!=self.frame.size.height;
     [super setFrame:frame];
     if (self.items && flag) {
-        [self setItems:self.items];
+        id items = AUTORELEASE(RETAIN(_items));
+        [self setItems:items];
     }
 }
 - (void)setBackgroundImage:(UIImage *)backgroundImage{

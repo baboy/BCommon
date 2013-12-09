@@ -158,7 +158,7 @@ typedef void (^AFURLConnectionOperationProgressBlock)(NSUInteger bytes, long lon
 
 @implementation BHttpRequest
 
-+ (BHttpRequestOperation *)getWithUrl:(NSString *)url params:(NSDictionary *)params callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback{
++ (BHttpRequestOperation *)queryWithUrl:(NSString *)url params:(NSDictionary *)params   cache:(BHttpRequestCache*)cache callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback{
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:url] parameters:params];
     id operation =
@@ -174,8 +174,11 @@ typedef void (^AFURLConnectionOperationProgressBlock)(NSUInteger bytes, long lon
                                   }
                                   
                               }];
+    [operation setRequestCache:cache];
+    [client enqueueHTTPRequestOperation:operation];
+    return operation;
 }
-+ (BHttpRequestOperation *)postWithUrl:(NSString *)url params:(NSDictionary *)params callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback{
++ (BHttpRequestOperation *)postWithUrl:(NSString *)url params:(NSDictionary *)params   cache:(BHttpRequestCache*)cache callback:(void(^)(BHttpRequestOperation *operation, id response, NSError *error))callback{
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:url] parameters:params];
     id operation =
@@ -191,6 +194,7 @@ typedef void (^AFURLConnectionOperationProgressBlock)(NSUInteger bytes, long lon
                                   }
                                   
                               }];
+    [operation setRequestCache:cache];
     [client enqueueHTTPRequestOperation:operation];
     return operation;
 }

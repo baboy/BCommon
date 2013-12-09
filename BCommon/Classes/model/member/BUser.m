@@ -106,6 +106,13 @@ static id _current_user = nil;
 - (NSString *)avatar{
     return [self get:@"avatar"];
 }
+- (void)setAvatarThumbnail:(NSString *)avatar{
+    [self setValue:avatar forKey:@"avatar_thumbnail"];
+}
+- (NSString *)avatarThumbnail{
+    NSString *thumbnail = [self get:@"avatar_thumbnail"];
+    return thumbnail ?: [self avatar];
+}
 #pragma metadata
 - (void)setMetadata:(NSDictionary *)metadata{
     [self setValue:metadata forKey:@"metadata"];
@@ -141,6 +148,13 @@ static id _current_user = nil;
 - (NSString *)desc{
     return [self get:@"desc"];
 }
+#pragma signature
+- (void)setSignature:(NSString *)signature{
+    [self setValue:signature forKey:@"signature"];
+}
+- (NSString *)signature{
+    return [self get:@"signature"];
+}
 #pragma birthday
 - (void)setBirthday:(NSDate *)birthday{
     [self setValue:birthday forKey:@"birthday"];
@@ -157,7 +171,7 @@ static id _current_user = nil;
         [_dict removeObjectForKey:key];
         return;
     }
-    id oldVal = [[self get:key] description];
+    id oldVal = [AUTORELEASE(RETAIN([self get:key])) description];
     [self.dict setValue:val forKey:key];
     if (self.isLogin && ![[val description] isEqualToString:oldVal]) {
         [BUser updateProfile:self];

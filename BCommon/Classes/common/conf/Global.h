@@ -29,7 +29,7 @@
 
 #define DISPATCH_RELEASE(__OBJ__)   if(__OBJ__) { dispatch_release(__OBJ__); __OBJ__ = NULL; }
 #define RELEASE(__POINTER)  [__POINTER release]; __POINTER = nil;
-#define RETAIN(__POINTER)  [__POINTER retain];
+#define RETAIN(__POINTER)  [__POINTER retain]
 #define AUTORELEASE(__POINTER)  [__POINTER autorelease]
 #define RGBCOLOR(r,g,b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]
 #define G_LOGIN_TIME					@"loginTime"

@@ -28,6 +28,7 @@
 - (NSString *)shortPinyin;
 - (BOOL)isEmail;
 - (BOOL)testRegex:(NSString *)re;
+- (BOOL)copyToPath:(NSString *)newPath;
 - (BOOL)renameToPath:(NSString *)newPath;
 - (BOOL)deleteFile;
 - (long long)sizeOfFile;

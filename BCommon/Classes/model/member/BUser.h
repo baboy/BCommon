@@ -22,8 +22,10 @@
 @property (nonatomic, assign) NSString *email;
 @property (nonatomic, assign) NSString *ukey;
 @property (nonatomic, assign) NSString *name;
+@property (nonatomic, assign) NSString *signature;
 @property (nonatomic, assign) NSString *desc;
 @property (nonatomic, assign) NSString *avatar;
+@property (nonatomic, assign) NSString *avatarThumbnail;
 @property (nonatomic, assign) NSInteger gender;
 @property (nonatomic, assign) NSString *education;
 @property (nonatomic, assign) NSString *school;
