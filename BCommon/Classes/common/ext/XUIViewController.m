@@ -75,9 +75,17 @@
     viewController.navigationItem.leftBarButtonItem = [Theme navBarButtonForKey:@"navigationbar-back-button" withTarget:viewController action:@selector(popViewController:)];
 }
 - (BOOL)shouldAutorotate{
+    UIViewController *vc = self.topViewController;
+    if ([vc respondsToSelector:@selector(shouldAutorotate)]) {
+        return [vc shouldAutorotate];
+    }
     return NO;
 }
 -(NSUInteger)supportedInterfaceOrientations{
+    UIViewController *vc = self.topViewController;
+    if ([vc respondsToSelector:@selector(supportedInterfaceOrientations)]) {
+        return [vc supportedInterfaceOrientations];
+    }
     return UIInterfaceOrientationMaskPortrait;
 }
 @end

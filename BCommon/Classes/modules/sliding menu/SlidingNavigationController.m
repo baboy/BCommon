@@ -218,6 +218,10 @@
     [self relayout];
     
     [self controllerAppear:self.controllers.lastObject];
+    if (!animated) {
+        wrapperController.view.frame = self.container.bounds;
+        return;
+    }
     DebugLog(@"controller count:%d",self.controllers.count);
     [self dragToPoint:CGPointZero completion:^(BOOL finished) {
         
@@ -320,10 +324,18 @@
         [self dragToPoint:p completion:nil];
     }
 }
+- (BOOL)canDrag{
+    AppNavigitionInternalController *ic = [self.viewControllers lastObject];
+    id vc = [[ic appNavigitionController] topViewController];
+    if ([vc respondsToSelector:@selector(canDrag)]) {
+        return [vc canDrag];
+    }
+    return YES;
+}
 #pragma panner delegate
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
     
-    if ( self.viewControllers.count <= 1 )
+    if ( self.viewControllers.count <= 1 || ![self canDrag])
         return NO;
     DLOG(@"flag:%d",YES);
     return YES;
