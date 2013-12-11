@@ -8,90 +8,78 @@
 
 #import "BPhotoScrollView.h"
 
-@interface BPhotoScrollView()<UIScrollViewDelegate>
+
+
+@interface BPhotoView()<UIScrollViewDelegate>
 @property (nonatomic, retain)UIView *container;
 @property (nonatomic, retain) XUIImageView *fullScreenImgView;
+@property (nonatomic, retain) UIImageView *backgroundImageView;
 @property (nonatomic, retain) UIActivityIndicatorView *indicator;
 @property (nonatomic, retain) UIView *bottomView;
 - (void)relayoutImageView:(UIImageView*)imgView withImage:(UIImage *)image;
 @end
 
-@implementation BPhotoScrollView
-@synthesize imgView = _imgView;
-@synthesize container = _container;
-@synthesize thumbnail = _thumbnail;
-@synthesize smallPic = _smallPic;
-@synthesize bigPic = _bigPic;
-@synthesize fullScreenImgView = _fullScreenImgView;
-@synthesize canShowFullScreen;
-@synthesize autoRemove = _autoRemove;
-@synthesize title = _title;
-@synthesize indicator = _indicator;
-@synthesize bottomView = _bottomView;
+@implementation BPhotoView
 - (void)dealloc{
-    [self.imgView setDelegate:nil];
-    [self.fullScreenImgView setDelegate:nil];
-    RELEASE(_imgView);
+    RELEASE(_userInfo);
     RELEASE(_container);
     RELEASE(_thumbnail);
-    RELEASE(_bigPic);
-    RELEASE(_smallPic);
+    RELEASE(_origin);
     RELEASE(_fullScreenImgView);
     RELEASE(_indicator);
     RELEASE(_bottomView);
+    RELEASE(_backgroundImageView);
     [super dealloc];
 }
 - (id)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        _imgView = [[XUIImageView alloc] initWithFrame:self.bounds];
-        [_imgView setClipsToBounds:YES];
-        [_imgView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
-        [_imgView setContentMode:UIViewContentModeScaleAspectFill];
-        [self addSubview:_imgView];
         [self addTarget:self action:@selector(viewFullScreen:) forControlEvents:UIControlEventTouchUpInside];
         self.canShowFullScreen = YES;
     }
     return self;
 }
 - (void)awakeFromNib{
-    if (!self.imgView) {        
-        _imgView = [[XUIImageView alloc] initWithFrame:self.bounds];
-        [_imgView setClipsToBounds:YES];
-        [_imgView setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight];
-        [self addSubview:_imgView];
-        [self addTarget:self action:@selector(viewFullScreen:) forControlEvents:UIControlEventTouchUpInside];
-        self.canShowFullScreen = YES;
-    }
+    [self addTarget:self action:@selector(viewFullScreen:) forControlEvents:UIControlEventTouchUpInside];
 }
-- (void)reset{
-    [self.fullScreenImgView setDelegate:nil];
+- (void)clear{
     RELEASE(_fullScreenImgView);
     RELEASE(_indicator);
     RELEASE(_bottomView);
     RELEASE(_container);
 }
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents{
-    [self removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-    [super removeTarget:target action:action forControlEvents:controlEvents];
+    //[self removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+    //[super removeTarget:target action:action forControlEvents:controlEvents];
     [super addTarget:target action:action forControlEvents:controlEvents];
 }
-- (void)setSmallPic:(NSString *)smallPic{
-    RELEASE(_smallPic);
-    _smallPic = [smallPic retain];
-    [self.imgView setDelegate:self];
-    [self.imgView setImageURLString:smallPic];
+- (UIImageView *)backgroundImageView{
+    if (!_backgroundImageView) {
+        _backgroundImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _backgroundImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth| UIViewAutoresizingFlexibleHeight;
+        _backgroundImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _backgroundImageView.clipsToBounds = YES;
+        [self addSubview:_backgroundImageView];
+        [self sendSubviewToBack:_backgroundImageView];
+    }
+    return _backgroundImageView;
 }
-- (void)imageView:(XUIImageView *)imgView didChangeImage:(UIImage *)image{    
-    if (imgView == self.imgView) {
-        [self.fullScreenImgView setImage:image];
+- (void)setBackgroundImage:(UIImage *)image forState:(UIControlState)state{
+    [self.backgroundImageView setImage:image];
+    [self bringSubviewToFront:self.imageView];
+}
+- (void)setImage:(UIImage *)image forState:(UIControlState)state{
+    [super setImage:image forState:state];
+    [self bringSubviewToFront:self.imageView];
+}
+- (void)setThumbnail:(NSString *)thumbnail{
+    if (!thumbnail) {
         return;
     }
-    if (image) {
-        [self relayoutImageView:imgView withImage:image];
-        [self.container addSubview:[self bottomView]];
-    }
-    [self.indicator stopAnimating];
+    RELEASE(_thumbnail);
+    _thumbnail = [thumbnail retain];
     
+    NSURL *url = isURL(thumbnail) ? [NSURL URLWithString:thumbnail] : [NSURL fileURLWithPath:thumbnail];
+    [self.backgroundImageView setImageURL:url];
 }
 - (void)relayoutImageView:(UIImageView*)imgView withImage:(UIImage *)image{
     float W = self.container.bounds.size.width - 20, H = self.container.bounds.size.height-20;
@@ -110,12 +98,12 @@
     CGRect rect = CGRectMake((self.container.bounds.size.width - imgWidth)/2, (self.container.bounds.size.height-imgHeight)/2, imgWidth, imgHeight);
     [UIView animateWithDuration:0.3
                      animations:^{
-                         [imgView setFrame:rect]; 
+                         [imgView setFrame:rect];
                          [self.container setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.96]];
-                     } 
+                     }
                      completion:^(BOOL finished) {
                      }];
-
+    
 }
 - (UIView *)bottomView{
     if (_bottomView) {
@@ -123,7 +111,7 @@
     }
     CGRect rect = CGRectMake(0, self.container.bounds.size.height-40, self.container.bounds.size.width, 40);
     UIView* view = [[[UIView alloc] initWithFrame:rect] autorelease];
-    [view setBackgroundColor:[UIColor colorWithWhite:0.1 alpha:0.3]];
+    [view setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:0.3]];
     rect = view.bounds;
     float iconWidth = rect.size.height;
     rect.size.width -= iconWidth+10;
@@ -161,16 +149,16 @@
     scrollView.userInteractionEnabled=YES;
     [container addSubview:scrollView];
     [window addSubview:container];
+    self.container = container;
     
     
     CGRect rect = [scrollView convertRect:self.frame fromView:self.superview];
     XUIImageView *imgView = [[[XUIImageView alloc] initWithFrame:rect] autorelease];
-    [imgView setObject:scrollView];
-    [imgView setDelegate:self];
-    UIImage *img = self.imgView.image?self.imgView.image:[UIImage imageNamed:@"thumbnail"];
+    UIImage *img = [self backgroundImageForState:UIControlStateNormal];
+    img = img?:[UIImage imageNamed:@"thumbnail"];
     [imgView setImage:img];
     imgView.userInteractionEnabled=YES;
-    [scrollView addSubview:imgView];    
+    [scrollView addSubview:imgView];
     [self setFullScreenImgView:imgView];
     
     
@@ -186,13 +174,23 @@
     [self.indicator.layer setShadowColor:[UIColor blackColor].CGColor];
     [container addSubview:self.indicator];
     
-    UITapGestureRecognizer *tap = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(quitFullScreen:)] autorelease];
+    UITapGestureRecognizer *tap = AUTORELEASE([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(quitFullScreen:)]);
     [scrollView addGestureRecognizer:tap];
-    [self setContainer: container];
-    [self relayoutImageView:imgView withImage:img]; 
-    if ([self.bigPic isURL]) 
+    
+    [self relayoutImageView:imgView withImage:img];
+    
+    if ([self.origin isURL])
         [self.indicator startAnimating];
-    [imgView setImageURLString:self.bigPic];
+    NSURL *imageURL = [self.origin isURL] ? [NSURL URLWithString:self.origin]:[NSURL fileURLWithPath:self.origin];
+    [imgView setImageURL:imageURL withImageLoadedCallback:^(NSURL *imageURL, NSString *filePath, NSError *error) {
+        [self.indicator stopAnimating];
+        if (error) {
+            [BIndicator showMessageAndFadeOut:error.localizedDescription];
+            return ;
+        }
+        [self relayoutImageView:imgView withImage:imgView.image];
+        [self.container addSubview:[self bottomView]];
+    }];
 }
 - (void)removeSelf{
     if(self.superview)
@@ -201,31 +199,24 @@
 }
 - (void)quitFullScreen:(UIGestureRecognizer *)r{
     UIScrollView *scrollView = (UIScrollView*)r.view;
-    UIImageView *imgView = nil;
-    for ( id v in scrollView.subviews ) {
-        if ([v isKindOfClass:[UIImageView class]]) {
-            imgView = v;
-            break;
-        }
-    }
+    UIImageView *imgView = self.fullScreenImgView;
     CGRect rect = [scrollView convertRect:self.frame fromView:self.superview];
-    if (self.bottomView) {
-        [self.bottomView removeFromSuperview];
-    }
     [self.indicator stopAnimating];
     [UIView animateWithDuration:0.3
                      animations:^{
                          if (imgView) {
                              [imgView setFrame:rect];
                          }
-                         [scrollView.superview setAlpha:0.3];
-                     } 
+                         [self.container setAlpha:0.3];
+                     }
                      completion:^(BOOL finished) {
-                         [scrollView.superview removeFromSuperview];
+                         if (self.container.superview) {
+                             [self.container removeFromSuperview];
+                         }
                          if (self.autoRemove) {
                              [self removeSelf];
                          }
-                         [self reset];
+                         [self clear];
                      }];
 }
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
@@ -246,3 +237,4 @@
     }
 }
 @end
+

@@ -34,7 +34,7 @@
 
 - (id) initWithAnnotation:(id <MKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
 	if (self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier]) {
-        _photoView = [[BPhotoScrollView alloc] initWithFrame:CGRectZero];
+        _photoView = [[BPhotoView alloc] initWithFrame:CGRectZero];
         [_photoView setClipsToBounds:YES];
         _titleLabel = [createLabel(CGRectZero, AnnoTitleFont, nil, AnnoTitleColor, [UIColor colorWithWhite:1.0 alpha:0.6], CGSizeMake(0, 1), UITextAlignmentLeft, 1, UILineBreakModeTailTruncation) retain];
         _descLabel = [createLabel(CGRectZero, AnnoSubTitleFont, nil, AnnoSubTitleColor, nil, CGSizeZero, UITextAlignmentLeft, 1, UILineBreakModeTailTruncation) retain];
@@ -79,8 +79,8 @@
         [self.photoView setFrame:imgRect];
         [self.photoView setHidden:NO];
         rect = CGRectMake(0, 0, rect.size.width - AnnoImageWidth, rect.size.height);
-        [self.photoView setSmallPic:anno.smallPic];
-        [self.photoView setBigPic:anno.bigPic];
+        [self.photoView setThumbnail:anno.smallPic];
+        [self.photoView setOrigin:anno.bigPic];
         if (isURL([anno video])) {
             CGRect vRect = self.videoIndicator.frame;
             vRect.origin = CGPointMake(imgRect.size.width - vRect.size.width, imgRect.size.height-vRect.size.height);

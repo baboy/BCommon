@@ -20,7 +20,7 @@ enum {
 @interface BCalloutMapAnnotationView : CalloutMapAnnotationView
 @property (nonatomic, retain) UILabel *titleLabel;
 @property (nonatomic, retain) UILabel *descLabel;
-@property (nonatomic, retain) BPhotoScrollView *photoView;
+@property (nonatomic, retain) BPhotoView *photoView;
 - (void) setPhotoCanFullScreen:(BOOL)canFullScreen;
 @end
 

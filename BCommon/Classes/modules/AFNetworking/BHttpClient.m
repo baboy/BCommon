@@ -72,7 +72,7 @@
                                 parameters:(NSDictionary *)parameters
 {
     NSParameterAssert(method);
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+	NSMutableURLRequest *request = AUTORELEASE([[NSMutableURLRequest alloc] initWithURL:url]);
     [request setHTTPMethod:method];
     [request setAllHTTPHeaderFields:self.defaultHeaders];
     request.timeoutInterval = REQUEST_TIME_INTERVAL;
@@ -114,7 +114,7 @@
 
 - (NSMutableURLRequest *)requestWithPostURL:(NSURL *)url parameters:(NSDictionary *)parameters
 {
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+	NSMutableURLRequest *request = AUTORELEASE([[NSMutableURLRequest alloc] initWithURL:url]);
     request.timeoutInterval = REQUEST_TIME_INTERVAL;
     [request setHTTPMethod:@"POST"];
     [request setAllHTTPHeaderFields:self.defaultHeaders];
@@ -150,7 +150,7 @@
         NSString *urlString = [Utils url:[url absoluteString] withParam:parameters];
         url = [NSURL URLWithString:urlString];
     }
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+	NSMutableURLRequest *request = AUTORELEASE([[NSMutableURLRequest alloc] initWithURL:url]);
     request.timeoutInterval = REQUEST_TIME_INTERVAL;
     [request setHTTPMethod:@"GET"];
     [request setAllHTTPHeaderFields:self.defaultHeaders];

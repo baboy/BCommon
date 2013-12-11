@@ -12,18 +12,27 @@
 #define AppRootNavigationController (id)[[APPDelegate window] rootViewController]
 
 @interface AppNavigitionInternalController:UIViewController
-@property (nonatomic, strong) AppNavigitionController *appNavigitionController;
-@property (nonatomic, strong) UINavigationController *customNavigationController;
+@property (nonatomic, retain) AppNavigitionController *appNavigitionController;
+@property (nonatomic, retain) UINavigationController *customNavigationController;
 @end
 @implementation AppNavigitionInternalController
+- (void)dealloc{
+    RELEASE(_appNavigitionController);
+    RELEASE(_customNavigationController);
+    [super dealloc];
+}
 - (UINavigationController *)navigationController{
     return self.customNavigationController;
 }
 @end
 @interface AppNavigitionController()
-@property (nonatomic, strong) UIViewController *wrapperController;
+@property (nonatomic, retain) UIViewController *wrapperController;
 @end
 @implementation AppNavigitionController
+- (void)dealloc{
+    RELEASE(_wrapperController);
+    [super dealloc];
+}
 - (id)rootController{
     id rootController = AppRootNavigationController;
     while ([rootController modalViewController]) {
@@ -67,27 +76,24 @@
 @interface SlidingNavigationController()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) NSMutableArray *controllers;
 @property (nonatomic, strong) UIView *container;
-//@property (nonatomic, strong) UIView *backgroundView;
-//@property (nonatomic, strong) UIView *previousViewContainer;
-//@property (nonatomic, strong) UIView *currentViewContainer;
 @property (nonatomic, strong) UIView *blackMaskView;
-@property (nonatomic, strong) NSMutableArray *screenShots;
 @property (nonatomic, assign, getter = isDraging) BOOL  draging;
 @property (nonatomic, assign) CGPoint firstTouchPoint;
 @end
 
 @implementation SlidingNavigationController
+
+- (void)dealloc{
+    RELEASE(_controllers);
+    RELEASE(_container);
+    RELEASE(_blackMaskView);
+    [super dealloc];
+}
 - (NSMutableArray *)controllers{
     if (!_controllers) {
         _controllers = [[NSMutableArray alloc] initWithCapacity:3];
     }
     return _controllers;
-}
-- (NSMutableArray *)screenShots{
-    if (!_screenShots) {
-        _screenShots = [[NSMutableArray alloc] initWithCapacity:3];
-    }
-    return _screenShots;
 }
 - (UIView *)container{
     if (!_container) {
@@ -108,40 +114,6 @@
         [self printView:[view.subviews objectAtIndex:i] level:level+1];
     }
 }
-/*
- - (UIView *)currentViewContainer{
- if (!_currentViewContainer) {
- _currentViewContainer = [[UIView alloc] initWithFrame:self.container.bounds];
- _currentViewContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
- [self.container insertSubview:_currentViewContainer aboveSubview:self.backgroundView];
- }
- return _currentViewContainer;
- }
- - (UIView *)backgroundView{
- if (!_backgroundView)
- {
- 
- _backgroundView = [[UIView alloc]initWithFrame:self.container.bounds];
- _backgroundView.backgroundColor = [UIColor blackColor];
- _backgroundView.autoresizingMask = self.container.autoresizingMask;
- [self.container addSubview:_backgroundView];
- [self.container sendSubviewToBack:_backgroundView];
- 
- self.previousViewContainer = [[UIView alloc] initWithFrame:_backgroundView.bounds];
- self.previousViewContainer.autoresizingMask = _backgroundView.autoresizingMask;
- [_backgroundView addSubview:self.previousViewContainer];
- 
- self.blackMaskView = [[UIView alloc]initWithFrame:_backgroundView.bounds];
- self.blackMaskView.autoresizingMask = _backgroundView.autoresizingMask;
- self.blackMaskView.backgroundColor = [UIColor blackColor];
- self.blackMaskView.alpha = 0.4;
- [_backgroundView addSubview:self.blackMaskView];
- 
- 
- }
- return _backgroundView;
- }
- */
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -150,8 +122,8 @@
     // add guesture
     
     UIPanGestureRecognizer *pan =
-    [[UIPanGestureRecognizer alloc]initWithTarget:self
-                                           action:@selector(pan:)];
+    AUTORELEASE([[UIPanGestureRecognizer alloc]initWithTarget:self
+                                           action:@selector(pan:)]);
     pan.delaysTouchesBegan = YES;
     pan.delegate = self;
     pan.maximumNumberOfTouches = 1;
@@ -160,10 +132,10 @@
 - (UIViewController *)wrapperController:(UIViewController *)vc{
     AppNavigitionController *subNav = (id)vc;
     if (![subNav isKindOfClass:[AppNavigitionController class]]) {
-        subNav = ([[AppNavigitionController alloc] initWithRootViewController:vc]);
+        subNav = AUTORELEASE([[AppNavigitionController alloc] initWithRootViewController:vc]);
         subNav.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
-    AppNavigitionInternalController *wrapper = ([[AppNavigitionInternalController alloc] init]);
+    AppNavigitionInternalController *wrapper = AUTORELEASE([[AppNavigitionInternalController alloc] init]);
     subNav.wrapperController = wrapper;
     wrapper.view.backgroundColor = [UIColor whiteColor];
     wrapper.appNavigitionController = subNav;

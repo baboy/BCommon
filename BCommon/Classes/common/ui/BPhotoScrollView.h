@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "XUIImageView.h"
 
-@interface BPhotoScrollView : UIControl
-@property (nonatomic, retain) XUIImageView *imgView;
-@property (nonatomic, retain) UIImage *thumbnail;
-@property (nonatomic, retain) NSString *smallPic;
-@property (nonatomic, retain) NSString *bigPic;
+@interface BPhotoView : UIButton
+@property (nonatomic, retain) id userInfo;
+@property (nonatomic, retain) NSString *thumbnail;
+@property (nonatomic, retain) NSString *origin;
 @property (nonatomic, retain) NSString *title;
 @property (nonatomic, assign) BOOL canShowFullScreen;
 @property (nonatomic, assign) BOOL autoRemove;
