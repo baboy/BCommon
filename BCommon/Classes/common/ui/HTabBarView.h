@@ -62,7 +62,7 @@
 @property (nonatomic, retain) UIColor *unSelectedTitleColor;
 @property (nonatomic, retain) id unSelectedImage;
 @property (nonatomic, retain) id selectedImage;
-
+@property (nonatomic, assign) float vPadding;
 @property (nonatomic, retain) UIColor *separatorColor;
 @property (nonatomic, retain) UIColor *separatorLeftColor;
 @property (nonatomic, retain) UIColor *separatorRightColor;

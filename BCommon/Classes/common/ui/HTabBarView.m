@@ -205,14 +205,14 @@
 	self.leftIndicator = AUTORELEASE([[UIButton alloc] initWithFrame:r]);
 	[self.leftIndicator setTag:1];
 	[self.leftIndicator addTarget:self action:@selector(tapIndicator:) forControlEvents:UIControlEventTouchUpInside];
-	[self.leftIndicator setImage:[UIImage imageNamed:@"arrow_left.png"] forState:UIControlStateNormal];
+	[self.leftIndicator setImage:[UIImage imageNamed:@"arrow-indicator-left"] forState:UIControlStateNormal];
 	[self addSubview:self.leftIndicator];
 	
 	r.origin.x = self.bounds.size.width - w;
 	self.rightIndicator = AUTORELEASE([[UIButton alloc] initWithFrame:r]);
 	[self.rightIndicator setTag:-1];
 	[self.rightIndicator addTarget:self action:@selector(tapIndicator:) forControlEvents:UIControlEventTouchUpInside];
-	[self.rightIndicator setImage:[UIImage imageNamed:@"arrow_right.png"] forState:UIControlStateNormal];
+	[self.rightIndicator setImage:[UIImage imageNamed:@"arrow-indicator-right"] forState:UIControlStateNormal];
 	[self addSubview:self.rightIndicator];
 	
 }
@@ -417,7 +417,7 @@
             barFrame.origin.x += titleFrame.size.width + 5;
             barFrame.size.width -= titleFrame.size.width + 5; 
         }
-        HTabBarView *bar = AUTORELEASE( [[HTabBarView alloc] initWithFrame:barFrame] );
+        HTabBarView *bar = AUTORELEASE( [[HTabBarView alloc] initWithFrame:CGRectInset(barFrame, 0, self.vPadding)] );
         bar.delegate = self;
         bar.alignLeft = YES;
         bar.itemWidth = self.itemWidth;
