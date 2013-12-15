@@ -25,11 +25,7 @@
     [self setup:@"default"];
 }
 
-+ (UIColor *)colorForKey:(NSString *)key{
-	NSString *v = [DBCache valueForKey:key domain:@"Theme"];
-    if (!v) {
-        v = [DBCache valueForKey:[NSString stringWithFormat:@"%@-color", key] domain:@"Theme"];
-    }
++ (UIColor *) color:(NSString *)v{
     UIColor *color = nil;
 	if ([v length] > 0) {
 		NSArray *arr = [v split:@","];
@@ -47,6 +43,13 @@
 		return color;
 	}
 	return nil;
+}
++ (UIColor *)colorForKey:(NSString *)key{
+	NSString *v = [DBCache valueForKey:key domain:@"Theme"];
+    if (!v) {
+        v = [DBCache valueForKey:[NSString stringWithFormat:@"%@-color", key] domain:@"Theme"];
+    }
+    return [self color:v];
 }
 //形如 16,1代表 16号粗体 16或者16,0 代表16号标准字体
 + (UIFont *)fontForKey:(NSString *)key{

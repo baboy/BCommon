@@ -12,6 +12,9 @@
 - (void)centerImageAndTitle:(float)space;
 - (void)centerImageAndTitle;
 - (void)setImageURL:(NSURL *)url forState:(UIControlState)state;
+- (void)setImageURL:(NSURL *)url placeholder:(UIImage*)placeholder forState:(UIControlState)state;
 - (void)setImageURLString:(NSString *)url forState:(UIControlState)state;
 - (void)setBackgroundImageURL:(NSURL *)imageURL forState:(UIControlState)state;
+- (void)setImageURL:(NSURL *)url placeholder:(UIImage*)placeholder forState:(UIControlState)state;
+- (void)setBackgroundImageURL:(NSURL *)imageURL placeholder:(UIImage*)placeholder forState:(UIControlState)state;
 @end

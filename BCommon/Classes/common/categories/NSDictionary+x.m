@@ -40,6 +40,9 @@
             [v isKindOfClass:[NSNumber class]] ||
             [v isKindOfClass:[NSNull class]]) {
             [json setValue:v forKey:key];
+        }else if([v isKindOfClass:[NSDate class]]){
+            v = [v format:@"yyyy-MM-dd HH:mm:ss Z"];
+            [json setValue:v forKey:key];
         }else if( [v isKindOfClass:[NSDictionary class]] || [v isKindOfClass:[NSArray class]]){
             id dv = [v json];
             if (dv) {

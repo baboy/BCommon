@@ -23,11 +23,6 @@
 }
 - (void)setImageURL:(NSURL *)imageURL background:(BOOL)flag forState:(UIControlState)state{
     if (!imageURL) {
-        if (flag) {
-            [self setBackgroundImage:nil forState:state];
-        }else{
-            [self setImage:nil forState:state];
-        }
         return;
     }
     UIImage *image = nil;
@@ -75,8 +70,24 @@
     [operation setRequestCache:[BHttpRequestCache fileCache]];
     [client enqueueHTTPRequestOperation:operation];
 }
+- (void)setImageURL:(NSURL *)url placeholder:(UIImage*)placeholder background:(BOOL)flag forState:(UIControlState)state{
+    if (placeholder) {
+        if (flag) {
+            [self setBackgroundImage:placeholder forState:state];
+        }else{
+            [self setImage:placeholder forState:state];
+        }
+    }
+    [self setImageURL:url background:flag forState:state];
+}
+- (void)setImageURL:(NSURL *)url placeholder:(UIImage*)placeholder forState:(UIControlState)state{
+    [self setImageURL:url placeholder:placeholder background:NO forState:state];
+}
+- (void)setBackgroundImageURL:(NSURL *)imageURL placeholder:(UIImage*)placeholder forState:(UIControlState)state{
+    [self setImageURL:imageURL placeholder:placeholder background:YES forState:state];
+}
 - (void)setImageURL:(NSURL *)imageURL forState:(UIControlState)state{
-    [self setImageURL:imageURL background:NO forState:state];
+    [self setImageURL:imageURL placeholder:nil background:NO forState:state];
     
 }
 - (void)setImageURLString:(NSString *)url forState:(UIControlState)state{
@@ -90,7 +101,7 @@
     [self setImageURL:imageURL forState:UIControlStateNormal];
 }
 - (void)setBackgroundImageURL:(NSURL *)imageURL forState:(UIControlState)state{
-    [self setImageURL:imageURL background:YES forState:state];
+    [self setImageURL:imageURL placeholder:nil background:YES forState:state];
     
 }
 @end

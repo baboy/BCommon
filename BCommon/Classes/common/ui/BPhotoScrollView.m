@@ -131,10 +131,12 @@
     return view;
 }
 - (void)viewFullScreen:(id)sender{
+    BOOL canFullScreen = self.canShowFullScreen;
     if (sender==nil) {
         sender = self;
+        canFullScreen = YES;
     }
-    if (!self.canShowFullScreen) {
+    if (!canFullScreen) {
         return;
     }
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
@@ -154,7 +156,7 @@
     
     CGRect rect = [scrollView convertRect:self.frame fromView:self.superview];
     XUIImageView *imgView = [[[XUIImageView alloc] initWithFrame:rect] autorelease];
-    UIImage *img = [self backgroundImageForState:UIControlStateNormal];
+    UIImage *img = self.backgroundImageView.image;
     img = img?:[UIImage imageNamed:@"thumbnail"];
     [imgView setImage:img];
     imgView.userInteractionEnabled=YES;
@@ -181,6 +183,9 @@
     
     if ([self.origin isURL])
         [self.indicator startAnimating];
+    if (!self.origin) {
+        return;
+    }
     NSURL *imageURL = [self.origin isURL] ? [NSURL URLWithString:self.origin]:[NSURL fileURLWithPath:self.origin];
     [imgView setImageURL:imageURL withImageLoadedCallback:^(NSURL *imageURL, NSString *filePath, NSError *error) {
         [self.indicator stopAnimating];

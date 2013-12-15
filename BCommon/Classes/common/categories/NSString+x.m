@@ -113,6 +113,9 @@
     return flag;
 }
 - (long long)sizeOfFile{
+    if (![self fileExists]) {
+        return 0;
+    }
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSDictionary *attrs = [fileManager attributesOfItemAtPath:self error: NULL];
     return [attrs fileSize];

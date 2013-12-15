@@ -105,6 +105,7 @@
 #define ThemeSectionViewTitleColor [Theme colorForKey:@"table-section-title-color"]
 @interface Theme : NSObject
 + (void)setup:(NSString *)theme;
++ (UIColor *) color:(NSString *)val;
 + (UIColor *) colorForKey:(NSString *)key;
 + (UIFont *)  fontForKey:(NSString *)key;
 + (UIImage *) imageForKey:(NSString *)key;
