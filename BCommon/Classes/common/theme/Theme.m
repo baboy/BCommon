@@ -91,6 +91,12 @@
     return nil;
 }
 
++ (int) intValueForKey:(NSString *)key{
+    return [[self valueForKey:key] intValue];
+}
++ (float) floatValueForKey:(NSString *)key{
+    return [[self valueForKey:key] floatValue];
+}
 + (UIBarButtonItem *) navBarButtonForKey:(NSString *)key withTarget:(id)target action:(SEL)action{
     
 	NSString *v = [DBCache valueForKey:key domain:@"Theme"];

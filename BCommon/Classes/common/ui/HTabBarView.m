@@ -66,6 +66,7 @@
 - (void)setFrame:(CGRect)frame{
     BOOL flag = frame.size.width!= self.frame.size.width || frame.size.height!=self.frame.size.height;
     [super setFrame:frame];
+    self.scrollView.frame = self.bounds;
     if (self.items && flag) {
         id items = AUTORELEASE(RETAIN(_items));
         [self setItems:items];

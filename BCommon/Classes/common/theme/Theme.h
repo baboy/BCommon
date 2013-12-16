@@ -109,6 +109,8 @@
 + (UIColor *) colorForKey:(NSString *)key;
 + (UIFont *)  fontForKey:(NSString *)key;
 + (UIImage *) imageForKey:(NSString *)key;
++ (int) intValueForKey:(NSString *)key;
++ (float) floatValueForKey:(NSString *)key;
 + (UIBarButtonItem *) navBarButtonForKey:(NSString *)key;
 + (UIBarButtonItem *) navBarButtonForKey:(NSString *)key withTarget:(id)target action:(SEL)action;
 + (UIButton *) buttonForKey:(NSString *)key;
