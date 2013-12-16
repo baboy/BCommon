@@ -10,7 +10,10 @@
 #import "BCommon.h"
 
 id loadViewFromNib(Class nibClass,id owner){
-    NSArray *objectsInNib = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass(nibClass)
+    return loadNib(NSStringFromClass(nibClass), owner);
+}
+id loadNib(NSString *nib, id owner){
+    NSArray *objectsInNib = [[NSBundle mainBundle] loadNibNamed:nib
                                                           owner:owner
                                                         options:nil];
     assert( objectsInNib.count == 1);

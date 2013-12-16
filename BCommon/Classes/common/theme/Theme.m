@@ -148,4 +148,7 @@
     UIBarButtonItem *barBtn = AUTORELEASE([[UIBarButtonItem alloc] initWithCustomView:btn]);
     return barBtn;
 }
++ (id)valueForKey:(NSString *)key{
+    return [DBCache valueForKey:key domain:@"Theme"];
+}
 @end

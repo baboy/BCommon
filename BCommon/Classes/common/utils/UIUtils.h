@@ -15,6 +15,7 @@ enum {
     CustomButtonStyle4
 };
 extern id loadViewFromNib(Class nibClass,id owner);
+extern id loadNib(NSString *nib, id owner);
 
 extern UILabel * createLabel(CGRect frame,UIFont *font,UIColor *bg,UIColor *textColor,UIColor *shadow,CGSize shadowSize,int textAlign,int numOfLines,int lineBreakMode);
 
