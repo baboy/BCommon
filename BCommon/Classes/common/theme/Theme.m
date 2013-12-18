@@ -122,7 +122,10 @@
 }
 
 + (UIButton *) buttonWithTitle:(NSString *)title background:(NSString *)imageName  target:(id)target action:(SEL)action{
-    return createButton(CGRectZero, title, imageName, target, action);
+    UIButton *btn = createButton(CGRectZero, title, imageName, target, action);
+    [btn setTitleColor:[Theme colorForKey:@"button-title-color"] forState:UIControlStateNormal];
+    [btn setTitleColor:[Theme colorForKey:@"button-title-color-selected"] forState:UIControlStateSelected];
+    return btn;
 }
 
 + (UILabel *) labelForStyle:(NSString *)style{

@@ -324,14 +324,14 @@ UIImage *createButtonCircleBg(CGSize size,float rad,UIColor *borderColor,UIColor
     
     float labelWidth = self.titleLabel.bounds.size.width;
     float labelHeight = self.titleLabel.bounds.size.height;
-    
-    self.imageEdgeInsets = UIEdgeInsetsMake(-labelHeight/2,labelWidth/2,labelHeight/2,-labelWidth/2);
+    float vPadding = (self.bounds.size.height - labelHeight-imageHeight)/3;
+    self.imageEdgeInsets = UIEdgeInsetsMake(-labelHeight/2-vPadding,labelWidth/2,labelHeight/2+vPadding,-labelWidth/2);
     CGSize titleSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font];
     CGRect labelFrame = self.titleLabel.frame;
     labelFrame.size = titleSize;
     self.titleLabel.frame = labelFrame;
     CGFloat offsetX = (titleSize.width-labelWidth)/2;
-    self.titleEdgeInsets = UIEdgeInsetsMake(imageHeight/2,-imageWidth/2-offsetX,-imageHeight/2,imageWidth/2+offsetX);
+    self.titleEdgeInsets = UIEdgeInsetsMake(imageHeight/2+vPadding,-imageWidth/2-offsetX,-imageHeight/2-vPadding,imageWidth/2+offsetX);
 }
 - (void)setTitle:(NSString *)title forState:(UIControlState)state{
     [super setTitle:title forState:state];

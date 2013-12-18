@@ -15,6 +15,7 @@
 + (UIView *)showMessage:(NSString *)msg duration:(float) t inView:(UIView *)view;
 + (UIView *)showMessage:(NSString *)msg duration:(float) t;
 + (UIView *)showMessageAndFadeOut:(NSString *)msg;
++ (UIView *)showMessage:(NSString *)msg icon:(UIImage *)icon inView:(UIView *)view;
 + (UIView *)showMessage:(NSString *)msg inView:(UIView *)view;
 + (UIView *)showMessage:(NSString *)msg;
 + (void)fadeOut;

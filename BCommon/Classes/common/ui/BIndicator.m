@@ -15,36 +15,51 @@ static UIView * IndicatorView = nil;
 static int IndicatorContentTag = 999;
 
 @implementation BIndicator
-+ (UIView *)createIndicator:(BOOL)withIndicator message:(NSString *)msg inView:(UIView *)container{
++ (UIView *)createIndicator:(BOOL)withIndicator icon:(UIImage *)icon message:(NSString *)msg inView:(UIView *)container{
+    float iconWidth = 0;
+    float iconHeight = 0;
+    if (withIndicator) {
+        iconWidth = BIndicatorAnimateWidth;
+        iconHeight = BIndicatorAnimateWidth;
+    }else if (icon) {
+        iconWidth *= 2*BIndicatorAnimateWidth;
+        iconHeight = BIndicatorAnimateWidth;
+    }
     CGSize size = [msg sizeWithFont:BIndicatorTextFont];
-    float k = withIndicator?(2*BIndicatorAnimateWidth/2):0;
+    float k = withIndicator?(2*iconWidth/2):0;
     float w = sqrt(4*size.width*size.height/3+k*k)+k+10;
     
     size = [msg sizeWithFont:BIndicatorTextFont constrainedToSize:CGSizeMake(w, CGFLOAT_MAX)];
-    float h = size.height + withIndicator?BIndicatorAnimateWidth:0;
+    float h = size.height + withIndicator?iconWidth:0;
     h = MAX(h, w*3/4);
     w = MAX(w, 120);
     float padding = 10;
-    CGRect rect = CGRectMake(0, 0, w+2*padding, h+2*padding);
+    CGRect rect = CGRectMake(0, 0, w+4*padding, h+4*padding);
     if (size.width == 0 && withIndicator) {
         padding = 5;
-        rect.size = CGSizeMake(BIndicatorAnimateWidth+2*padding, BIndicatorAnimateWidth+2*padding);
+        rect.size = CGSizeMake(iconWidth+2*padding, iconWidth+2*padding);
     }
     
-	UIView *view = [[[UIView alloc] initWithFrame:rect] autorelease];
+	UIView *view = AUTORELEASE([[UIView alloc] initWithFrame:rect] );
 	view.backgroundColor = BIndicatorBackgroundColor;
 	view.layer.cornerRadius = 8.0;
     
     rect = CGRectInset(rect, padding, padding);
-    if (withIndicator) {
-        CGRect r = CGRectMake(rect.origin.x+(rect.size.width-BIndicatorAnimateWidth)/2, rect.origin.y, BIndicatorAnimateWidth, BIndicatorAnimateWidth);
+    if (withIndicator || icon) {
+        CGRect r = CGRectMake(rect.origin.x+(rect.size.width-iconWidth)/2, rect.origin.y, iconWidth, iconWidth);
+        UIView *iconView = nil;
+        if (withIndicator) {
+            iconView = AUTORELEASE([[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]);
+            [iconView setFrame:r];
+            [(id)iconView startAnimating];
+        }else{
+            iconView = [[UIButton alloc] initWithFrame:r];
+            [(id)iconView setImage:icon forState:UIControlStateNormal];
+        }
         
-        UIActivityIndicatorView *aiv = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] autorelease];
-        [aiv setFrame:r];
-        [aiv startAnimating];
-        [view addSubview:aiv];
-        rect.origin.y += BIndicatorAnimateWidth;
-        rect.size.height -= BIndicatorAnimateWidth;
+        [view addSubview:iconView];
+        rect.origin.y += iconWidth;
+        rect.size.height -= iconWidth;
     }
     UILabel *label = createLabel(rect, BIndicatorTextFont, nil, [UIColor whiteColor], [UIColor blackColor], CGSizeMake(0, -1), UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
 	label.text = msg;
@@ -89,17 +104,23 @@ static int IndicatorContentTag = 999;
     }
     return window;
 }
++ (UIView *)createIndicator:(BOOL)withIndicator message:(NSString *)msg inView:(UIView *)container{
+    return [self createIndicator:withIndicator icon:nil message:msg inView:container];
+}
 +(UIView *)showMessage:(NSString *)msg duration:(float)t{
     UIView *view = [self currentWindow];
     return [BIndicator showMessage:msg duration:t inView:view];
 }
 
 + (UIView *)showMessage:(NSString *)msg inView:(UIView *)view{
-    [self createIndicator:YES message:msg inView:view];
-    return IndicatorView;
+    return [self showMessage:msg icon:nil inView:view];
 }
 + (UIView *)showMessageAndFadeOut:(NSString *)msg{
     return [self showMessage:msg duration:1.0];
+}
++ (UIView *)showMessage:(NSString *)msg icon:(UIImage *)icon inView:(UIView *)view{
+    [self createIndicator:YES icon:icon message:msg inView:view];
+    return IndicatorView;
 }
 
 + (UIView *)showMessage:(NSString *)msg{
