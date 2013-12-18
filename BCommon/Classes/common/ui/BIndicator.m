@@ -18,11 +18,14 @@ static int IndicatorContentTag = 999;
 + (UIView *)createIndicator:(BOOL)withIndicator icon:(UIImage *)icon message:(NSString *)msg inView:(UIView *)container{
     float iconWidth = 0;
     float iconHeight = 0;
+    if (icon) {
+        withIndicator = NO;
+    }
     if (withIndicator) {
         iconWidth = BIndicatorAnimateWidth;
         iconHeight = BIndicatorAnimateWidth;
     }else if (icon) {
-        iconWidth *= 2*BIndicatorAnimateWidth;
+        iconWidth = 2*BIndicatorAnimateWidth;
         iconHeight = BIndicatorAnimateWidth;
     }
     CGSize size = [msg sizeWithFont:BIndicatorTextFont];
@@ -46,7 +49,7 @@ static int IndicatorContentTag = 999;
     
     rect = CGRectInset(rect, padding, padding);
     if (withIndicator || icon) {
-        CGRect r = CGRectMake(rect.origin.x+(rect.size.width-iconWidth)/2, rect.origin.y, iconWidth, iconWidth);
+        CGRect r = CGRectMake(rect.origin.x+(rect.size.width-iconWidth)/2, rect.origin.y, iconWidth, iconHeight);
         UIView *iconView = nil;
         if (withIndicator) {
             iconView = AUTORELEASE([[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]);
@@ -58,8 +61,8 @@ static int IndicatorContentTag = 999;
         }
         
         [view addSubview:iconView];
-        rect.origin.y += iconWidth;
-        rect.size.height -= iconWidth;
+        rect.origin.y += iconHeight;
+        rect.size.height -= iconHeight;
     }
     UILabel *label = createLabel(rect, BIndicatorTextFont, nil, [UIColor whiteColor], [UIColor blackColor], CGSizeMake(0, -1), UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
 	label.text = msg;

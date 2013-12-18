@@ -21,8 +21,7 @@
             return nil;
         }
     }
-    if (placeholderImage)
-        self.image = placeholderImage;
+    self.image = placeholderImage;
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:imageURL parameters:nil];
     BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
