@@ -30,7 +30,7 @@
 @property (nonatomic, assign) NSString *education;
 @property (nonatomic, assign) NSString *school;
 @property (nonatomic, assign) NSString *mobile;
-@property (nonatomic, assign) NSDate *birthday;
+@property (nonatomic, assign) NSString *birthday;
 @property (nonatomic, assign) NSInteger age;
 @property (nonatomic, assign) NSDictionary *metadata;
 - (id)initWithDictionary:(NSDictionary *)dict;

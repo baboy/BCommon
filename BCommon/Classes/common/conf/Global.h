@@ -67,6 +67,7 @@
 #define BundleVersion ([[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]?[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleShortVersionString"]:[[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleVersion"])
 
 #define AppURLTypes  [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleURLTypes"]
+#define AppName      [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBundleDisplayName"] 
 #define AppURLSchemes [AppURLTypes count]?[[AppURLTypes objectAtIndex:0] valueForKey:@"CFBundleURLSchemes"]:nil
 #define AppURLScheme [AppURLSchemes count]?[AppURLSchemes objectAtIndex:0]:nil
 

@@ -156,7 +156,7 @@ static id _current_user = nil;
     return [self get:@"signature"];
 }
 #pragma birthday
-- (void)setBirthday:(NSDate *)birthday{
+- (void)setBirthday:(NSString *)birthday{
     [self setValue:birthday forKey:@"birthday"];
 }
 - (NSDate *)birthday{
