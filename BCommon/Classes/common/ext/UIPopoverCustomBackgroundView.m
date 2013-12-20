@@ -27,10 +27,10 @@
 }
 
 + (CGFloat)arrowHeight{
-    return 25.0f;
+    return 20.0f;
 }
 + (CGFloat)arrowBase{
-    return 25.0f;
+    return 20.0f;
 }
 
 - (CGFloat) arrowOffset {
@@ -50,6 +50,7 @@
 }
 
 - (void)drawRect:(CGRect)rect{
+    UIColor *backgroundColor = ThemeViewBackgroundColor?:[UIColor whiteColor];
     float rad = 5.0f;
     float hpadding = 5, vpadding = 5;
     CGRect r = rect;
@@ -57,7 +58,7 @@
 	float miny = CGRectGetMinY(r)+vpadding, midy = CGRectGetMidY(r), maxy = CGRectGetMaxY(r)-vpadding;
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
-    CGContextSetShadowWithColor(ctx, CGSizeMake(0, 1), 2.0, [UIColor colorWithWhite:0 alpha:0.8].CGColor);
+    CGContextSetShadowWithColor(ctx, CGSizeMake(0, 1), 2.0, backgroundColor.CGColor);
     CGContextSetFillColorWithColor(ctx, [UIColor colorWithWhite:1.0 alpha:1.0].CGColor);
     CGPoint p1 = {0,0}, p0 = {0,0}, p2 = {0,0};
     switch (self.arrowDirection) {

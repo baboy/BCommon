@@ -80,9 +80,10 @@ static int IndicatorContentTag = 999;
     view.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
     if (container == [self currentWindow]) {
         id rootControllr = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-        if (rootControllr) {
-            //IndicatorView.transform = CGAffineTransformIdentity;
-            //IndicatorView.transform = [rootControllr view].transform;
+        CGAffineTransform containerTransform = container.transform;
+        if (rootControllr && (containerTransform.tx==0 || containerTransform.ty==0 )) {
+            IndicatorView.transform = CGAffineTransformIdentity;
+            IndicatorView.transform = [rootControllr view].transform;
         }
     }
     [IndicatorView addSubview:view];

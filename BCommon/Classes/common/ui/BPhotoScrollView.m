@@ -13,9 +13,11 @@
 @interface BPhotoView()<UIScrollViewDelegate>
 @property (nonatomic, retain)UIView *container;
 @property (nonatomic, retain) XUIImageView *fullScreenImgView;
+@property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIImageView *backgroundImageView;
 @property (nonatomic, retain) UIActivityIndicatorView *indicator;
 @property (nonatomic, retain) UIView *bottomView;
+@property (nonatomic, assign) UIStatusBarStyle statusBarStyle;
 - (void)relayoutImageView:(UIImageView*)imgView withImage:(UIImage *)image;
 @end
 
@@ -63,6 +65,12 @@
     }
     return _backgroundImageView;
 }
+- (void)setContentMode:(UIViewContentMode)contentMode{
+    self.backgroundImageView.contentMode = contentMode;
+}
+- (UIViewContentMode)contentMode{
+    return self.backgroundImageView.contentMode;
+}
 - (void)setBackgroundImage:(UIImage *)image forState:(UIControlState)state{
     [self.backgroundImageView setImage:image];
     [self bringSubviewToFront:self.imageView];
@@ -81,29 +89,39 @@
     NSURL *url = isURL(thumbnail) ? [NSURL URLWithString:thumbnail] : [NSURL fileURLWithPath:thumbnail];
     [self.backgroundImageView setImageURL:url];
 }
+- (void)saveStatusBarStyle{
+    self.statusBarStyle = [APP statusBarStyle];
+}
+- (void)setStatusBarStyle{
+    [APP setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+- (void)restoreStatusBarStyle{
+    [APP setStatusBarStyle:self.statusBarStyle];
+}
 - (void)relayoutImageView:(UIImageView*)imgView withImage:(UIImage *)image{
-    float W = self.container.bounds.size.width - 20, H = self.container.bounds.size.height-20;
-    float imgWidth = image.size.width, imgHeight = image.size.height;
-    if (W/H > imgWidth/imgHeight) {
-        if (imgHeight>H) {
-            imgHeight = H;
-            imgWidth = image.size.width/image.size.height*imgHeight;
-        }
-    }else{
-        if (imgWidth>W) {
-            imgWidth = W;
-            imgHeight = image.size.height/image.size.width*imgWidth;
-        }
-    }
-    CGRect rect = CGRectMake((self.container.bounds.size.width - imgWidth)/2, (self.container.bounds.size.height-imgHeight)/2, imgWidth, imgHeight);
+    if (!image)
+        return;
+    float padding = 0;
+    float W = self.container.bounds.size.width - 2*padding, H = self.container.bounds.size.height- 2*padding;
+    float imgWidth = MIN(W, image.size.width);
+    float imgHeight = image.size.height*imgWidth/image.size.width;
+    
+    CGRect rect = CGRectMake((self.container.bounds.size.width - imgWidth)/2, MAX((self.container.bounds.size.height-imgHeight)/2, 0), imgWidth, imgHeight);
     [UIView animateWithDuration:0.3
                      animations:^{
                          [imgView setFrame:rect];
                          [self.container setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.96]];
                      }
                      completion:^(BOOL finished) {
+                         self.scrollView.contentSize = CGSizeMake(MAX(imgView.bounds.size.width, self.scrollView.bounds.size.width), MAX(imgView.bounds.size.height, self.scrollView.bounds.size.height));
+                         
                      }];
     
+    float minScale = image.size.width/self.scrollView.bounds.size.width;
+    minScale = minScale>1?1:minScale;
+    
+    [self.scrollView setMinimumZoomScale:minScale];
+    [self.scrollView setMaximumZoomScale:3.0];
 }
 - (UIView *)bottomView{
     if (_bottomView) {
@@ -111,7 +129,7 @@
     }
     CGRect rect = CGRectMake(0, self.container.bounds.size.height-40, self.container.bounds.size.width, 40);
     UIView* view = [[[UIView alloc] initWithFrame:rect] autorelease];
-    [view setBackgroundColor:[UIColor colorWithWhite:0.9 alpha:0.3]];
+    [view setBackgroundColor:[UIColor colorWithWhite:0.1 alpha:0.8]];
     rect = view.bounds;
     float iconWidth = rect.size.height;
     rect.size.width -= iconWidth+10;
@@ -121,9 +139,9 @@
     
     rect.origin.x += rect.size.width;
     rect.size.width = iconWidth;
-    UIImage *downloadImage = [UIImage imageNamed:@"download"];
+    UIImage *downloadImage = [UIImage imageNamed:@"icon-download"];
     rect = CGRectMake(rect.origin.x+(iconWidth-downloadImage.size.width)/2, rect.origin.y+(iconWidth-downloadImage.size.height)/2, downloadImage.size.width, downloadImage.size.height);
-    UIButton *btn = [[[UIButton alloc] initWithFrame:rect] autorelease];
+    UIButton *btn = AUTORELEASE([[UIButton alloc] initWithFrame:rect]);
     [btn setImage:downloadImage forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(saveImage:) forControlEvents:UIControlEventTouchUpInside];
     [view addSubview:btn];
@@ -139,30 +157,36 @@
     if (!canFullScreen) {
         return;
     }
+    [self saveStatusBarStyle];
+    [self setStatusBarStyle];
+    UIImage *thumbnailImage = self.backgroundImageView.image;
+    thumbnailImage = thumbnailImage?:[UIImage imageNamed:@"thumbnail"];
+    
+    
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     UIView *container = [[[UIView alloc] initWithFrame:window.bounds] autorelease];
     [container setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.3]];
     UIScrollView *scrollView = [[[UIScrollView alloc] initWithFrame:container.bounds] autorelease];
+    scrollView.bounces = YES;
+    scrollView.alwaysBounceHorizontal = YES;
+    scrollView.alwaysBounceVertical = YES;
     [scrollView setDelegate:self];
     [scrollView setBackgroundColor:[UIColor clearColor]];
-    [scrollView setMinimumZoomScale:1.0];
-    [scrollView setMaximumZoomScale:3.0];
+    
     scrollView.bouncesZoom = YES;
     scrollView.userInteractionEnabled=YES;
     [container addSubview:scrollView];
     [window addSubview:container];
     self.container = container;
+    self.scrollView = scrollView;
     
     
     CGRect rect = [scrollView convertRect:self.frame fromView:self.superview];
     XUIImageView *imgView = [[[XUIImageView alloc] initWithFrame:rect] autorelease];
-    UIImage *img = self.backgroundImageView.image;
-    img = img?:[UIImage imageNamed:@"thumbnail"];
-    [imgView setImage:img];
+    [imgView setImage:thumbnailImage];
     imgView.userInteractionEnabled=YES;
     [scrollView addSubview:imgView];
     [self setFullScreenImgView:imgView];
-    
     
     
     //
@@ -179,7 +203,7 @@
     UITapGestureRecognizer *tap = AUTORELEASE([[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(quitFullScreen:)]);
     [scrollView addGestureRecognizer:tap];
     
-    [self relayoutImageView:imgView withImage:img];
+    [self relayoutImageView:imgView withImage:thumbnailImage];
     
     if ([self.origin isURL])
         [self.indicator startAnimating];
@@ -187,13 +211,13 @@
         return;
     }
     NSURL *imageURL = [self.origin isURL] ? [NSURL URLWithString:self.origin]:[NSURL fileURLWithPath:self.origin];
-    [imgView setImageURL:imageURL withImageLoadedCallback:^(NSURL *imageURL, NSString *filePath, NSError *error) {
+    [imgView setImageURL:imageURL placeholderImage:thumbnailImage withImageLoadedCallback:^(NSURL *imageURL, NSString *filePath, NSError *error) {
         [self.indicator stopAnimating];
         if (error) {
             [BIndicator showMessageAndFadeOut:error.localizedDescription];
             return ;
         }
-        [self relayoutImageView:imgView withImage:imgView.image];
+        [self relayoutImageView:self.fullScreenImgView withImage:self.fullScreenImgView.image];
         [self.container addSubview:[self bottomView]];
     }];
 }
@@ -203,6 +227,7 @@
     RELEASE(self);
 }
 - (void)quitFullScreen:(UIGestureRecognizer *)r{
+    [self restoreStatusBarStyle];
     UIScrollView *scrollView = (UIScrollView*)r.view;
     UIImageView *imgView = self.fullScreenImgView;
     CGRect rect = [scrollView convertRect:self.frame fromView:self.superview];
@@ -224,10 +249,30 @@
                          [self clear];
                      }];
 }
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale{
-    [scrollView setContentSize:CGSizeMake(scrollView.bounds.size.width*scale, scrollView.bounds.size.height*scale)];
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView{
+    UIView *imageView = [self viewForZoomingInScrollView:scrollView];
+    CGSize boundsSize = scrollView.bounds.size;
+    CGRect imageFrame = imageView.frame;
+    
+    // center horizontally
+    if (imageFrame.size.width < boundsSize.width)
+    {
+        imageFrame.origin.x = (boundsSize.width - imageFrame.size.width) / 2;
+    } else {
+        imageFrame.origin.x = 0;
+    }
+    
+    // center vertically
+    if (imageFrame.size.height < boundsSize.height)
+    {
+        imageFrame.origin.y = (boundsSize.height - imageFrame.size.height) / 2;
+    } else {
+        imageFrame.origin.y = 0;
+    }
+    imageView.frame = imageFrame;
 }
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    DLOG(@"%@",NSStringFromCGSize(scrollView.contentSize));
     for ( id imgView in scrollView.subviews ) {
         if ([imgView isKindOfClass:[UIImageView class]]) {
             return imgView;
@@ -237,8 +282,15 @@
 }
 - (void)saveImage:(id)sender{
     if (self.fullScreenImgView.image) {
-        [BIndicator showMessageAndFadeOut:NSLocalizedString(@"Save image success!", nil)];
-        UIImageWriteToSavedPhotosAlbum(self.fullScreenImgView.image, nil, nil, nil);
+        UIImageWriteToSavedPhotosAlbum(self.fullScreenImgView.image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+    }
+}
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo{
+    if (error != NULL){
+        [BIndicator showMessageAndFadeOut:error.localizedDescription];
+    }
+    else{
+        [BIndicator showMessageAndFadeOut:NSLocalizedString(@"已保存到相册", nil)];
     }
 }
 @end

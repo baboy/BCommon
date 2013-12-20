@@ -8,7 +8,7 @@
 
 
 #import "SlidingNavigationController.h"
-#define DebugLog(...)    DLOG(__VA_ARGS__)
+#define DebugLog(...)    //DLOG(__VA_ARGS__)
 #define AppRootNavigationController (id)[[APPDelegate window] rootViewController]
 
 @interface AppNavigitionInternalController:UIViewController
@@ -201,7 +201,7 @@
 }
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    DLOG(@"");
+    DebugLog(@"");
     UIViewController *wrapperController = [self wrapperController:viewController];
     if (self.controllers.count == 0) {
         [self.controllers addObject:wrapperController];
@@ -337,7 +337,7 @@
     
     if ( self.viewControllers.count <= 1 || ![self canDrag])
         return NO;
-    DLOG(@"flag:%d",YES);
+    DebugLog(@"flag:%d",YES);
     return YES;
 }
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{
