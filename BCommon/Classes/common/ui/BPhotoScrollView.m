@@ -23,6 +23,10 @@
 
 @implementation BPhotoView
 - (void)dealloc{
+    if ([self.scrollView superview]) {
+        [self.scrollView removeFromSuperview];
+    }
+    RELEASE(_scrollView);
     RELEASE(_userInfo);
     RELEASE(_container);
     RELEASE(_thumbnail);
@@ -166,7 +170,7 @@
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     UIView *container = [[[UIView alloc] initWithFrame:window.bounds] autorelease];
     [container setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.3]];
-    UIScrollView *scrollView = [[[UIScrollView alloc] initWithFrame:container.bounds] autorelease];
+    UIScrollView *scrollView = AUTORELEASE([[UIScrollView alloc] initWithFrame:container.bounds]);
     scrollView.bounces = YES;
     scrollView.alwaysBounceHorizontal = YES;
     scrollView.alwaysBounceVertical = YES;

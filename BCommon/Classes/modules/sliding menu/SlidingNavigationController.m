@@ -8,7 +8,7 @@
 
 
 #import "SlidingNavigationController.h"
-#define DebugLog(...)    //DLOG(__VA_ARGS__)
+#define DebugLog(...)    DLOG(__VA_ARGS__)
 #define AppRootNavigationController (id)[[APPDelegate window] rootViewController]
 
 @interface AppNavigitionInternalController:UIViewController
@@ -71,6 +71,10 @@
     vc = [vc navigationController];
     [vc dismissModalViewControllerAnimated:YES];
 }
+- (NSArray *)popToRootViewControllerAnimated:(BOOL)animated{
+    id rootController = [self rootController];
+    return [rootController popToRootViewControllerAnimated:animated];
+}
 @end
 
 @interface SlidingNavigationController()<UIGestureRecognizerDelegate>
@@ -123,7 +127,7 @@
     
     UIPanGestureRecognizer *pan =
     AUTORELEASE([[UIPanGestureRecognizer alloc]initWithTarget:self
-                                           action:@selector(pan:)]);
+                                                       action:@selector(pan:)]);
     pan.delaysTouchesBegan = YES;
     pan.delegate = self;
     pan.maximumNumberOfTouches = 1;
@@ -201,7 +205,7 @@
 }
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
 {
-    DebugLog(@"");
+    DLOG(@"");
     UIViewController *wrapperController = [self wrapperController:viewController];
     if (self.controllers.count == 0) {
         [self.controllers addObject:wrapperController];
@@ -249,6 +253,20 @@
 }
 -(void)popViewController:(id)sender{
     [self popViewControllerAnimated:YES];
+}
+- (NSArray *)popToRootViewControllerAnimated:(BOOL)animated{
+    if (self.viewControllers.count<=1) {
+        return [super popToRootViewControllerAnimated:animated];
+    }
+    NSRange r = {1,0};
+    r.length = self.viewControllers.count-2;
+    NSArray *removedControllers = [self.viewControllers subarrayWithRange:r];
+    for (AppNavigitionInternalController *vc in removedControllers) {
+        [vc.view removeFromSuperview];
+    }
+    [self.controllers removeObjectsInRange:r];
+    [self popViewControllerAnimated:animated];
+    return removedControllers;
 }
 /**
  * p为navigation view 的坐标
@@ -337,7 +355,7 @@
     
     if ( self.viewControllers.count <= 1 || ![self canDrag])
         return NO;
-    DebugLog(@"flag:%d",YES);
+    DLOG(@"flag:%d",YES);
     return YES;
 }
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer{

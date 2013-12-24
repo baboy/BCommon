@@ -80,7 +80,7 @@
     return [s description];
 }
 - (BOOL)isEmail{
-    return [self isMatchedByRegex:@"^[-_A-Za-z0-9]+[-A-Za-z0-9_\\.]*@[-_A-Za-z0-9]+\\.[-_A-Za-z0-9\\.]+$"];
+    return [self isMatchedByRegex:@"^[-_A-Za-z0-9]+[-_A-Za-z0-9_\\.]*@[-_A-Za-z0-9]+\\.[-_A-Za-z0-9\\.]+$"];
 }
 - (BOOL)testRegex:(NSString *)re{
     return [self isMatchedByRegex:re];
