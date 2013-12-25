@@ -26,6 +26,10 @@
 #define gNavBarTitleShadowColor          [Theme colorForKey:@"navigationbar-title-shadow-color"]
 #define gNavBarBackgroundImage  [Theme imageForKey:@"navigationbar-background"]
 #define ThemeViewBackgroundColor    [Theme colorForKey:@"view-background-color"]
+#define ThemeTitleColor             [UIColor colorWithWhite:0 alpha:1]
+#define ThemeDescTextColor           [UIColor colorWithWhite:0.4 alpha:1]
+#define ThemeDescTextFont           [UIFont systemFontOfSize:14]
+#define ThemeDescTextShadowColor    [UIColor colorWithWhite:1 alpha:1]
 
 // table
 #define gTableCellTitleFont     [Theme fontForKey:@"table-cell-title-font"]

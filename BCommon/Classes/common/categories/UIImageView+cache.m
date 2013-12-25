@@ -6,10 +6,41 @@
 //  Copyright (c) 2012 LavaTech. All rights reserved.
 //
 
-#import "UIImageView+cache.h"
-@implementation UIImageView(cache)
 
+#import "UIImageView+cache.h"
+#import <objc/runtime.h>
+
+static char UIImageViewCacheOperationObjectKey;
+
+@interface UIImageView()
+@property (readwrite, nonatomic, strong) NSOperation *requestOperation;
+@end
+@implementation UIImageView(cache)
+- (NSOperation *)requestOperation {
+    return (NSOperation *)objc_getAssociatedObject(self, &UIImageViewCacheOperationObjectKey);
+}
+
+- (void)setRequestOperation:(NSOperation *)requestOperation{
+    objc_setAssociatedObject(self, &UIImageViewCacheOperationObjectKey, requestOperation, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
++ (NSOperationQueue *)sharedImageRequestOperationQueue {
+    static NSOperationQueue *_imageRequestOperationQueue = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _imageRequestOperationQueue = [[NSOperationQueue alloc] init];
+        [_imageRequestOperationQueue setMaxConcurrentOperationCount:NSOperationQueueDefaultMaxConcurrentOperationCount];
+    });
+    
+    return _imageRequestOperationQueue;
+}
+
+- (void)cancelImageRequestOperation {
+    [self.requestOperation cancel];
+    self.requestOperation = nil;
+}
 - (id)setImageURL:(NSURL *)imageURL placeholderImage:(UIImage *)placeholderImage withImageLoadedCallback:(void (^)(NSURL *imageURL, NSString *filePath, NSError *error))callback{
+    [self cancelImageRequestOperation];
     NSString *fp = [UIImageView cachePathForURL:imageURL];
     if (fp) {
         UIImage *img = [UIImage imageWithContentsOfFile:fp];
@@ -44,7 +75,8 @@
                                                                  }];
     [operation setUserInfo:[NSDictionary dictionaryWithObject:self forKey:@"object"]];
     [operation setRequestCache:[BHttpRequestCache fileCache]];
-    [client enqueueHTTPRequestOperation:operation];
+    self.requestOperation = operation;
+    [[[self class] sharedImageRequestOperationQueue] addOperation:self.requestOperation];
     return operation;
 }
 - (void)setImageURL:(NSURL *)imageURL{

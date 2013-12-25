@@ -44,8 +44,8 @@ void setButtonImage(UIButton *button,NSString *imageName, NSString *imageName2, 
     
     if (isBackground) {
         image = image?[image resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height/2, image.size.width/2, image.size.height/2, image.size.width/2)]:nil;
-        image2 = image?[image2 resizableImageWithCapInsets:UIEdgeInsetsMake(image2.size.height/2, image2.size.width/2, image2.size.height/2, image2.size.width/2)]:nil;
-        selectImage = selectImage?[selectImage resizableImageWithCapInsets:UIEdgeInsetsMake(selectImage.size.height/2, selectImage.size.width/2, selectImage.size.height/2, selectImage.size.width/2)]:nil;
+        image2 = image2?[image2 resizableImageWithCapInsets:UIEdgeInsetsMake(image2.size.height/2, image2.size.width/2, image2.size.height/2, image2.size.width/2)]:image;
+        selectImage = selectImage?[selectImage resizableImageWithCapInsets:UIEdgeInsetsMake(selectImage.size.height/2, selectImage.size.width/2, selectImage.size.height/2, selectImage.size.width/2)]:image;
         [button setBackgroundImage:image forState:UIControlStateNormal];
         [button setBackgroundImage:image2 forState:UIControlStateHighlighted];
         [button setBackgroundImage:selectImage forState:UIControlStateSelected];
