@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+enum  {
+    HTabBarAlignmentCenter,
+    HTabBarAlignmentLeft,
+    HTabBarAlignmentRight
+};
+typedef NSInteger HTabBarAlignment;
+
 @protocol HTabBarViewDelegate;
 @interface HTabBarView : UIView<UIScrollViewDelegate>
 @property (nonatomic, assign)id<HTabBarViewDelegate>delegate;
@@ -32,6 +39,7 @@
 @property (nonatomic, assign) BOOL  alignLeft;
 @property (nonatomic, assign) BOOL  vPadding;
 @property (nonatomic, retain) UIImage *backgroundImage;
+@property (nonatomic, assign) HTabBarAlignment align;
 
 - (void) tappedAtIndex:(int)i;
 - (void) selectAtIndex:(int)i;
@@ -66,6 +74,7 @@
 @property (nonatomic, retain) UIColor *separatorColor;
 @property (nonatomic, retain) UIColor *separatorLeftColor;
 @property (nonatomic, retain) UIColor *separatorRightColor;
+@property (nonatomic, assign) HTabBarAlignment align;
 
 - (NSDictionary *)selectValue;
 @end

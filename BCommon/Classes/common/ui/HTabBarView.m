@@ -156,6 +156,12 @@
     //[btn setBackgroundImage:[UIImage imageWithColor:[UIColor clearColor] size:CGSizeMake(1, 1)] forState:UIControlStateSelected];
     return btn;
 }
+- (void)setAlignLeft:(BOOL)alignLeft{
+    if (alignLeft)
+        self.align = HTabBarAlignmentLeft;
+    else
+        self.align = HTabBarAlignmentCenter;
+}
 - (void) setItems:(NSArray *)items{
 	RELEASE(_items);
 	_items = [items retain];
@@ -163,19 +169,23 @@
     
 	int n = [_items count];
     BOOL flag = [self totalWidth] > self.scrollView.frame.size.width;
-	self.btns = [NSMutableArray arrayWithCapacity:n];
+	NSMutableArray *btns = [NSMutableArray arrayWithCapacity:n];
 	CGRect rect = CGRectInset(CGRectMake(0, 0, [self buttonAvgWidth], self.bounds.size.height),0,0);
-	for ( int i=0; i<n; i++) {
+	for ( int j=0; j<n; j++) {
+        int i = j;
+        if (self.align == HTabBarAlignmentRight) {
+            i = n-j-1;
+        }
 		NSDictionary *item = [_items objectAtIndex:i];
 		NSString *name = [item valueForKey:@"name"];
         name = name?:[item valueForKey:@"title"];
         rect.size.width = [self buttonAvgWidth];
-        if (flag || self.alignLeft) {
+        if (flag || self.align != HTabBarAlignmentCenter ) {
             rect.size.width = [name sizeWithFont:self.titleFont].width+10;
         }
         UIButton *btn = [self createButtonWithFrame:CGRectInset(rect, 0, self.vPadding) info:item atIndex:i];
 		[self.scrollView addSubview:btn];
-		[self.btns addObject:btn];
+		[btns addObject:btn];
 		[btn release];
 		rect.origin.x += rect.size.width+self.spacing/2;
 		if (i != (n-1) && self.separatorWidth) {
@@ -188,7 +198,13 @@
 		}
         rect.origin.x += self.spacing/2;
 	}
+    self.btns = (self.align == HTabBarAlignmentRight)?[NSMutableArray arrayWithArray:[btns reverse]]:btns;
 	self.scrollView.contentSize = CGSizeMake(rect.origin.x-self.spacing, 0);
+    if (self.align == HTabBarAlignmentRight) {
+        CGPoint p = CGPointZero;
+        p.x = self.scrollView.contentSize.width - self.scrollView.bounds.size.width;
+        self.scrollView.contentOffset = p;
+    }
     CGRect r = self.scrollView.frame;
 	if ( self.scrollView.contentSize.width > (r.size.width+5) ) {
         [self.scrollView setFrame:CGRectInset(r, HTabBarIndicatorWidth, 0)];
@@ -198,7 +214,7 @@
 	[self selectAtIndex:_selectedIndex];
 }
 - (void)relayout{
-
+    
 }
 - (void) createIndicator{
 	float w = HTabBarIndicatorWidth,h = HTabBarIndicatorHeight;
@@ -369,6 +385,7 @@
     _container = [[UIView alloc] initWithFrame:self.bounds];
     _container.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self addSubview:_container];
+    self.align = HTabBarAlignmentLeft;
 }
 - (id)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
@@ -407,20 +424,26 @@
         NSString *key = [item valueForKey:@"key"];
         NSString *val = [item valueForKey:@"value"];
         NSArray *options = [item valueForKey:@"options"];
-        CGRect barFrame = rowFrame;
+        UIView *lineWrapper = AUTORELEASE([[UIView alloc] initWithFrame:rowFrame]);
+        lineWrapper.backgroundColor = [UIColor clearColor];
+        CGRect barFrame = lineWrapper.bounds;
         if (name && [name length] > 0) {
             float titleWidth = self.titleWidth > 0 ? self.titleWidth: 48;
-            CGRect titleFrame = rowFrame;
+            CGRect titleFrame = barFrame;
             titleFrame.size.width = titleWidth;
+            if (self.align == HTabBarAlignmentRight) {//居右对齐
+                titleFrame.origin.x = barFrame.size.width-titleFrame.size.width;
+            }else{//居左对齐
+                barFrame.origin.x += titleFrame.size.width + 5;
+            }
+            barFrame.size.width -= titleFrame.size.width + 5;
+            
             UILabel *titleLabel = createLabel(titleFrame, self.titleFont, nil, self.titleColor, nil, CGSizeZero, UITextAlignmentLeft, 1, NSLineBreakByTruncatingTail);
             titleLabel.text = name;
-            [self.container addSubview:titleLabel];
-            barFrame.origin.x += titleFrame.size.width + 5;
-            barFrame.size.width -= titleFrame.size.width + 5; 
+            [lineWrapper addSubview:titleLabel];
         }
         HTabBarView *bar = AUTORELEASE( [[HTabBarView alloc] initWithFrame:CGRectInset(barFrame, 0, self.vPadding)] );
         bar.delegate = self;
-        bar.alignLeft = YES;
         bar.itemWidth = self.itemWidth;
         bar.itemBorderWidth = self.itemBorderWidth;
         bar.selectedBackgroundImage = self.selectedImage;
@@ -430,6 +453,7 @@
         bar.separatorRightColor = self.separatorRightColor;
         bar.selectedTitleColor = self.selectedTitleColor;
         bar.unSelectedTitleColor = self.unSelectedTitleColor;
+        bar.align = self.align;
         bar.items = options;
         bar.key = key;
         if ( i > 0 && self.vSeparatorColor) {
@@ -441,7 +465,8 @@
             [self.container addSubview:line];
         }
         
-        [self.container addSubview:bar];
+        [lineWrapper addSubview:bar];
+        [self.container addSubview:lineWrapper];
         rowFrame.origin.y += rowFrame.size.height;
         [bars addObject:bar];
     }
