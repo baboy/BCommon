@@ -233,6 +233,9 @@
 }
 - (UIViewController *)popViewControllerAnimated:(BOOL)animated
 {
+    if (self.viewControllers.count<=1) {
+        return nil;
+    }
     if (!animated) {
         AppNavigitionInternalController *lastViewController = [self.controllers lastObject];
         [self controllerDisappear:lastViewController];

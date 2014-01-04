@@ -206,12 +206,17 @@
     BOOL flag = YES;
     if (topViewShouldBegin) {
         CGPoint velocity = [gestureRecognizer velocityInView:self];
-        if ( (self.contentOffset.x ==0 && velocity.x >= 0) ||
-            ((self.contentOffset.x+self.bounds.size.width) == self.contentSize.width && velocity.x<=0)) {
+        
+        if ( ABS(velocity.x) > ABS(velocity.y) &&
+            (
+              (self.contentOffset.x ==0 && velocity.x >= 0) ||
+            ((self.contentOffset.x+self.bounds.size.width) == self.contentSize.width && velocity.x<=0)
+              )
+            ) {
             flag = !topViewShouldBegin;
         }
     }
-    //DLOG(@"flag:%@",flag);
+    DLOG(@"flag:%d",flag);
     return flag;
 }
 @end

@@ -203,7 +203,12 @@
     if (self.align == HTabBarAlignmentRight) {
         CGPoint p = CGPointZero;
         p.x = self.scrollView.contentSize.width - self.scrollView.bounds.size.width;
-        self.scrollView.contentOffset = p;
+        CGRect scrollViewFrame = self.scrollView.frame;
+        if (self.scrollView.contentSize.width < scrollViewFrame.size.width) {
+            scrollViewFrame.origin.x += (scrollViewFrame.size.width - self.scrollView.contentSize.width);
+            scrollViewFrame.size.width = self.scrollView.contentSize.width;
+            self.scrollView.frame = scrollViewFrame;
+        }
     }
     CGRect r = self.scrollView.frame;
 	if ( self.scrollView.contentSize.width > (r.size.width+5) ) {

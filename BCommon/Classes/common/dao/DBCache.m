@@ -7,7 +7,6 @@
 //
 
 #import "DBCache.h"
-#import "JSONKit.h"
 
 #define CacheSqlQuery	@"select value from cache where domain=? and key=?"
 #define CacheSqlRmForKey	@"delete from cache where domain=? and key=?"
@@ -72,10 +71,10 @@
 }
 
 + (NSDictionary *)dictForKey:(NSString *)key{
-    return [[self valueForKey:key] objectFromJSONString];
+    return [[self valueForKey:key] json];
 }
 + (NSArray *)arrayForKey:(NSString *)key{    
-    return [[self valueForKey:key] objectFromJSONString];
+    return [[self valueForKey:key] json];
 }
 + (void) clear{
 

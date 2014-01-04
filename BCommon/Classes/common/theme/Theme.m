@@ -28,6 +28,9 @@
 + (UIColor *) color:(NSString *)v{
     UIColor *color = nil;
 	if ([v length] > 0) {
+        if ([v hasPrefix:@"#"]) {
+            return [UIColor colorFromString:v];
+        }
 		NSArray *arr = [v split:@","];
         if ([arr count]==1 && (v.length>=6)) {
             color = [UIColor colorFromString:v];
@@ -75,8 +78,8 @@
     if (!v) {
         return nil;
     }
-    if ([v hasPrefix:@"#"]) {
-        UIImage *image = [UIImage imageWithColor:[UIColor colorFromString:v] size:CGSizeMake(10, 10)];
+    if ([v hasPrefix:@"#"] || [v rangeOfString:@","].length>0) {
+        UIImage *image = [UIImage imageWithColor:[self color:v] size:CGSizeMake(10, 10)];
         [image resizableImageWithCapInsets:UIEdgeInsetsMake(image.size.height/2, image.size.width/2, image.size.height/2, image.size.width/2)];
         return image;
     }
@@ -154,6 +157,8 @@
 }
 + (UIBarButtonItem *) navButtonForStyle:(NSString *)style withTitle:(NSString *)title frame:(CGRect)frame target:(id)target action:(SEL)action{
     UIButton *btn = [self buttonForStyle:style withTitle:title frame:frame target:target action:action];
+    UIFont *font = [Theme fontForKey:@"navbar-item-title-font"];
+    btn.titleLabel.font = font;
     UIBarButtonItem *barBtn = AUTORELEASE([[UIBarButtonItem alloc] initWithCustomView:btn]);
     return barBtn;
 }

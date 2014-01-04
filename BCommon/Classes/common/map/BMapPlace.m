@@ -56,12 +56,13 @@
     NSString *url = [Utils url:ApiQueryLocation withParam:@{@"loc":location}];
     BHttpClient *client = [BHttpClient defaultClient];
     NSURLRequest *request = [client requestWithGetURL:[NSURL URLWithString:url] parameters:nil];
+    DLOG(@"%@",request);
     BHttpRequestOperation *operation =
     [client jsonRequestWithURLRequest:request
                               success:^(BHttpRequestOperation *operation, id json) {
                                   BResponse *response = [BResponse responseWithDictionary:json];
                                   NSMutableArray *addrs = nil;
-                                  NSError *error = nil;
+                                  NSError *error = response.error;
                                   if (response.isSuccess) {
                                       NSDictionary *data = response.data;
                                       NSArray *list = [data valueForKey:@"list"];

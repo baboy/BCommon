@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define ConnectionFailedMsg    NSLocalizedString(@"Network connection failed!",nil)
+#define ConnectionFailedMsg    NSLocalizedString(@"网络请求失败!",nil)
 #define ShareVodContentFormat    [GString stringForKey:@"share-vod-content-format"]
 #define ShareLiveContentFormat   [GString stringForKey:@"share-live-content-format"]
 #define ShareRadioContentFormat  [GString stringForKey:@"share-radio-content-format"]

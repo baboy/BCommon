@@ -196,7 +196,7 @@
 	return s;
 }
 - (NSDictionary *) parseURLStringWithParam:(NSDictionary *)param{
-    NSString *url = self;
+    NSString *url = [NSString stringWithString:self];
 	NSMutableDictionary *ret = [NSMutableDictionary dictionaryWithCapacity:3];
 	[ret setValue:url forKey:URLParseKeyString];
 	NSString *path = url;
@@ -242,7 +242,9 @@
 	NSString *page = @"";
 	if ( i>6 && i<[path length] ) {
 		page = [path substringFromIndex:(i+1)];
-		path = [path substringToIndex:i];
+        if (page.length>0) {
+            path = [path substringToIndex:i];
+        }
 	}
 	[ret setValue:page forKey:URLParseKeyPage];
 	[ret setValue:path forKey:URLParseKeyPath];
@@ -250,7 +252,7 @@
 	return ret;
 }
 - (NSString *)	URLStringWithParam:(NSDictionary *)param{
-    NSString *url = self;
+    NSString *url = [NSString stringWithString:self];
 	NSMutableDictionary *phParam = [NSMutableDictionary dictionaryWithDictionary:param];
     NSString *newUrl = url;
 	if (param) {
@@ -280,7 +282,7 @@
 	if (p) {
 		NSString *requestString = [p serialize];
 		if (requestString && [requestString length]>0) {
-			newUrl = [NSString stringWithFormat:([url indexOf:@"?"]>=0?@"%@&%@":@"%@?%@"),newUrl,requestString];
+			newUrl = [NSString stringWithFormat:([newUrl indexOf:@"?"]>=0?@"%@&%@":@"%@?%@"),newUrl,requestString];
 		}
 	}
 	return [newUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];

@@ -46,6 +46,7 @@
 @implementation BQueueItem(BQueueItemDeprecated)
 
 - (int)tabId{
+    return 0;
 }
 - (void) setTabId:(int)tabId{
     [self setID:tabId];
@@ -300,6 +301,6 @@
 }
 + (BOOL) setField:(NSString *)field value:(NSString *)val forField:(NSString*)field2 value:(id)val2{
     
-    [self updateField:field value:val forField:field2 value:val2];
+    return [self updateField:field value:val forField:field2 value:val2];
 }
 @end

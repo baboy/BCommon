@@ -147,7 +147,7 @@
 }
 - (NSMutableURLRequest *)requestWithGetURL:(NSURL *)url parameters:(NSDictionary *)parameters{
     if (parameters) {
-        NSString *urlString = [Utils url:[url absoluteString] withParam:parameters];
+        NSString *urlString = [[url absoluteString] URLStringWithParam:parameters];//[Utils url:[url absoluteString] withParam:parameters];
         url = [NSURL URLWithString:urlString];
     }
 	NSMutableURLRequest *request = AUTORELEASE([[NSMutableURLRequest alloc] initWithURL:url]);

@@ -1,6 +1,5 @@
 platform :ios, :deployment_target => '5.0'
 
-pod 'JSONKit'
 pod 'Reachability'
 pod 'FMDB'
 pod 'RegexKitLite'
