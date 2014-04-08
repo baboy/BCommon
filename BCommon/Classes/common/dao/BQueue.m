@@ -142,6 +142,7 @@
              value:[NSString stringWithFormat:@"%d", status]
           forField:DBQFieldID
              value:[NSString stringWithFormat:@"%d", ID]];
+    return YES;
 }
 + (BOOL) removeById:(int) ID{
     BOOL ret = NO;
