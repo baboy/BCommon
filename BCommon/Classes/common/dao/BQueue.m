@@ -106,7 +106,7 @@
     FMDatabase *db = [self db];
 	FMResultSet *rs = [db executeQuery:@"SELECT * FROM queue WHERE qid=? LIMIT 0,1",qid];
     if ([rs next]) {
-        ret = [[[BQueueItem alloc] initWithDictionary:[rs resultDict]] autorelease];
+        ret = [[[BQueueItem alloc] initWithDictionary:[rs resultDictionary]] autorelease];
     }
     [self close:db];
 	return ret;
@@ -131,18 +131,14 @@
     ret = [NSMutableArray array];
     while ([rs next]) {
         BQueueItem *qItem = AUTORELEASE([[BQueueItem alloc] initWithDictionary:[rs resultDictionary]]);
-        id qData = clazz ? AUTORELEASE([[clazz alloc] initWithDictionary:[qItem jsonData]]) : qItem;
+        id qData = clazz ? AUTORELEASE([[clazz alloc] initWithDictionary:[[qItem data] json]]) : qItem;
         [ret addObject:qData];
     }
 	[self close:db];
 	return ret;
 }
 + (BOOL) setStatus:(int) status forId:(int)ID{
-    [self setField:DBQFieldStatus
-             value:[NSString stringWithFormat:@"%d", status]
-          forField:DBQFieldID
-             value:[NSString stringWithFormat:@"%d", ID]];
-    return YES;
+    return [self updateField:DBQFieldStatus value:[NSString stringWithFormat:@"%d", status] forId:ID];
 }
 + (BOOL) removeById:(int) ID{
     BOOL ret = NO;

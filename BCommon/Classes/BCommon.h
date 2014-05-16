@@ -59,6 +59,7 @@
 //ext
 #import "XScrollView.h"
 #import "BHttpClient.h"
+#import "AsyncLoader.h"
 #import "HTabBarView.h"
 #import "VTabBarView.h"
 #import "XUILabel.h"

@@ -13,4 +13,13 @@
 + (BOOL) isAvailable;
 + (BOOL) isConnectWifi;
 + (BOOL) isConnect3G;
++ (NSString *)access;
+@end
+
+
+
+@interface MacAddress : NSObject
+
++(NSString *)currentAddress;
+
 @end

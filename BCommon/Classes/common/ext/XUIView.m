@@ -98,5 +98,50 @@
     
     return img;
 }
-
+- (UIView *)showEmptyMsg:(NSString *)msg withNetIndicator:(BOOL)withIndicator icon:(NSString *)iconName withTarget:(id)target withAction:(SEL)action{
+    UIView *container = [self viewWithTag:-99999999];
+    if (container) {
+        [self removeEmptyIndicator];
+    }
+    container = [[UIView alloc] initWithFrame:self.bounds];
+    float w = container.bounds.size.width, h = container.bounds.size.height;
+    UIImage *icon = [UIImage imageNamed:iconName];
+    CGRect iconFrame = CGRectMake((w-icon.size.width)/2, h*0.35-icon.size.height/2, icon.size.width, icon.size.height);
+    UIButton *btn = [[UIButton alloc] initWithFrame:iconFrame];
+    [btn setImage:icon forState:UIControlStateNormal];
+    [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    [container addSubview:btn];
+    float indicatorWidth = withIndicator?20:0;
+    CGRect labelFrame = CGRectMake(0, iconFrame.origin.y+icon.size.height+10, w, 40);
+    CGSize msgSize = [msg sizeWithFont:ThemeDescTextFont constrainedToSize:CGSizeMake(w, MAXFLOAT)];
+    labelFrame.size.width = msgSize.width;
+    labelFrame.origin.x = (w-labelFrame.size.width)/2+indicatorWidth/2;
+    UILabel *msgLabel = createLabel(labelFrame, ThemeDescTextFont, nil, ThemeDescTextColor, ThemeDescTextShadowColor, CGSizeMake(0, 1), UITextAlignmentCenter, 0, UILineBreakModeTailTruncation);
+    msgLabel.text = msg;
+    if (target && action) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:target action:action];
+        [container addGestureRecognizer:tap];
+    }
+    [container addSubview:msgLabel];
+    
+    
+    if (withIndicator) {
+        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        CGRect indicatorFrame = CGRectMake(labelFrame.origin.x - 24, labelFrame.origin.y+(labelFrame.size.height-msgSize.height)/2, 20, 20);
+        indicator.frame = indicatorFrame;
+        [indicator startAnimating];
+        [container addSubview:indicator];
+    }
+    
+    [self addSubview:container];
+    container.tag = -99999999;
+    return container;
+}
+- (UIView *)showEmptyMsg:(NSString *)msg icon:(NSString *)iconName withTarget:(id)target withAction:(SEL)action{
+    return [self showEmptyMsg:msg withNetIndicator:NO icon:iconName withTarget:target withAction:action];
+}
+- (void)removeEmptyIndicator{
+    UIView *v = [self viewWithTag:-99999999];
+    [v removeFromSuperview];
+}
 @end

@@ -63,6 +63,7 @@
     id rootController = [self rootController];
     if (self == rootController) {
         [super presentModalViewController:modalViewController animated:animated];
+        return;
     }
     [rootController presentModalViewController:modalViewController animated:animated];
 }
@@ -241,6 +242,7 @@
         [self controllerDisappear:lastViewController];
         [self.controllers removeLastObject];
         [lastViewController.view removeFromSuperview];
+        lastViewController.appNavigitionController = nil;
         [self controllerAppear:[self.controllers lastObject]];
         [self currentView].frame = self.container.bounds;
         [self relayout];

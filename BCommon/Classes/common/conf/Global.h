@@ -36,7 +36,7 @@
 #define G_APP_MAP_FILE					@"appmap.plist"
 
 #define gVideoExpireTime            3600
-#define MinM3u8SliceDuration        10
+#define MinM3u8SliceDuration        5
 
 #define CacheSchemeName                 @"cache-image"
 
@@ -77,8 +77,18 @@
 
 #define AppLink  @"http://www.tvie.com.cn"
 
-#define DeviceID                [OpenUDID value]
+#define IDFV ( [[UIDevice currentDevice] respondsToSelector:@selector(identifierForVendor)] ? [[[UIDevice currentDevice] identifierForVendor] UUIDString] : nil)
+#define DeviceID                IDFV?:[OpenUDID value]
 #define DeviceToken             [DBCache valueForKey:@"deviceToken"]
+
+#define DeviceName              [[UIDevice currentDevice] name]
+#define DevicePlatform          [[UIDevice currentDevice] model]
+#define DeviceSystem                [[UIDevice currentDevice] systemName]
+#define DeviceSystemVersion         [[UIDevice currentDevice] systemVersion]
+#define DeviceResolution        [NSString stringWithFormat:@"%dx%d", (int)[[UIScreen mainScreen] bounds].size.width, (int)[[UIScreen mainScreen] bounds].size.height]
+
+#define DeviceParam             @{@"product_id":BundleID, @"channel":@"", @"version":BundleVersion, @"device_id":DeviceID, @"build":BundleBuildID, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion, @"resolution":DeviceResolution, @"device_name":DeviceName}
+
 
 //notify
 #define NotifyLogout                @"NotifyUserLogout"

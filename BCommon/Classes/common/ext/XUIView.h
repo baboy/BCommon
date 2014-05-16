@@ -30,4 +30,7 @@ enum {
 
 @interface UIView(x)
 - (UIImage *)screenshot;
+- (UIView *)showEmptyMsg:(NSString *)msg withNetIndicator:(BOOL)withIndicator icon:(NSString *)iconName withTarget:(id)target withAction:(SEL)action;
+- (UIView *)showEmptyMsg:(NSString *)msg icon:(NSString *)iconName withTarget:(id)target withAction:(SEL)action;
+- (void)removeEmptyIndicator;
 @end

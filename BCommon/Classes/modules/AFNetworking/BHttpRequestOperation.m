@@ -62,7 +62,7 @@ typedef void (^AFURLConnectionOperationProgressBlock)(NSUInteger bytes, long lon
     _cacheFilePath = [cacheFilePath retain];
     NSString *tmpFilePath = tmpFilePath = [cacheFilePath stringByAppendingPathExtension:@"download"];
     if (!self.downloadResume) {
-        [[NSString stringWithFormat:@"%@.%d",cacheFilePath,(int)(arc4random()*999999)] stringByAppendingPathExtension:@"download"];
+        [[NSString stringWithFormat:@"%@.%d",cacheFilePath,(int)arc4random()] stringByAppendingPathExtension:@"download"];
     }
     [self setTmpFilePath:tmpFilePath];
 }
