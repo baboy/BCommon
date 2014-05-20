@@ -34,7 +34,7 @@
     [super dealloc];
 }
 - (id)rootController{
-    id rootController = AppRootNavigationController;
+    id rootController = [[self wrapperController] navigationController] ?: AppRootNavigationController;
     while ([rootController modalViewController]) {
         rootController = [rootController modalViewController];
     }
