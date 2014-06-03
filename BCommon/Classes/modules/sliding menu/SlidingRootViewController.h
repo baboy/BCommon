@@ -10,4 +10,8 @@
 
 @interface SlidingRootViewController : IIViewDeckController<IIViewDeckControllerDelegate>
 
+
++ (void)showNetConnectMessage;
+- (void)checkAppViersion;
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 @end

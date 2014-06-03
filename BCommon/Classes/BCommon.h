@@ -74,3 +74,4 @@
 
 #import "Theme.h"
 #import "GString.h"
+#import "Application.h"

@@ -30,6 +30,9 @@ Pod::Spec.new do |s|
 	model.subspec 'member' do |member|
 		member.source_files = 'BCommon/Classes/model/member'
 	end
+	model.subspec 'app' do |app|
+		member.source_files = 'BCommon/Classes/model/app'
+	end
   end
   s.subspec 'common' do |common|     
     common.subspec 'categories' do |cate|

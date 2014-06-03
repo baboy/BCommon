@@ -12,13 +12,7 @@ extern NSString *ApiDomain;
 
 #define ApiClient               @"http://m.tvie.com.cn/mcms/api2/client.php"
 #define ApiRequestBatchNum      20
-/*
- #define ApiPathConf             @"/mcms/api2/config.php"
- //反馈相关
- #define ApiPathFeedback          @"/mcms/api2/mod/comment/?"
- //直播
- #define ApiPathLiveChannel       "/mcms/api2/mod/live/"
- */
+
 #define ApiConf                 [NSString stringWithFormat:@"%@/config.origin.php", ApiDomain]
 #define ApiMemberLogin          [NSString stringWithFormat:@"%@/mod/member/login.php", ApiDomain]
 #define ApiMemberRegister       [NSString stringWithFormat:@"%@/mod/member/register.php", ApiDomain]
@@ -68,5 +62,20 @@ extern NSString *ApiDomain;
 //登记设备
 #define ApiAddDevice                [NSString stringWithFormat:@"%@/mod/device/ios.php", @"http://m.tvie.com.cn/mcms/api2"]
 
+/********* Api Interface *************/
 
+//检查版本更新
+#define ApiQueryAppVersion          [BApi apiForKey:@"check_app_version"]
+//反馈相关
+#define ApiPostFeedback             [BApi apiForKey:@"feedback"]
+//检索应用市场
+#define ApiQueryAppList             [BApi apiForKey:@"query_appmarket"]
+
+//获取关于
+#define ApiQueryAbout               [BApi apiForKey:@"about"]
+
+@interface BApi : NSObject
++ (void)setup:(NSString *)plist;
++ (NSString *)apiForKey:(NSString *)key;
+@end
 

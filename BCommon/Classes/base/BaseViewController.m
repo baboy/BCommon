@@ -8,12 +8,17 @@
 
 #import "BaseViewController.h"
 
-@interface BaseViewController ()
+#define AlertViewTagCheckVersion     11
 
+@interface BaseViewController ()
+@property (nonatomic, retain) ApplicationVersion *app;
 @end
 
 @implementation BaseViewController
-
+- (void)dealloc{
+    [super dealloc];
+    RELEASE(_app);
+}
 - (NSArray *)getInputCheckConfig{
     return nil;
 }
@@ -52,6 +57,77 @@
     }
     return YES;
 }
+- (void)checkAppViersion{
+    [ApplicationVersion getAppVersionCallback:^(BHttpRequestOperation *operation,ApplicationVersion *app, NSError *error) {
+        self.app = app;
+        NSString *msg = app.msg;
+        NSMutableArray *btnTitles = [NSMutableArray array];
+        switch (app.role) {
+            case AppUpdateRoleMsg:
+                [btnTitles addObject:NSLocalizedString(@"确定", nil)];
+                break;
+            case AppUpdateRolePrompt:
+                [btnTitles addObject:NSLocalizedString(@"取消", nil)];
+                [btnTitles addObject:NSLocalizedString(@"确定", nil)];
+                break;
+            case AppUpdateRoleUpdate:
+                [btnTitles addObject:NSLocalizedString(@"确定", nil)];
+                break;
+            case AppUpdateRoleForbidden:
+                [btnTitles addObject:NSLocalizedString(@"确定", nil)];
+                break;
+                
+            default:
+                break;
+        }
+        if (btnTitles.count>0) {
+            UIAlertView *alert =
+            [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"提示", nil)
+                                       message:nil
+                                      delegate:self
+                             cancelButtonTitle:nil
+                             otherButtonTitles:nil];
+            alert.tag = AlertViewTagCheckVersion;
+            alert.message = msg;
+            for (int i = 0, n = (int)btnTitles.count; i < n; i++) {
+                [alert addButtonWithTitle:[btnTitles objectAtIndex:i]];
+            }
+            [alert show];
+            
+        }
+    }];
+}
 
++ (void)showNetConnectMessage{
+    NSString *msg = NoAvailableConnection;
+    if ([NetChecker isAvailable]) {
+        msg = [NSString stringWithFormat:NSLocalizedString(@"你使用的是%@网络!", nil),
+               ([NetChecker isConnectWifi] ? @"WIFI" : @"2G/3G/4G")];
+    }
+    [BIndicator showMessage:msg duration:2.0f];
+}
+#pragma  alert delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag == AlertViewTagCheckVersion) {
+        switch (self.app.role) {
+            case AppUpdateRolePrompt:
+                if (buttonIndex==1 && isURL(self.app.appStore)) {
+                    [APP openURL:[NSURL URLWithString:self.app.appStore]];
+                }
+                break;
+            case AppUpdateRoleUpdate:
+                if (isURL(self.app.appStore)) {
+                    [APP openURL:[NSURL URLWithString:self.app.appStore]];
+                }
+                break;
+            case AppUpdateRoleForbidden:
+                exit(-1);
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
 
 @end

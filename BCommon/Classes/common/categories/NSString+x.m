@@ -66,7 +66,7 @@
 
 }
 - (BOOL)isURL{
-    if(self && [self hasPrefix:@"http://"])
+    if(self && ([[self lowercaseString] hasPrefix:@"http://"] || [[self lowercaseString] hasPrefix:@"https://"]))
         return YES;
     return NO;
 }

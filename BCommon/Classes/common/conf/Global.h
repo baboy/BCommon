@@ -75,10 +75,13 @@
 #define ShareEmailContentPrefix  NSLocalizedString(@"Share via iLookForiPhone",nil)
 #define ShareContentPostfix  NSLocalizedString(@"via iLookForiPhone", nil)
 
-#define AppLink  @"http://www.tvie.com.cn"
+#define AppLink             [DBCache valueForKey:@"app_link"]
 
 #define IDFV ( [[UIDevice currentDevice] respondsToSelector:@selector(identifierForVendor)] ? [[[UIDevice currentDevice] identifierForVendor] UUIDString] : nil)
-#define DeviceID                IDFV?:[OpenUDID value]
+
+#define APPID                   [DBCache valueForKey:@"appid"]
+
+#define DeviceID                [OpenUDID value]
 #define DeviceToken             [DBCache valueForKey:@"deviceToken"]
 
 #define DeviceName              [[UIDevice currentDevice] name]
@@ -87,7 +90,10 @@
 #define DeviceSystemVersion         [[UIDevice currentDevice] systemVersion]
 #define DeviceResolution        [NSString stringWithFormat:@"%dx%d", (int)[[UIScreen mainScreen] bounds].size.width, (int)[[UIScreen mainScreen] bounds].size.height]
 
-#define DeviceParam             @{@"product_id":BundleID, @"channel":@"", @"version":BundleVersion, @"device_id":DeviceID, @"build":BundleBuildID, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion, @"resolution":DeviceResolution, @"device_name":DeviceName}
+#define AppBuild            [DBCache valueForKey:@"build"]
+#define AppChannel           [DBCache valueForKey:@"channel"]
+
+#define DeviceParam             @{@"product_id":BundleID, @"channel":AppChannel, @"version":BundleVersion, @"device_id":DeviceID, @"build":AppBuild, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion, @"resolution":DeviceResolution, @"device_name":DeviceName}
 
 
 //notify
@@ -105,14 +111,15 @@
 #define NotificationAppWillEnterBackground  @"AppWillEnterBackground"
 #define NotificationAppDidBecomeActive      @"AppDidBecomeActive"
 
-@interface G : NSObject {
-
-}
+@interface G : NSObject
++ (void)setup:(NSString *)plist;
 + (id) valueForKey:(id)key;
 + (void) setValue:(id)val forKey:(id)key;
 + (id)remove:(id)key;
 + (NSDictionary *) dict;
++ (void)setConf:(NSString *)conf;
 @end
+
 
 
 
