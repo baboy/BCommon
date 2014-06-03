@@ -31,6 +31,7 @@ Pod::Spec.new do |s|
 		member.source_files = 'BCommon/Classes/model/member'
 	end
 	model.subspec 'app' do |app|
+		app.resource = 'BCommon/Classes/common/conf/default.api.plist', 'BCommon/Classes/common/conf/default.conf.plist'
 		app.source_files = 'BCommon/Classes/model/app'
 	end
   end
