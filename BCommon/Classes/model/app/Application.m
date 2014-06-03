@@ -7,10 +7,6 @@
 //
 
 #import "Application.h"
-#import "Utils.h"
-#import "Global.h"
-#import "DBCache.h"
-#import "BResponse.h"
 @implementation Application
 
 - (id)initWithDictionary:(NSDictionary *)dic{

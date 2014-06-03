@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BHttpClient.h"
 enum {
     AppUpdateRoleNormal,
     AppUpdateRoleMsg=9,
