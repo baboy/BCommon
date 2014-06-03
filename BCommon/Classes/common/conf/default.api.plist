@@ -28,6 +28,8 @@
 	<string>/api/v1/user/login/</string>
 	<key>register</key>
 	<string>/api/v1/user/register/</string>
+	<key>user_update_profile</key>
+	<string>/api/v1/user/profile/</string>
 	<key>login_openid</key>
 	<string>/api/v1/user/login/openid/</string>
 	<key>query_comments</key>
