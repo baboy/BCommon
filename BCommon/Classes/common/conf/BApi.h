@@ -10,57 +10,10 @@
 //用户相关
 extern NSString *ApiDomain;
 
-#define ApiClient               @"http://m.tvie.com.cn/mcms/api2/client.php"
 #define ApiRequestBatchNum      20
 
-#define ApiConf                 [NSString stringWithFormat:@"%@/config.origin.php", ApiDomain]
-#define ApiMemberLogin          [NSString stringWithFormat:@"%@/mod/member/login.php", ApiDomain]
-#define ApiMemberRegister       [NSString stringWithFormat:@"%@/mod/member/register.php", ApiDomain]
-//直播
-#define ApiLiveChannel          [NSString stringWithFormat:@"%@/mod/live/", ApiDomain]
-//评论相关
-#define ApiCommentPost          [NSString stringWithFormat:@"%@/mod/comment/", ApiDomain]
-#define ApiCommentQuery         [NSString stringWithFormat:@"%@/mod/comment/", ApiDomain]
 
-//微博相关
-#define ApiWeiboFeeds           [NSString stringWithFormat:@"%@/mod/sns/feeds.php", ApiDomain]
-#define ApiWeiboFriends         [NSString stringWithFormat:@"%@/mod/sns/friends.php", ApiDomain]
-#define ApiWeiboStatus          [NSString stringWithFormat:@"%@/mod/sns/status.php", ApiDomain]
-#define ApiWeiboComments        [NSString stringWithFormat:@"%@/mod/sns/comments.php", ApiDomain]
 
-//反馈相关
-#define ApiFeedback             [NSString stringWithFormat:@"%@/mod/comment/?", ApiDomain]
-//关于
-#define ApiAbout                [NSString stringWithFormat:@"%@/mod/about/?", ApiDomain]
-
-//天气
-#define ApiWeatherQuery         [NSString stringWithFormat:@"%@/mod/weather/", ApiDomain]
-
-//爆料
-#define ApiReportImageUploadBlock   [NSString stringWithFormat:@"%@/mod/ugc/block.php", ApiDomain]
-#define ApiReportVideoUploadBlock   [NSString stringWithFormat:@"%@/mod/ugc/block.php", ApiDomain]
-#define ApiReportQuery              [NSString stringWithFormat:@"%@/mod/ugc/?mod=report", ApiDomain]
-#define ApiReportCategory           [NSString stringWithFormat:@"%@/mod/ugc/category.php?mod=report", ApiDomain]
-#define ApiReportAddRecord          [NSString stringWithFormat:@"%@/mod/ugc/?mod=report", ApiDomain]
-#define ApiReportStatis             [NSString stringWithFormat:@"%@/mod/ugc/statis.php", ApiDomain]
-
-//点播相关
-#define ApiVodCategory              [NSString stringWithFormat:@"%@/mod/vod/category.php", ApiDomain]
-#define ApiVodType                  [NSString stringWithFormat:@"%@/mod/vod/category.php?type", ApiDomain]
-#define ApiVodQuery                 [NSString stringWithFormat:@"%@/mod/vod/query.php", ApiDomain]
-#define ApiVodQueryHot              [NSString stringWithFormat:@"%@/mod/vod/query.php?q=hot", ApiDomain]
-#define ApiVodQueryRecommend        [NSString stringWithFormat:@"%@/mod/vod/query.php?q=recommend", ApiDomain]
-#define ApiVodQueryRank             [NSString stringWithFormat:@"%@/mod/vod/query.php?q=rank", ApiDomain]
-
-//新闻相关
-#define ApiNewsType                 [NSString stringWithFormat:@"%@/mod/news/category.php?type", ApiDomain]
-#define ApiNewsQuery                [NSString stringWithFormat:@"%@/mod/news/query.php", ApiDomain]
-
-//地图
-#define ApiQueryLocation            [NSString stringWithFormat:@"%@/mod/map/geo.php", ApiDomain]
-
-//登记设备
-#define ApiAddDevice                [NSString stringWithFormat:@"%@/mod/device/ios.php", @"http://m.tvie.com.cn/mcms/api2"]
 
 /********* Api Interface *************/
 
@@ -70,9 +23,37 @@ extern NSString *ApiDomain;
 #define ApiPostFeedback             [BApi apiForKey:@"feedback"]
 //检索应用市场
 #define ApiQueryAppList             [BApi apiForKey:@"query_appmarket"]
-
+#define ApiStorageUpload            [BApi apiForKey:@"storage_upload"]
 //获取关于
 #define ApiQueryAbout               [BApi apiForKey:@"about"]
+
+#define ApiRegister                  [BApi apiForKey:@"register"]
+#define ApiLogin                     [BApi apiForKey:@"login"]
+#define ApiLoginWithOpenID           [BApi apiForKey:@"login_openid"]
+//获取频道列表
+#define ApiQueryTVChannels          [BApi apiForKey:@"query_channels"]
+//直播搜索
+#define ApiTVSearch         [BApi apiForKey:@"search_epgs"]
+//正在热播
+#define ApiHotTVChannels    [BApi apiForKey:@"query_hot_channels"]
+//播放源
+#define ApiLiveSources    [BApi apiForKey:@"query_channel_source"]
+
+//查询评论列表
+#define ApiQueryComments           [BApi apiForKey:@"query_comments"]
+//发送评论
+#define ApiPostComment            [BApi apiForKey:@"post_comment"]
+
+//地图
+#define ApiQueryLocation            [BApi apiForKey:@"search_location"]
+
+// weather
+#define ApiWeatherQuery             [BApi apiForKey:@"query_weather"]
+
+//news
+#define ApiNewsQuery                [BApi apiForKey:@"query_news"]
+#define ApiNewsType                 [BApi apiForKey:@"query_news_type"]
+
 
 @interface BApi : NSObject
 + (void)setup:(NSString *)plist;

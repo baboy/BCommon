@@ -242,7 +242,7 @@ static id _current_user = nil;
     
     BHttpClient *client = [BHttpClient defaultClient];
     NSDictionary *params = @{@"username":uname,@"password":pwd};
-    NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiMemberLogin] parameters:params];
+    NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiLogin] parameters:params];
     BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
                                                                  success:^(BHttpRequestOperation *operation, id data) {
                                                                      
@@ -259,7 +259,7 @@ static id _current_user = nil;
     
     BHttpClient *client = [BHttpClient defaultClient];
     NSDictionary *params = @{@"username":uname,@"password":pwd,@"email":email};
-    NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiMemberRegister] parameters:params];
+    NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiRegister] parameters:params];
     BHttpRequestOperation *operation = [client dataRequestWithURLRequest:request
                                                                  success:^(BHttpRequestOperation *operation, id data) {
                                                                      

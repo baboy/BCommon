@@ -10,15 +10,35 @@
 	<string>/api/v1/feedback/</string>
 	<key>query_channels</key>
 	<string>/api/v1/live/channels/</string>
-	<key>query_host_channels</key>
+	<key>query_hot_channels</key>
 	<string>/api/v1/live/channels/hot/</string>
 	<key>search_epgs</key>
 	<string>/api/v1/live/epg/search/</string>
+	<key>storage_upload</key>
+	<string>http://app.tvie.com.cn/storage/{fid}</string>
+	<key>query_channel_source</key>
+	<string>/api/v1/live/channel/source/</string>
 	<key>query_appmarket</key>
 	<string>/api/v1/market/</string>
 	<key>check_app_version</key>
 	<string>/api/v1/version/</string>
 	<key>about</key>
 	<string>/api/v1/about/</string>
+	<key>login</key>
+	<string>/api/v1/user/login/</string>
+	<key>register</key>
+	<string>/api/v1/user/register/</string>
+	<key>login_openid</key>
+	<string>/api/v1/user/login/openid/</string>
+	<key>query_comments</key>
+	<string>/api/v1/comment/</string>
+	<key>post_comment</key>
+	<string>/api/v1/comment/</string>
+	<key>query_weather</key>
+	<string></string>
+	<key>query_news_type</key>
+	<string>/api/v1/news/query/</string>
+	<key>query_news</key>
+	<string>/api/v1/news/categories/</string>
 </dict>
 </plist>
