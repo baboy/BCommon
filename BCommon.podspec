@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
 		member.source_files = 'BCommon/Classes/model/member'
 	end
 	model.subspec 'app' do |app|
-		member.source_files = 'BCommon/Classes/model/app'
+		app.source_files = 'BCommon/Classes/model/app'
 	end
   end
   s.subspec 'common' do |common|     
