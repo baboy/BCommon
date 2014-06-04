@@ -75,3 +75,7 @@
 #import "Theme.h"
 #import "GString.h"
 #import "Application.h"
+#import "BehaviorTracker.h"
+#import "NSThread+x.h"
+#import "UIImagePickerController+camera.h"
+#import "UIActionSheet+x.h"
