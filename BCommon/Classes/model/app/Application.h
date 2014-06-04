@@ -18,14 +18,14 @@ typedef NSInteger AppUpdateRole;
 
 @interface Application : NSObject
 
-@property (nonatomic, strong) NSString *appName;
-@property (nonatomic, strong) NSString *appSummary;
-@property (nonatomic, strong) NSString *appContent;
-@property (nonatomic, strong) NSString *appScrore;
-@property (nonatomic, strong) NSString *appLink;
-@property (nonatomic, strong) NSString *appDownloadUrl;
-@property (nonatomic, strong) NSString *appIcon;
-@property (nonatomic, strong) NSString *version;
+@property (nonatomic, retain) NSString *appName;
+@property (nonatomic, retain) NSString *appSummary;
+@property (nonatomic, retain) NSString *appContent;
+@property (nonatomic, retain) NSString *appScrore;
+@property (nonatomic, retain) NSString *appLink;
+@property (nonatomic, retain) NSString *appDownloadUrl;
+@property (nonatomic, retain) NSString *appIcon;
+@property (nonatomic, retain) NSString *version;
 
 - (id)initWithDictionary:(NSDictionary *)dic;
 + (NSArray *)appsFromArray:(NSArray *)array;

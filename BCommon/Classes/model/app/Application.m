@@ -7,8 +7,21 @@
 //
 
 #import "Application.h"
-@implementation Application
+#import "Group.h"
 
+@implementation Application
+- (void)dealloc{
+    [super dealloc];
+    
+    RELEASE(_appName);
+    RELEASE(_appSummary);
+    RELEASE(_appContent);
+    RELEASE(_appScrore);
+    RELEASE(_appLink);
+    RELEASE(_appDownloadUrl);
+    RELEASE(_appIcon);
+    RELEASE(_version);
+}
 - (id)initWithDictionary:(NSDictionary *)dic{
     if (self = [super init]) {
         self.appContent = nullToNil([dic objectForKey:@"content"]);
@@ -28,7 +41,7 @@
 + (NSArray *)appsFromArray:(NSArray *)array{
     NSMutableArray *list = [NSMutableArray array];
     for (int i = 0, n = [array count]; i < n; i++) {
-        Application *app = [[Application alloc] initWithDictionary:[array objectAtIndex:i]];
+        Application *app = AUTORELEASE([[Application alloc] initWithDictionary:[array objectAtIndex:i]]);
         [list addObject:app];
     }
     return list;
@@ -45,16 +58,19 @@
     BHttpRequestOperation *operation = [client jsonRequestWithURLRequest:request success:^(BHttpRequestOperation *operation, id json) {
         DLOG(@"json = %@",json);
         NSError *error = nil;
-        NSArray *appList = nil;
+        NSArray *groups = nil;
         
         BResponse *response = [BResponse responseWithDictionary:json];
         if ([response isSuccess]) {
-            appList = [Application appsFromArray:response.data];
+            groups = [Group groupsFromArray:[response data]];
+            for (Group *group in groups) {
+                group.data = [Application appsFromArray:group.data];
+            }
         }else{
             error = response.error;
         }
         if (callback) {
-            callback(operation,appList,error);
+            callback(operation,groups,error);
         }
     } failure:^(BHttpRequestOperation *operation, NSError *error) {
         DLOG(@"fail:%@",error);

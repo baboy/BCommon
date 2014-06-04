@@ -215,6 +215,9 @@ static id _current_user = nil;
 }
 + (BOOL)loginWithUser:(BUser *)user{
     if (user) {
+        if ([self user]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationUserWillChange object:nil];
+        }
         NSString *data = [[user dict] jsonString];
         DLOG(@"%@", data);
         if (data) {

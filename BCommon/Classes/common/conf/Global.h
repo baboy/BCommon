@@ -101,6 +101,7 @@
 #define NotifyLogout                @"NotifyUserLogout"
 #define NotifyLogin                 @"NotifyUserLogin"
 #define NotifyUserProfileUpdated    @"NotifyUserProfileUpdated"
+#define NotificationUserWillChange  @"NotifyUserWillChange"
 
 #define SystemVolumeChangeNotify @"AVSystemController_SystemVolumeDidChangeNotification"
 
