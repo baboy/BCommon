@@ -80,6 +80,7 @@
 #define IDFV ( [[UIDevice currentDevice] respondsToSelector:@selector(identifierForVendor)] ? [[[UIDevice currentDevice] identifierForVendor] UUIDString] : nil)
 
 #define APPID                   [DBCache valueForKey:@"appid"]
+#define TrackerKey                   [DBCache valueForKey:@"tracker_appkey"]
 
 #define DeviceID                [OpenUDID value]
 #define DeviceToken             [DBCache valueForKey:@"deviceToken"]
