@@ -72,6 +72,7 @@
 #import "OpenUDID.h"
 #import "BHttpRequestOperation.h"
 
+#import "Group.h"
 #import "Theme.h"
 #import "GString.h"
 #import "Application.h"
@@ -79,4 +80,3 @@
 #import "NSThread+x.h"
 #import "UIImagePickerController+camera.h"
 #import "UIActionSheet+x.h"
-#import "Group.h"
