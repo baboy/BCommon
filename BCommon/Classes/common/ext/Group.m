@@ -12,13 +12,13 @@
 @end
 @implementation Group
 - (void)dealloc{
-    [super dealloc];
     RELEASE(_id);
     RELEASE(_name);
     RELEASE(_icon);
     RELEASE(_desc);
     RELEASE(_data);
     RELEASE(_dict);
+    [super dealloc];
 }
 - (id) initWithDictionary:(NSDictionary*)dict{
     if(self = [super init]){

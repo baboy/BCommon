@@ -79,3 +79,4 @@
 #import "NSThread+x.h"
 #import "UIImagePickerController+camera.h"
 #import "UIActionSheet+x.h"
+#import "Group.h"

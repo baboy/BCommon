@@ -19,10 +19,11 @@ static NSString *LogSessionID = nil;
 @implementation BehaviorTracker
 
 + (void)initialize{
-    LogSessionID = [NSString stringWithFormat:@"%@%d",[[NSDate date] format:@"yyyyMMddhhmmss"], 10000+(int)(arc4random()%9999)];
+    NSString *sessionID = [NSString stringWithFormat:@"%@%d",[[NSDate date] format:@"yyyyMMddhhmmss"], 10000+(int)(arc4random()%9999)];
+    LogSessionID = RETAIN(sessionID);
 }
 + (void)setAppKey:(NSString *)appKey{
-    LogAppKey = appKey;
+    LogAppKey = RETAIN(appKey);
 }
 +(NSString *)appKey{
     return LogAppKey;
@@ -65,7 +66,7 @@ static NSString *LogSessionID = nil;
                  BResponse *response = [BResponse responseWithDictionary:json];
                  if ([response isSuccess]) {
                      DLOG(@"json:%@", json);
-                     DeviceSNO = [[response data] valueForKey:@"sno"];
+                     DeviceSNO = RETAIN([[response data] valueForKey:@"sno"]);
                  }else{
                      DLOG(@"error:%@", error);
                      AsyncCall(^{
