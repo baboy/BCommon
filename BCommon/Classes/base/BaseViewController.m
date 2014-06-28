@@ -9,6 +9,8 @@
 #import "BaseViewController.h"
 
 #define AlertViewTagCheckVersion     11
+#define AlertViewCommentApp 20
+#define AlertViewCommentAppGoodIndex    2
 
 @interface BaseViewController ()
 @property (nonatomic, retain) ApplicationVersion *app;
@@ -106,28 +108,51 @@
     }
     [BIndicator showMessage:msg duration:2.0f];
 }
-#pragma  alert delegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == AlertViewTagCheckVersion) {
-        switch (self.app.role) {
-            case AppUpdateRolePrompt:
-                if (buttonIndex==1 && isURL(self.app.appStore)) {
-                    [APP openURL:[NSURL URLWithString:self.app.appStore]];
-                }
-                break;
-            case AppUpdateRoleUpdate:
-                if (isURL(self.app.appStore)) {
-                    [APP openURL:[NSURL URLWithString:self.app.appStore]];
-                }
-                break;
-            case AppUpdateRoleForbidden:
-                exit(-1);
-                break;
-                
-            default:
-                break;
-        }
+- (void)commentApp{
+    int t = get_current_app_start_times();
+    NSString *commentMsg = [DBCache valueForKey:@"app_store_comment_msg"];
+    if ( (t>0 && t%3==0) && !get_current_app_comment() && (AppStore && [AppStore isURL]) && [commentMsg length]>10) {
+        UIAlertView *alert = [self alertWithTitle:nil
+                                          message:commentMsg
+                                           button:NSLocalizedString(@"太烂了,不评", nil),
+                              NSLocalizedString(@"一般般,不评", nil),
+                              NSLocalizedString(@"挺好的,好评", nil),
+                              NSLocalizedString(@"取消", nil),nil];
+        alert.tag = AlertViewCommentApp;
     }
 }
-
+#pragma  alert delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (alertView.tag){
+        case AlertViewTagCheckVersion:
+            switch (self.app.role) {
+                case AppUpdateRolePrompt:
+                    if (buttonIndex==1 && isURL(self.app.appStore)) {
+                        [APP openURL:[NSURL URLWithString:self.app.appStore]];
+                    }
+                    break;
+                case AppUpdateRoleUpdate:
+                    if (isURL(self.app.appStore)) {
+                        [APP openURL:[NSURL URLWithString:self.app.appStore]];
+                    }
+                    break;
+                case AppUpdateRoleForbidden:
+                    exit(-1);
+                    break;
+                    
+                default:
+                    break;
+            }
+        case AlertViewCommentApp:
+            [BehaviorTracker trackEvent:@"comment_app" group:@"app" element:[NSString stringWithFormat:@"%d", buttonIndex]];
+            if (buttonIndex == AlertViewCommentAppGoodIndex) {
+                DLOG(@"%@",AppStore);
+                [APP openURL:[NSURL URLWithString:AppStore]];
+            }
+            if (buttonIndex!=3) {
+                set_current_app_comment(buttonIndex+1);
+            }
+            break;
+    }
+}
 @end

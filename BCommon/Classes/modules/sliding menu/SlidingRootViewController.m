@@ -9,6 +9,11 @@
 #import "SlidingRootViewController.h"
 #define DebugLog(...)    DLOG(__VA_ARGS__)
 #define AlertViewTagCheckVersion 11
+
+#define AlertViewCommentApp 20
+#define AlertViewCommentAppGoodIndex    2
+
+
 @interface IIViewDeckController(x)
 - (NSMutableArray*) panners;
 - (void)panned:(UIPanGestureRecognizer*)panner;
@@ -161,7 +166,19 @@
                          
                      }];
 }
-
+- (void)commentApp{
+    int t = get_current_app_start_times();
+    NSString *commentMsg = [DBCache valueForKey:@"app_store_comment_msg"];
+    if ( (t>0 && t%3==0) && !get_current_app_comment() && (AppStore && [AppStore isURL]) && [commentMsg length]>10) {
+        UIAlertView *alert = [self alertWithTitle:nil
+                                          message:commentMsg
+                                           button:NSLocalizedString(@"太烂了,不评", nil),
+                              NSLocalizedString(@"一般般,不评", nil),
+                              NSLocalizedString(@"挺好的,好评", nil),
+                              NSLocalizedString(@"取消", nil),nil];
+        alert.tag = AlertViewCommentApp;
+    }
+}
 
 - (void)checkAppViersion{
     [ApplicationVersion getAppVersionCallback:^(BHttpRequestOperation *operation,ApplicationVersion *app, NSError *error) {
@@ -212,27 +229,70 @@
     }
     [BIndicator showMessage:msg duration:2.0f];
 }
+
+- (UIAlertView*)alertWithTitle:(NSString *)title message:(NSString *)msg button:(NSString *)buttonTitle,...{
+    if (!msg) {
+        return nil;
+    }
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:2];
+    va_list args;
+    va_start(args, buttonTitle);
+    id arg;
+    if (buttonTitle) {
+        [buttons addObject:buttonTitle];
+        while ( (arg = va_arg(args, NSString*) ) != nil) {
+            [buttons addObject:arg];
+        }
+    }
+    va_end(args);
+    if ([buttons count] == 0) {
+        [buttons addObject:NSLocalizedString(@"确定", @"alert")];
+    }
+    
+    UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:title
+                                                     message:msg
+                                                    delegate:self
+                                           cancelButtonTitle:nil
+                                           otherButtonTitles:nil] autorelease];
+    int n = [buttons count];
+    for (int i=0; i<n; i++) {
+        [alert addButtonWithTitle:[buttons objectAtIndex:i]];
+    }
+    [alert show];
+    return alert;
+}
 #pragma  alert delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == AlertViewTagCheckVersion) {
-        switch (self.app.role) {
-            case AppUpdateRolePrompt:
-                if (buttonIndex==1 && isURL(self.app.appStore)) {
-                    [APP openURL:[NSURL URLWithString:self.app.appStore]];
-                }
-                break;
-            case AppUpdateRoleUpdate:
-                if (isURL(self.app.appStore)) {
-                    [APP openURL:[NSURL URLWithString:self.app.appStore]];
-                }
-                break;
-            case AppUpdateRoleForbidden:
-                exit(-1);
-                break;
-                
-            default:
-                break;
-        }
+    switch (alertView.tag){
+        case AlertViewTagCheckVersion:
+            switch (self.app.role) {
+                case AppUpdateRolePrompt:
+                    if (buttonIndex==1 && isURL(self.app.appStore)) {
+                        [APP openURL:[NSURL URLWithString:self.app.appStore]];
+                    }
+                    break;
+                case AppUpdateRoleUpdate:
+                    if (isURL(self.app.appStore)) {
+                        [APP openURL:[NSURL URLWithString:self.app.appStore]];
+                    }
+                    break;
+                case AppUpdateRoleForbidden:
+                    exit(-1);
+                    break;
+                    
+                default:
+                    break;
+            }
+        case AlertViewCommentApp:
+            [BehaviorTracker trackEvent:@"comment_app" group:@"app" element:[NSString stringWithFormat:@"%d", buttonIndex]];
+            if (buttonIndex == AlertViewCommentAppGoodIndex) {
+                DLOG(@"%@",AppStore);
+                [APP openURL:[NSURL URLWithString:AppStore]];
+            }
+            if (buttonIndex!=3) {
+                set_current_app_comment(buttonIndex+1);
+            }
+            break;
     }
 }
 @end

@@ -19,6 +19,7 @@
 - (BOOL)checkInput:(NSArray *)config;
 + (void)showNetConnectMessage;
 
+- (void)commentApp;
 - (void)checkAppViersion;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 @end

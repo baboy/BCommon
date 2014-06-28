@@ -222,7 +222,7 @@
     [self.controllers addObject:wrapperController];
     [self relayout];
     
-    [self controllerAppear:self.controllers.lastObject];
+    //[self controllerAppear:self.controllers.lastObject];
     if (!animated) {
         wrapperController.view.frame = self.container.bounds;
         return;
@@ -239,7 +239,7 @@
     }
     if (!animated) {
         AppNavigitionInternalController *lastViewController = [self.controllers lastObject];
-        [self controllerDisappear:lastViewController];
+        //[self controllerDisappear:lastViewController];
         [self.controllers removeLastObject];
         [lastViewController.view removeFromSuperview];
         lastViewController.appNavigitionController = nil;

@@ -16,9 +16,14 @@ extern NSString                            *ApiDomain;
 
 
 /********* Api Interface *************/
-
+#define ApiSplash                     [BApi  apiForKey:@"api_splash"]
+#define ApiConf                     [BApi  apiForKey:@"app_conf"]
 //检查版本更新
 #define ApiQueryAppVersion          [BApi  apiForKey:@"check_app_version"]
+
+
+#define ApiRegisterDeviceToken     [BApi  apiForKey:@"register_device_token"]
+
 //反馈相关
 #define ApiPostFeedback             [BApi  apiForKey:@"feedback"]
 //检索应用市场

@@ -4,6 +4,10 @@
 <dict>
 	<key>server</key>
 	<string>http://app.tvie.com.cn</string>
+	<key>app_conf</key>
+	<string></string>
+	<key>api_splash</key>
+	<string></string>
 	<key>query_app_version</key>
 	<string>/api/v1/version/</string>
 	<key>feedback</key>

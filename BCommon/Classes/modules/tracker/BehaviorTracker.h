@@ -16,6 +16,7 @@
  *
  */
 + (void)trackEvent:(NSString *)event group:(NSString *)group element:(NSString *)ele duration:(int)dur;
-+ (void)trackStart:(NSString *)event group:(NSString *)group element:(NSString *)ele;
-+ (void)trackEnd:(NSString *)event group:(NSString *)group element:(NSString *)ele;
++ (void)trackEvent:(NSString *)event group:(NSString *)group element:(NSString *)ele;
++ (void)trackStartWithGroup:(NSString *)group element:(NSString *)ele;
++ (void)trackEndWithGroup:(NSString *)group element:(NSString *)ele;
 @end

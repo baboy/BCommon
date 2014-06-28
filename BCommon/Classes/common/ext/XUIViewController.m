@@ -295,6 +295,9 @@
     [self.requestPool setValue:request forKey:key];    
 }
 - (UIAlertView*)alert:(NSString *)msg button:(NSString *)buttonTitle,...{
+    return [self alertWithTitle:nil message:msg button:buttonTitle];
+}
+- (UIAlertView*)alertWithTitle:(NSString *)title message:(NSString *)msg button:(NSString *)buttonTitle,...{
     if (!msg) {
         return nil;
     }

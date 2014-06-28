@@ -52,4 +52,7 @@ typedef NSInteger AppUpdateRole;
 //检测版本更新
 + (BHttpRequestOperation *)getAppVersionCallback:(void(^)(BHttpRequestOperation *operation, ApplicationVersion *app, NSError *error))callback;
 
++ (BHttpRequestOperation *)registerNotificationDeviceToken:(NSString *)token callback:(void(^)(BHttpRequestOperation *operation, NSDictionary *json, NSError *error))callback;
+
+
 @end

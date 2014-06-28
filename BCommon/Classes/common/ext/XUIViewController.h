@@ -48,4 +48,5 @@ enum{
 - (void)setHttpRequest:(id)request forKey:(NSString *)key;
 - (UIAlertView*)alert:(NSString *)msg;
 - (UIAlertView*)alert:(NSString *)msg button:(NSString *)buttonTitle,...;
+- (UIAlertView*)alertWithTitle:(NSString *)title message:(NSString *)msg button:(NSString *)buttonTitle,...;
 @end

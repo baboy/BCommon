@@ -92,22 +92,20 @@ static NSString *LogSessionID = nil;
              }];
     
 }
++ (void)trackEvent:(NSString *)event group:(NSString *)group element:(NSString *)ele{
+    [self trackEvent:event group:group element:ele duration:0];
+}
 
-+ (void)trackStart:(NSString *)event group:(NSString *)group element:(NSString *)ele{
-    NSString *k = group;
-    if (event) {
-        k = [NSString stringWithFormat:@"%@_%@", k, event];
-    }
++ (void)trackStartWithGroup:(NSString *)group element:(NSString *)ele{
+    NSString *k = [NSString stringWithFormat:@"track_%@",group];
     if (ele) {
         k = [NSString stringWithFormat:@"%@_%@", k, ele];
     }
     [G setValue:[NSDate date] forKey:k];
+    [self trackEvent:@"in" group:group element:ele duration:0];
 }
-+ (void)trackEnd:(NSString *)event group:(NSString *)group element:(NSString *)ele{
-    NSString *k = group;
-    if (event) {
-        k = [NSString stringWithFormat:@"%@_%@", k, event];
-    }
++ (void)trackEndWithGroup:(NSString *)group element:(NSString *)ele{
+    NSString *k = [NSString stringWithFormat:@"track_%@",group];
     if (ele) {
         k = [NSString stringWithFormat:@"%@_%@", k, ele];
     }
@@ -115,7 +113,7 @@ static NSString *LogSessionID = nil;
     int len = 0;
     if(s)
         len = abs( [[NSDate date] timeIntervalSinceDate:s] );
-    [self trackEvent:event group:group element:ele duration:len];
-    
+    [self trackEvent:@"out" group:group element:ele duration:len];
+    [G remove:k];
 }
 @end

@@ -60,8 +60,10 @@ static char UIImageViewCacheOperationObjectKey;
                                                                      NSDictionary *userInfo = [operation userInfo];
                                                                      id object = userInfo?[userInfo valueForKey:@"object"]:nil;
                                                                      NSString *fp = operation.cacheFilePath;
-                                                                     if (self == object) {
-                                                                         [self setImage:[UIImage imageWithContentsOfFile:fp]];
+                                                                     if (self == object ) {
+                                                                         if ([fp fileExists]) {
+                                                                             [self setImage:[UIImage imageWithContentsOfFile:fp]];
+                                                                         }
                                                                          if (callback) {
                                                                              callback(imageURL, fp, nil);
                                                                          }

@@ -217,4 +217,27 @@
     return operation;
 }
 
++ (BHttpRequestOperation *)registerNotificationDeviceToken:(NSString *)token callback:(void(^)(BHttpRequestOperation *operation, NSDictionary *json, NSError *error))callback{
+    BHttpClient *client = [BHttpClient defaultClient];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:DeviceParam];
+    [param setValue:token forKey:@"token"];
+    NSURLRequest *request = [client requestWithPostURL:[NSURL URLWithString:ApiRegisterDeviceToken] parameters:param];
+    BHttpRequestOperation *operation = [client jsonRequestWithURLRequest:request success:^(BHttpRequestOperation *operation, id json) {
+        BResponse *respone = [BResponse responseWithDictionary:json];
+        if (callback) {
+            callback(operation, [respone data], [respone error]);
+        }
+        
+    } failure:^(BHttpRequestOperation *operation, NSError *error) {
+        DLOG(@"fail = %@",error);
+        if (callback) {
+            callback(operation,nil,error);
+        }
+    }];
+    
+    [operation setRequestCache:[BHttpRequestCache defaultCache]];
+    [client enqueueHTTPRequestOperation:operation];
+    return operation;
+}
 @end

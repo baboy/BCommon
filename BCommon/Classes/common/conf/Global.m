@@ -30,6 +30,8 @@ static NSMutableDictionary *data;
 }
 + (void)setup{
     [self setup:@"default"];
+    [G setValue:DeviceParam forKey:@"device_param"];
+    [G setValue:URLCommonParam forKey:@"url_common_param"];
 }
 
 + (void) initData{
@@ -68,6 +70,30 @@ static NSMutableDictionary *data;
 }
 @end
 
+
+void add_app_start_times(){
+    [DBCache setValue:[NSNumber numberWithInt:get_app_start_times()+1] forKey:@"app_start_times"];
+    add_current_app_start_times();
+}
+int get_app_start_times(){
+    return [DBCache intForKey:@"app_start_times"];
+}
+void add_current_app_start_times(){
+    NSString *k = [NSString stringWithFormat:@"app_start_times_ver%@",BundleVersion];
+    [DBCache setValue:[NSNumber numberWithInt:get_current_app_start_times()+1] forKey:k];
+}
+int get_current_app_start_times(){
+    NSString *k = [NSString stringWithFormat:@"app_start_times_ver%@",BundleVersion];
+    return [DBCache intForKey:k];
+}
+void set_current_app_comment(int level){
+    NSString *k = [NSString stringWithFormat:@"current_app_comment_ver%@",BundleVersion];
+    [DBCache setValue:[NSNumber numberWithInt:level] forKey:k];
+}
+int get_current_app_comment(){
+    NSString *k = [NSString stringWithFormat:@"current_app_comment_ver%@",BundleVersion];
+    return [DBCache intForKey:k];
+}
 
 
 

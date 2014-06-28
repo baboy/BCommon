@@ -13,5 +13,7 @@
 
 + (void)showNetConnectMessage;
 - (void)checkAppViersion;
+- (void)commentApp;
+- (UIAlertView*)alertWithTitle:(NSString *)title message:(NSString *)msg button:(NSString *)buttonTitle,...;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex;
 @end

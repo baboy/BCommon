@@ -17,9 +17,13 @@ NSString *ApiDomain = @"http://m.tvie.com.cn/mcms/xchannel";
     NSString *f = getBundleFile([NSString stringWithFormat:@"%@.api.plist", plist]);
     NSDictionary *conf = [NSDictionary dictionaryWithContentsOfFile:f];
     NSString *server = [conf valueForKey:@"server"];
+    NSArray *ignores = @[@"server", @"handler"];
     for (NSString *k in [conf allKeys]) {
         NSString *v = [conf valueForKey:k];
-        if (![v isURL] && server) {
+        if (!v || [v length]==0) {
+            continue;
+        }
+        if (![ignores containsStringIgnoreCase:k] && ![v isURL] && server) {
             v = [NSString stringWithFormat:@"%@%@", server, v];
         }
         [DBCache setValue:v forKey:k domain:@"api"];
@@ -30,6 +34,13 @@ NSString *ApiDomain = @"http://m.tvie.com.cn/mcms/xchannel";
 }
 
 + (NSString *)apiForKey:(NSString *)key{
+    NSString *clazz = [DBCache valueForKey:@"handler" domain:@"api"];
+    if (clazz) {
+        Class c = NSClassFromString(clazz);
+        if (c) {
+            return [c apiForKey:key];
+        }
+    }
 	NSString *v = [DBCache valueForKey:key domain:@"api"];
 	return v;
 }

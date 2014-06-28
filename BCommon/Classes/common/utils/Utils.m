@@ -74,7 +74,7 @@ BOOL strIsNil(NSString *s){
 
 BOOL isURL(NSString *s){
     s = nullToNil(s);
-	if (s && [[s lowercaseString] hasPrefix:@"http://"]) {
+	if (s && ([[s lowercaseString] hasPrefix:@"http://"] || [[s lowercaseString] hasPrefix:@"https://"])) {
 		return YES;
 	}
 	return NO;

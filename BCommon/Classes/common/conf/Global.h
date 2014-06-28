@@ -76,6 +76,7 @@
 #define ShareContentPostfix  NSLocalizedString(@"via iLookForiPhone", nil)
 
 #define AppLink             [DBCache valueForKey:@"app_link"]
+#define AppStore             [DBCache valueForKey:@"app_store"]
 
 #define IDFV ( [[UIDevice currentDevice] respondsToSelector:@selector(identifierForVendor)] ? [[[UIDevice currentDevice] identifierForVendor] UUIDString] : nil)
 
@@ -83,7 +84,7 @@
 #define TrackerKey                   [DBCache valueForKey:@"tracker_appkey"]
 
 #define DeviceID                [OpenUDID value]
-#define DeviceToken             [DBCache valueForKey:@"deviceToken"]
+#define DeviceToken             [DBCache valueForKey:@"device_token"]
 
 #define DeviceName              [[UIDevice currentDevice] name]
 #define DevicePlatform          [[UIDevice currentDevice] model]
@@ -94,7 +95,9 @@
 #define AppBuild            [DBCache valueForKey:@"build"]
 #define AppChannel           [DBCache valueForKey:@"channel"]
 
-#define DeviceParam             @{@"product_id":BundleID, @"channel":AppChannel, @"version":BundleVersion, @"device_id":DeviceID, @"build":AppBuild, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion, @"resolution":DeviceResolution, @"device_name":DeviceName}
+#define DeviceParam         @{@"product_id":BundleID, @"channel":AppChannel, @"version":BundleVersion, @"device_id":DeviceID, @"build":AppBuild, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion, @"resolution":DeviceResolution, @"device_name":DeviceName}
+
+#define URLCommonParam             @{@"product_id":BundleID, @"channel":AppChannel, @"version":BundleVersion, @"device_id":DeviceID, @"build":AppBuild, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion}
 
 
 //notify
@@ -113,6 +116,7 @@
 #define NotificationAppWillEnterBackground  @"AppWillEnterBackground"
 #define NotificationAppDidBecomeActive      @"AppDidBecomeActive"
 
+
 @interface G : NSObject
 + (void)setup:(NSString *)plist;
 + (id) valueForKey:(id)key;
@@ -122,6 +126,13 @@
 + (void)setConf:(NSString *)conf;
 @end
 
+
+extern void add_app_start_times();
+extern int get_app_start_times();
+extern void add_current_app_start_times();
+extern int get_current_app_start_times();
+extern void set_current_app_comment(int level);
+extern int get_current_app_comment();
 
 
 
