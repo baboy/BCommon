@@ -51,6 +51,7 @@
     self.selectedIndex = 0;
     self.separatorLeftColor = gLineTopColor;
     self.separatorRightColor = gLineBottomColor;
+    self.titleFont = [UIFont systemFontOfSize:14];
 }
 - (id)initWithFrame:(CGRect)frame{
 	self = [super initWithFrame:frame];
@@ -149,7 +150,7 @@
     [btn setTag:atIndex];
     btn.backgroundColor = [UIColor clearColor];
     //[btn setBackgroundImage:self.unSelectedBackgroundImage forState:UIControlStateNormal];
-    btn.titleLabel.font = [UIFont systemFontOfSize:14];
+    btn.titleLabel.font = self.titleFont;
     [btn setTitle:[info valueForKey:@"name"] forState:UIControlStateNormal];
     [btn setTitleColor:self.unSelectedTitleColor forState:UIControlStateNormal];
     [btn setTitleColor:self.selectedTitleColor forState:UIControlStateSelected];
@@ -452,6 +453,7 @@
         bar.itemWidth = self.itemWidth;
         bar.itemBorderWidth = self.itemBorderWidth;
         bar.selectedBackgroundImage = self.selectedImage;
+        bar.titleFont = self.titleFont;
         bar.separatorWidth = self.separatorWidth;
         bar.separatorColor = self.separatorColor;
         bar.separatorLeftColor = self.separatorLeftColor;

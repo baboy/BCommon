@@ -295,12 +295,7 @@
     [self.requestPool setValue:request forKey:key];    
 }
 - (UIAlertView*)alert:(NSString *)msg button:(NSString *)buttonTitle,...{
-    return [self alertWithTitle:nil message:msg button:buttonTitle];
-}
-- (UIAlertView*)alertWithTitle:(NSString *)title message:(NSString *)msg button:(NSString *)buttonTitle,...{
-    if (!msg) {
-        return nil;
-    }
+    
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:2];
     va_list args;
     va_start(args, buttonTitle);
@@ -312,8 +307,30 @@
         }
     }
     va_end(args);
+    return [self alertWithTitle:nil message:msg button:buttons,nil];
+}
+- (UIAlertView*)alertWithTitle:(NSString *)title message:(NSString *)msg button:(id)buttonTitle,...{
+    if (!msg) {
+        return nil;
+    }
+    NSMutableArray *buttons = nil;
+    if ([buttonTitle isKindOfClass:[NSArray class]]) {
+        buttons = buttonTitle;
+    }else{
+        buttons = [NSMutableArray arrayWithCapacity:2];
+        va_list args;
+        va_start(args, buttonTitle);
+        id arg;
+        if (buttonTitle) {
+            [buttons addObject:buttonTitle];
+            while ( (arg = va_arg(args, NSString*) ) != nil) {
+                [buttons addObject:arg];
+            }
+        }
+        va_end(args);
+    }
     if ([buttons count] == 0) {
-        [buttons addObject:NSLocalizedString(@"确定", @"alert")];
+        buttons = [NSMutableArray arrayWithObject:NSLocalizedString(@"确定", @"alert")];
     }
     
     UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"", nil)
