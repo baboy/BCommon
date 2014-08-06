@@ -76,7 +76,7 @@
                                                     delegate:self
                                            cancelButtonTitle:nil
                                            otherButtonTitles:nil];
-    int n = [buttons count];
+    int n = (int)[buttons count];
     for (int i=0; i<n; i++) {
         [alert addButtonWithTitle:[buttons objectAtIndex:i]];
     }

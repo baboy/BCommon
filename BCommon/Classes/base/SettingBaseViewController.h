@@ -6,11 +6,11 @@
 //  Copyright (c) 2013年 baboy. All rights reserved.
 //
 
-#import "AppBaseTableViewController.h"
 
-@interface SettingBaseViewController : AppBaseTableViewController
+@interface SettingBaseViewController : BaseTableViewController
 
-@property (nonatomic, strong) NSArray *sections;
+@property (nonatomic, retain) NSArray *sections;
 - (void)openController:(NSString *)controller;
 - (id)configOfIndexPath:(NSIndexPath *)indexPath;
+- (void)setConfig:(NSString *)confFile;
 @end

@@ -314,6 +314,14 @@ UIImage * createImageWithImage(UIImage *originImage, CGSize imageSize, UIColor *
     return newImage;
     
 }
+
++ (UIImage *)highlightedImageNamed:(NSString *)imageName{
+    if (imageName && [imageName hasSuffix:@"-0"]) {
+        imageName = [imageName stringByReplacingOccurrencesOfString:@"-0" withString:@"-1"];
+        return[self imageNamed:imageName];
+    }
+    return nil;
+}
 @end  
 
 CGGradientRef createGradient(CGContextRef ctx,NSArray *colors,CGFloat locations[]){

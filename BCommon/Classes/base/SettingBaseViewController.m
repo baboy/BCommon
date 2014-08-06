@@ -13,7 +13,14 @@
 @end
 
 @implementation SettingBaseViewController
-
+- (void)dealloc{
+    RELEASE(_sections);
+    [super dealloc];
+}
+- (void)setConfig:(NSString *)confFile{
+    NSArray *list = [NSMutableArray arrayWithContentsOfFile:getBundleFile(confFile)];
+    [self setSections:list];
+}
 #pragma mark -- UITableViewDataSource and Delegate
 - (id)configOfIndexPath:(NSIndexPath *)indexPath{
     id data = [self.sections objectAtIndex:indexPath.section];
@@ -49,6 +56,7 @@
     id data = [self configOfIndexPath:indexPath];
     NSString *cellID = [data valueForKey:@"cell"];
     NSString *title = [data valueForKey:@"title"];
+    NSString *icon = [data valueForKey:@"icon"];
     int tag = [[data valueForKey:@"tag"] intValue];
     NSString *tapAction = [data valueForKey:@"tap-accessory-action"];
     NSString *loadAction = [data valueForKey:@"load-action"];
@@ -58,6 +66,16 @@
         cell = [tableView dequeueReusableCellWithIdentifier:cellID];
         if (!cell) {
             cell = [self loadViewFromNibNamed:cellID];
+        }
+        if ([cell respondsToSelector:@selector(titleLabel)] && [title length]>0) {
+            [[cell titleLabel] setText:title];
+        }
+        if ([cell respondsToSelector:@selector(imgView)] && [icon length]>0) {
+            [[cell imgView] setImage:[UIImage imageNamed:icon]];
+            UIImage *highlightedImage = [UIImage highlightedImageNamed:icon];
+            if (highlightedImage) {
+                [[cell imgView] setHighlightedImage:highlightedImage];
+            }
         }
     }else{
         cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];

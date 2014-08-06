@@ -18,13 +18,13 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor clearColor];
+        //self.backgroundColor = [UIColor clearColor];
         [self setExclusiveTouch:YES];
     }
     return self;
 }
 - (void)awakeFromNib{
-    self.backgroundColor = [UIColor clearColor];
+    //self.backgroundColor = [UIColor clearColor];
 }
 + (void)toggleWithView:(UIView *)view1 withView2:(UIView *)view2 withLocation:(XUIViewToggleLocation)location animated:(BOOL)animated{
     CGRect frame1 = view1.frame;
