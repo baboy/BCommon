@@ -16,54 +16,55 @@ extern NSString                            *ApiDomain;
 
 
 /********* Api Interface *************/
-#define ApiSplash                     [BApi  apiForKey:@"api_splash"]
-#define ApiConf                     [BApi  apiForKey:@"app_conf"]
+#define ApiSplash                     getApi(@"api_splash",nil)
+#define ApiConf                     getApi(@"app_conf",nil)
 //检查版本更新
-#define ApiQueryAppVersion          [BApi  apiForKey:@"check_app_version"]
+#define ApiQueryAppVersion          getApi(@"check_app_version",nil)
 
 
-#define ApiRegisterDeviceToken     [BApi  apiForKey:@"register_device_token"]
+#define ApiRegisterDeviceToken     getApi(@"register_device_token",nil)
 
 //反馈相关
-#define ApiPostFeedback             [BApi  apiForKey:@"feedback"]
+#define ApiPostFeedback             getApi(@"feedback",nil)
 //检索应用市场
-#define ApiQueryAppList             [BApi  apiForKey:@"query_appmarket"]
-#define ApiStorageUpload            [BApi  apiForKey:@"storage_upload"]
+#define ApiQueryAppList             getApi(@"query_appmarket",nil)
+#define ApiStorageUpload(param)     getApi(@"storage_upload", param)
 //获取关于
-#define ApiQueryAbout               [BApi  apiForKey:@"about"]
+#define ApiQueryAbout               getApi(@"about",nil)
 
-#define ApiRegister                  [BApi apiForKey:@"register"]
-#define ApiLogin                     [BApi apiForKey:@"login"]
-#define ApiLoginWithOpenID           [BApi apiForKey:@"login_openid"]
+#define ApiRegister                  getApi(@"register",nil)
+#define ApiLogin                     getApi(@"login",nil)
+#define ApiLoginWithOpenID           getApi(@"login_openid",nil)
 
-#define ApiUpdateUserProfile         [BApi apiForKey:@"user_update_profile"]
+#define ApiUpdateUserProfile         getApi(@"user_update_profile",nil)
 //获取频道列表
-#define ApiQueryTVChannels          [BApi  apiForKey:@"query_channels"]
+#define ApiQueryTVChannels          getApi(@"query_channels",nil)
 //直播搜索
-#define ApiTVSearch         [BApi          apiForKey:@"search_epgs"]
+#define ApiTVSearch         getApi(@"search_epgs",nil)
 //正在热播
-#define ApiHotTVChannels    [BApi          apiForKey:@"query_hot_channels"]
+#define ApiHotTVChannels    getApi(@"query_hot_channels",nil)
 //播放源
-#define ApiLiveSources    [BApi            apiForKey:@"query_channel_source"]
+#define ApiLiveSources    getApi(@"query_channel_source",nil)
 
 //查询评论列表
-#define ApiQueryComments           [BApi   apiForKey:@"query_comments"]
+#define ApiQueryComments           getApi(@"query_comments",nil)
 //发送评论
-#define ApiPostComment            [BApi    apiForKey:@"post_comment"]
+#define ApiPostComment            getApi(@"post_comment",nil)
 
 //地图
-#define ApiQueryLocation            [BApi  apiForKey:@"search_location"]
+#define ApiQueryLocation            getApi(@"search_location",nil)
 
 // weather
-#define ApiWeatherQuery             [BApi  apiForKey:@"query_weather"]
+#define ApiWeatherQuery             getApi(@"query_weather",nil)
 
 //news
-#define ApiNewsQuery [BApi apiForKey:@"query_news"]
-#define ApiNewsType [BApi  apiForKey:@"query_news_type"]
+#define ApiNewsQuery getApi(@"query_news",nil)
+#define ApiNewsType getApi(@"query_news_type",nil)
 
 
 @interface BApi :                          NSObject
 + (void)setup:(NSString                    *)plist;
 + (NSString *)apiForKey:(NSString          *)key;
++ (NSString *)apiForKey:(NSString          *)key withParam:(NSDictionary *)param;
 @end
-
+extern NSString * getApi(NSString *key, NSDictionary *param);

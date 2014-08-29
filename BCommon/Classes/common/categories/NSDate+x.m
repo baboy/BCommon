@@ -45,12 +45,13 @@
         t = t/HourSec;
         return [NSString stringWithFormat:NSLocalizedString(@"%d小时前", nil), t];
     }
-    /*
-    if (t < (DaySec * 30)) {
+    if (t < (DaySec * 7)) {
         t = t/DaySec;
         return [NSString stringWithFormat:NSLocalizedString(@"%d天前", nil), t];
     }
-     */
+    if ([[self format:@"yyyy"] isEqualToString:[[NSDate date] format:@"yyyy"]]) {
+        return [self format:NSLocalizedString(@"MM-dd HH:mm", nil)];
+    }
     return [self format:NSLocalizedString(@"yyyy-MM-dd HH:mm", nil)];
 }
 - (NSString *)GMTFormat{

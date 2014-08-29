@@ -41,16 +41,19 @@
 - (BOOL)containsStringIgnoreCase:(NSString *)string forObjectKey:(NSString *)key{
     for (id item in self) {
         NSString *v = [item isKindOfClass:[NSString class]]?item:nil;
-        if ([item isKindOfClass:[NSDictionary class]] && key) {
-            v = [item valueForKey:key];
-        }else if([item isKindOfClass:[NSObject class]]){
-            SEL sel = sel_registerName((const char*)[key UTF8String]);
-            if ([item respondsToSelector:sel]) {
-                v = [item performSelector:sel];
-            }else{
-                continue;
+        if (!v) {
+            if ([item isKindOfClass:[NSDictionary class]] && key) {
+                v = [item valueForKey:key];
+            }else if([item isKindOfClass:[NSObject class]]){
+                SEL sel = sel_registerName((const char*)[key UTF8String]);
+                if ([item respondsToSelector:sel]) {
+                    v = [item performSelector:sel];
+                }else{
+                    continue;
+                }
             }
         }
+        
         
         if ([[v lowercaseString] isEqualToString:[string lowercaseString]]) {
             return YES;

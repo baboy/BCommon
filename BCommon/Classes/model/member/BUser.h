@@ -14,7 +14,7 @@
 #define UserParams  [NSMutableDictionary dictionaryWithObjectsAndKeys:UKey, @"ukey", nil]
 
 
-@interface BUser : NSObject
+@interface BUser : Model
 @property (nonatomic, assign) NSString *uid;
 @property (nonatomic, assign) NSString *username;
 @property (nonatomic, assign) NSString *nickname;

@@ -19,8 +19,12 @@ static id _current_user = nil;
     [super dealloc];
 }
 - (id)initWithDictionary:(NSDictionary *)dict{
-    if ( self = [super init] ) {
+    if ( self = [super initWithDictionary:dict] ) {
         _dict = [[NSMutableDictionary alloc] initWithDictionary:dict];
+        if (!self.desc) {
+            [self setDesc:nullToNil([dict valueForKey:@"description"])];
+        }
+        /*
         [self setUid:nullToNil([dict valueForKey:@"uid"])];
         [self setEmail:nullToNil([dict valueForKey:@"email"])];
         [self setUkey:nullToNil([dict valueForKey:@"ukey"])];
@@ -46,6 +50,7 @@ static id _current_user = nil;
         }else{
             [self setMetadata:meta];
         }
+         */
     }
     return self;
 }

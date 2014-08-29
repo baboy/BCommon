@@ -10,6 +10,16 @@
 NSString *ApiDomain = @"http://m.tvie.com.cn/mcms/xchannel";
 
 @implementation BApi
++ (Class)handler{
+    NSString *clazz = [DBCache valueForKey:@"handler" domain:@"api"];
+    if (clazz) {
+        Class c = NSClassFromString(clazz);
+        if (c) {
+            return c;
+        }
+    }
+    return self;
+}
 + (void)initialize{
     [self setup];
 }
@@ -34,14 +44,17 @@ NSString *ApiDomain = @"http://m.tvie.com.cn/mcms/xchannel";
 }
 
 + (NSString *)apiForKey:(NSString *)key{
-    NSString *clazz = [DBCache valueForKey:@"handler" domain:@"api"];
-    if (clazz) {
-        Class c = NSClassFromString(clazz);
-        if (c) {
-            return [c apiForKey:key];
-        }
-    }
 	NSString *v = [DBCache valueForKey:key domain:@"api"];
 	return v;
 }
++ (NSString *)apiForKey:(NSString*)key withParam:(NSDictionary *)param{
+    NSString *v = [self apiForKey:key];
+    if (param) {
+        v = [v URLStringWithParam:param];
+    }
+    return v;
+}
 @end
+NSString * getApi(NSString *key, NSDictionary *param){
+    return [[BApi handler] apiForKey:key withParam:param];
+}

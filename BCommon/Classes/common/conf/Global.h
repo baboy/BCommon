@@ -55,7 +55,7 @@
 #define gImageCacheDir              @"cache_image"
 
 
-#define DaySec                      3600*24
+#define DaySec                      (3600*24)
 #define HourSec                        3600
 //全局配置文件
 

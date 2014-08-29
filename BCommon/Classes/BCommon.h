@@ -64,8 +64,10 @@
 #import "VTabBarView.h"
 #import "XUILabel.h"
 #import "BImageView.h"
-#import "BUser.h"
 #import "UIImageView+cache.h"
+//model
+#import "Model.h"
+#import "BUser.h"
 
 //
 #import "Base64.h"
