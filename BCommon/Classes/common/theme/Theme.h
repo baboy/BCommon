@@ -55,6 +55,8 @@
 
 #define gNavBarBackButton       [Theme navBarButtonForKey:@"navigationbar-back-button"]
 
+#define ThemeNavBarBackButton(target,act) [Theme navBarButtonForKey:@"navigationbar-back-button" withTarget:(target) action:(act)]
+
 #define gPlayerPlayButton       [Theme buttonForKey:@"icon-play"]
 
 

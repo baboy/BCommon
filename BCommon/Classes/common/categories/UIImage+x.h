@@ -30,6 +30,8 @@ extern void createPath(CGContextRef ctx,CGRect rect,float rad);
 - (UIImage *)imageWithCornerRadius:(int)rad borderColor:(UIColor *)borderColor size:(CGSize)imgSize;
 - (UIImage *)imageRotatedByDegrees:(float)degrees;
 + (UIImage *)highlightedImageNamed:(NSString *)imageName;
+- (BOOL)saveTo:(NSString *)path;
++ (UIImage *)createImageFromPixelBuffer:(CVPixelBufferRef)pixelBuffer;
 @end  
 
 extern CGGradientRef createGradient(CGContextRef ctx,NSArray *colors,CGFloat locations[]);

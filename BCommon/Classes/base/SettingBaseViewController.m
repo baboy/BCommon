@@ -111,7 +111,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    //[tableView deselectRowAtIndexPath:indexPath animated:YES];
     id data = [self configOfIndexPath:indexPath];
     if (![data isKindOfClass:[NSDictionary class]]) {
         return;

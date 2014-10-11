@@ -95,9 +95,9 @@
 #define AppBuild            [DBCache valueForKey:@"build"]
 #define AppChannel           [DBCache valueForKey:@"channel"]
 
-#define DeviceParam         @{@"product_id":BundleID, @"channel":AppChannel, @"version":BundleVersion, @"device_id":DeviceID, @"build":AppBuild, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion, @"resolution":DeviceResolution, @"device_name":DeviceName}
+#define DeviceParam         @{@"appid":APPID, @"product_id":BundleID, @"channel":AppChannel, @"version":BundleVersion, @"device_id":DeviceID, @"build":AppBuild, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion, @"resolution":DeviceResolution, @"device_name":DeviceName}
 
-#define URLCommonParam             @{@"product_id":BundleID, @"channel":AppChannel, @"version":BundleVersion, @"device_id":DeviceID, @"build":AppBuild, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion}
+#define URLCommonParam             @{@"appid":APPID, @"product_id":BundleID, @"channel":AppChannel, @"version":BundleVersion, @"device_id":DeviceID, @"build":AppBuild, @"platform":DevicePlatform,@"os":DeviceSystem, @"os_version":DeviceSystemVersion}
 
 
 //notify

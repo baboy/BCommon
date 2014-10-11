@@ -322,6 +322,30 @@ UIImage * createImageWithImage(UIImage *originImage, CGSize imageSize, UIColor *
     }
     return nil;
 }
+- (BOOL)saveTo:(NSString *)path{
+    NSData *data = UIImageJPEGRepresentation(self, 0);
+    @try{
+        return [data writeToFile:path atomically:YES];
+    }
+    @catch (NSException *e){
+        NSLog(@"create thumbnail exception.");
+    }
+    return false;
+
+}
++ (UIImage *)createImageFromPixelBuffer:(CVPixelBufferRef)pixelBuffer{
+    CIImage *ciImage = [CIImage imageWithCVPixelBuffer:pixelBuffer];
+    
+    CIContext *temporaryContext = [CIContext contextWithOptions:nil];
+    CGImageRef cgImage = [temporaryContext
+                             createCGImage:ciImage
+                             fromRect:CGRectMake(0, 0,
+                                                 CVPixelBufferGetWidth(pixelBuffer),
+                                                 CVPixelBufferGetHeight(pixelBuffer))];
+    
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    return image;
+}
 @end  
 
 CGGradientRef createGradient(CGContextRef ctx,NSArray *colors,CGFloat locations[]){

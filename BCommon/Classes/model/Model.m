@@ -31,9 +31,20 @@
     }
 }
 - (NSMutableDictionary *)dictForFields:(NSArray *)fields{
+    DLOG(@"%@",fields);
     NSMutableDictionary *d = [NSMutableDictionary dictionary];
-    for (NSString *field in fields) {
+    for (NSString *k in fields) {
+        NSString *field = k;
+        if ( [field rangeOfString:@"_"].length>0 ) {
+            field = [[[[k stringByReplacingOccurrencesOfString:@"_" withString:@" "] capitalizedString] split:@" "] join:@""];
+            field = [NSString stringWithFormat:@"%@%@",[[field substringToIndex:1] lowercaseString],[field substringFromIndex:1]];
+        }
+        DLOG(@"field:%@",field);
+        
         SEL action = NSSelectorFromString(field);
+        if (![self respondsToSelector:action]) {
+            continue;
+        }
         IMP imp = [self methodForSelector:action];
         id (*_propValue)() = (void *)imp;
         id val = _propValue(self, action);
@@ -80,6 +91,9 @@
     if([name isEqualToString:@"Tc"]){
         return @"boolean";
     }
+    if([name isEqualToString:@"Tq"]){
+        return @"long";
+    }
     NSString* className = [[name substringToIndex:[name length]-1] substringFromIndex:3];
     if ([className rangeOfString:@"<"].location != NSNotFound) {
         NSString* subName = [className substringFromIndex:[className rangeOfString:@"<"].location+1];
@@ -124,12 +138,20 @@
                     func(self, sel, v);
                     continue;
                 }
+                if ([className isEqualToString:@"long"]) {
+                    int v = [val doubleValue];
+                    // set value
+                    IMP imp = [self methodForSelector:sel];
+                    void(*func)(id, SEL, long long) = (void *)imp;
+                    func(self, sel, v);
+                    continue;
+                }
                 
                 if ([className isEqualToString:@"boolean"]) {
                     int v = [val boolValue];
                     // set value
                     IMP imp = [self methodForSelector:sel];
-                    void(*func)(id, SEL, double) = (void *)imp;
+                    void(*func)(id, SEL, BOOL) = (void *)imp;
                     func(self, sel, v);
                     continue;
                 }
