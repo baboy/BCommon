@@ -251,8 +251,8 @@
 - (void)removeSelf{
     if(self.superview)
         [self removeFromSuperview];
-    RELEASE(self);
-    [[UIWindow preViewWindow] setHidden:YES];
+    [self clear];
+    //RELEASE(self);
 }
 - (void)quitFullScreen:(UIGestureRecognizer *)r{
     [self restoreStatusBarStyle];
@@ -273,8 +273,9 @@
                          }
                          if (self.autoRemove) {
                              [self removeSelf];
+                         }else{
+                             [self clear];
                          }
-                         [self clear];
                      }];
 }
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
