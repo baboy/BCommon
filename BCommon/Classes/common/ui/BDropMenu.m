@@ -10,28 +10,6 @@
 
 #define DropMenuVerticalPadding 4.0f
 
-@interface UIWindow(x)
-+ (UIWindow *)popWindow;
-@end
-@implementation UIWindow(x)
-
-+ (UIWindow*)popWindow {
-    static UIWindow *_popWindow = nil;
-    static dispatch_once_t initOncePopWindow;
-    dispatch_once(&initOncePopWindow, ^{
-        _popWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        [_popWindow setWindowLevel:UIWindowLevelStatusBar+1];
-    });
-    DLOG(@"%@",_popWindow);
-    if ([UIScreen mainScreen].bounds.size.height < [UIScreen mainScreen].bounds.size.width) {
-        _popWindow.bounds = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
-        _popWindow.center = CGPointMake(_popWindow.bounds.size.width/2, _popWindow.bounds.size.height/2);
-        
-    }
-    return _popWindow;
-}
-@end
-
 @interface BDropMenuBackground:UIView
 @property (nonatomic, assign) CGPoint anchorPoint;
 @end

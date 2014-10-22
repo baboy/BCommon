@@ -8,27 +8,6 @@
 
 #import "BPhotoScrollView.h"
 
-@interface UIWindow(x)
-+ (UIWindow *)preViewWindow;
-@end
-@implementation UIWindow(x)
-
-+ (UIWindow*)preViewWindow {
-    static UIWindow *_preViewWindow = nil;
-    static dispatch_once_t initOncePopWindow;
-    dispatch_once(&initOncePopWindow, ^{
-        _preViewWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        [_preViewWindow setWindowLevel:UIWindowLevelNormal];
-    });
-    DLOG(@"%@",_preViewWindow);
-    if ([UIScreen mainScreen].bounds.size.height < [UIScreen mainScreen].bounds.size.width) {
-        _preViewWindow.bounds = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
-        _preViewWindow.center = CGPointMake(_preViewWindow.bounds.size.width/2, _preViewWindow.bounds.size.height/2);
-        
-    }
-    return _preViewWindow;
-}
-@end
 
 @interface BPhotoView()<UIScrollViewDelegate>
 @property (nonatomic, retain)UIView *container;
