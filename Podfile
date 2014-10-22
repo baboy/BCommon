@@ -8,4 +8,3 @@ pod 'OpenUDID'
 pod 'ViewDeck'
 
 
-generate_bridge_support!

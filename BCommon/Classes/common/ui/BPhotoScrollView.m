@@ -8,7 +8,27 @@
 
 #import "BPhotoScrollView.h"
 
+@interface UIWindow(x)
++ (UIWindow *)preViewWindow;
+@end
+@implementation UIWindow(x)
 
++ (UIWindow*)preViewWindow {
+    static UIWindow *_preViewWindow = nil;
+    static dispatch_once_t initOncePopWindow;
+    dispatch_once(&initOncePopWindow, ^{
+        _preViewWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        [_preViewWindow setWindowLevel:UIWindowLevelNormal];
+    });
+    DLOG(@"%@",_preViewWindow);
+    if ([UIScreen mainScreen].bounds.size.height < [UIScreen mainScreen].bounds.size.width) {
+        _preViewWindow.bounds = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
+        _preViewWindow.center = CGPointMake(_preViewWindow.bounds.size.width/2, _preViewWindow.bounds.size.height/2);
+        
+    }
+    return _preViewWindow;
+}
+@end
 
 @interface BPhotoView()<UIScrollViewDelegate>
 @property (nonatomic, retain)UIView *container;
@@ -35,23 +55,30 @@
     RELEASE(_indicator);
     RELEASE(_bottomView);
     RELEASE(_backgroundImageView);
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
+}
+- (void)setup{
+    [self addTarget:self action:@selector(viewFullScreen:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRotate:) name:UIDeviceOrientationDidChangeNotification  object:[UIDevice currentDevice]];
+
 }
 - (id)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
-        [self addTarget:self action:@selector(viewFullScreen:) forControlEvents:UIControlEventTouchUpInside];
         self.canShowFullScreen = YES;
     }
     return self;
 }
 - (void)awakeFromNib{
-    [self addTarget:self action:@selector(viewFullScreen:) forControlEvents:UIControlEventTouchUpInside];
+    [self setup];
 }
 - (void)clear{
     RELEASE(_fullScreenImgView);
     RELEASE(_indicator);
     RELEASE(_bottomView);
     RELEASE(_container);
+    [[UIWindow preViewWindow] setHidden:YES];
 }
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents{
     //[self removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -167,9 +194,23 @@
     thumbnailImage = thumbnailImage?:[UIImage imageNamed:@"thumbnail"];
     
     
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    UIView *container = [[[UIView alloc] initWithFrame:window.bounds] autorelease];
+    UIWindow *window = [UIWindow preViewWindow];
+    UIView *container = AUTORELEASE([[UIView alloc] initWithFrame:window.bounds] );
     [container setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.3]];
+    
+    float angle = 0;
+    if ([APP statusBarOrientation] == UIInterfaceOrientationLandscapeRight) {
+        angle = M_PI*0.5;
+    }
+    if([APP statusBarOrientation] == UIInterfaceOrientationLandscapeLeft){
+        angle = -M_PI*0.5;
+    }
+    if (angle!=0) {
+        container.bounds = CGRectMake(0, 0, window.bounds.size.height, window.bounds.size.width);
+        container.center = window.center;
+        container.transform = CGAffineTransformMakeRotation(angle);
+    }
+    
     UIScrollView *scrollView = AUTORELEASE([[UIScrollView alloc] initWithFrame:container.bounds]);
     scrollView.bounces = YES;
     scrollView.alwaysBounceHorizontal = YES;
@@ -183,6 +224,8 @@
     [window addSubview:container];
     self.container = container;
     self.scrollView = scrollView;
+    
+    
     
     
     CGRect rect = [scrollView convertRect:self.frame fromView:self.superview];
@@ -224,11 +267,13 @@
         [self relayoutImageView:self.fullScreenImgView withImage:self.fullScreenImgView.image];
         [self.container addSubview:[self bottomView]];
     }];
+    [window makeKeyAndVisible];
 }
 - (void)removeSelf{
     if(self.superview)
         [self removeFromSuperview];
     RELEASE(self);
+    [[UIWindow preViewWindow] setHidden:YES];
 }
 - (void)quitFullScreen:(UIGestureRecognizer *)r{
     [self restoreStatusBarStyle];
@@ -295,6 +340,35 @@
     }
     else{
         [BIndicator showMessageAndFadeOut:NSLocalizedString(@"已保存到相册", nil)];
+    }
+}
+- (void)deviceRotate:(NSNotification *)noti  {
+    if (!self.container) {
+        return;
+    }
+    UIInterfaceOrientation orientation = [APP statusBarOrientation];
+    switch (orientation) {
+        case UIDeviceOrientationPortrait:
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            break;
+        case UIDeviceOrientationLandscapeLeft: //home button on the right
+        case UIDeviceOrientationLandscapeRight:{
+            float angle = M_PI*0.5;
+            if(orientation == UIDeviceOrientationLandscapeRight){
+                angle = -M_PI*0.5;
+            }
+            [UIView animateWithDuration:0.8
+                             animations:^{
+                                 self.container.transform = CGAffineTransformMakeRotation(angle);
+                             }
+                             completion:^(BOOL finished) {
+                             }];
+            break;
+            
+        }
+        default:
+            break;
     }
 }
 @end

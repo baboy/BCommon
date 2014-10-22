@@ -10,6 +10,28 @@
 
 #define DropMenuVerticalPadding 4.0f
 
+@interface UIWindow(x)
++ (UIWindow *)popWindow;
+@end
+@implementation UIWindow(x)
+
++ (UIWindow*)popWindow {
+    static UIWindow *_popWindow = nil;
+    static dispatch_once_t initOncePopWindow;
+    dispatch_once(&initOncePopWindow, ^{
+        _popWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        [_popWindow setWindowLevel:UIWindowLevelStatusBar+1];
+    });
+    DLOG(@"%@",_popWindow);
+    if ([UIScreen mainScreen].bounds.size.height < [UIScreen mainScreen].bounds.size.width) {
+        _popWindow.bounds = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
+        _popWindow.center = CGPointMake(_popWindow.bounds.size.width/2, _popWindow.bounds.size.height/2);
+        
+    }
+    return _popWindow;
+}
+@end
+
 @interface BDropMenuBackground:UIView
 @property (nonatomic, assign) CGPoint anchorPoint;
 @end
@@ -28,6 +50,7 @@
     RELEASE(_contentView);
     RELEASE(_anchor);
     RELEASE(_object);
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
 - (id)init{
@@ -49,6 +72,7 @@
         [_backgroundView.layer setShadowRadius:1.0];
         [_backgroundView.layer setShadowOpacity:1.0];
         [_backgroundView.layer setShadowOffset:CGSizeMake(0, 1)];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceRotate:) name:UIDeviceOrientationDidChangeNotification  object:[UIDevice currentDevice]];
         
         self.isRetain = NO;
     }
@@ -95,15 +119,15 @@
         [self setHidden:YES];
         return;
     }
-    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-    CGPoint p = [window convertPoint:self.offset fromView:self.anchor];
+    UIView *container = self;
+    CGPoint p = [container convertPoint:self.offset fromView:self.anchor];
     
     float x = p.x - self.menuWidth/2;
     float y = p.y;
     if (x < 10) {
         x = 10;
-    }else if((x+self.menuWidth) > window.bounds.size.width){
-        x = window.bounds.size.width - self.menuWidth-10;
+    }else if((x+self.menuWidth) > container.bounds.size.width){
+        x = container.bounds.size.width - self.menuWidth-10;
     }
     
     float topPadding = 11.0f;
@@ -200,12 +224,31 @@
         [self retain];
     }
     if ([self.items count] && ([self.items count] > 2 || ![self.items containsObject:self.filterItem])) {
-        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        DLOG(@"%d",[APP statusBarOrientation]);
+        
+        UIWindow *window = [UIWindow popWindow];
         if (!self.superview) {
             [window addSubview:self];
         }
+        float angle = 0;
+        if ([APP statusBarOrientation] == UIInterfaceOrientationLandscapeRight) {
+            angle = M_PI*0.5;
+        }
+        if([APP statusBarOrientation] == UIInterfaceOrientationLandscapeLeft){
+            angle = -M_PI*0.5;
+        }
+        self.bounds = window.bounds;
+        self.center = window.center;
+        if (angle!=0) {
+            self.transform = CGAffineTransformMakeRotation(angle);
+        }
+        
+        //[[UIApplication sharedApplication] setStatusBarOrientation:orientation];
+        
         [self relayoutBackground];
+        
         [self setHidden:NO];
+        [window makeKeyAndVisible];
     }
 }
 - (void)toggle{
@@ -223,6 +266,8 @@
     if (self.isRetain) {
         self.isRetain = NO;
         [self release];
+        UIWindow *window = [UIWindow popWindow];
+        [window setHidden:YES];
     }
 }
 - (BOOL)isShow{
@@ -230,6 +275,32 @@
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     [self hide];
+}
+- (void)deviceRotate:(NSNotification *)noti  {
+    UIInterfaceOrientation orientation = [APP statusBarOrientation];
+    switch (orientation) {
+        case UIDeviceOrientationPortrait:
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            break;
+        case UIDeviceOrientationLandscapeLeft: //home button on the right
+        case UIDeviceOrientationLandscapeRight:{
+            float angle = M_PI*0.5;
+            if(orientation == UIDeviceOrientationLandscapeRight){
+                angle = -M_PI*0.5;
+            }
+            [UIView animateWithDuration:0.8
+                             animations:^{
+                                 self.transform = CGAffineTransformMakeRotation(angle);
+                             }
+                             completion:^(BOOL finished) {
+                             }];
+            break;
+            
+        }
+        default:
+            break;
+    }
 }
 @end
 
